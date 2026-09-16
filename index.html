@@ -27,7 +27,7 @@
 <style>
 :root{
   --lavande:#9DACDA; --brume:#DCECF8; --ble:#FCED90; --ambre:#EEAF51;
-  --corail:#E85D4C; --corail-fonce:#D14B3B; --beige:#DECDC1; --creme:#F6F4EC;
+  --corail:#E85D4C; --corail-fonce:#D14B3B; --corail-sombre:#9B2F20; --beige:#DECDC1; --creme:#F6F4EC;
   --ink:#262523; --ink-2:#57534C; --ink-3:#8C877E;
   --line:rgba(38,37,35,.10); --line-2:rgba(38,37,35,.16);
   --white:#fff; --ok:#2F8F5B; --err:#C8412F;
@@ -214,7 +214,14 @@ p{margin:0}
 /* ---------- sections ---------- */
 section{position:relative}
 .sec{padding:64px 0}
-.sec--white{background:#fff}
+.sec--brume{background:var(--brume)}
+.sec--lavande{background:var(--lavande)}
+.sec--beige{background:var(--beige)}
+/* sur fond coloré, le corail du kicker et le gris du chapô ne tiennent plus le contraste */
+.sec--brume .kicker,.sec--lavande .kicker,.sec--beige .kicker{color:var(--ink)}
+.sec--brume .kicker svg,.sec--lavande .kicker svg,.sec--beige .kicker svg{color:var(--corail)}
+.sec--lavande .sub,.sec--beige .sub{color:var(--ink)}
+.sec--brume .h2 em,.sec--lavande .h2 em,.sec--beige .h2 em{color:var(--corail-sombre)}
 .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--corail);margin-bottom:12px}
 .kicker svg{width:16px;height:16px}
 .h2{font-size:clamp(29px,6.4vw,46px);text-wrap:balance}
@@ -235,7 +242,6 @@ section{position:relative}
 /* price section */
 .price{display:grid;gap:14px;margin-top:34px}
 .card{background:#fff;border-radius:var(--r-md);box-shadow:0 0 0 1px var(--line)}
-.sec--white .card{background:var(--creme);box-shadow:none}
 .chart{padding:20px 18px 14px}
 .chart__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .chart__title{font-size:16px;font-weight:700}
@@ -292,7 +298,6 @@ section{position:relative}
 .tile .pre{font-weight:700;font-size:15px;margin-bottom:2px}
 .tile--rge{background:#D5DCF0}
 .tile--consuel{background:#fff;box-shadow:0 0 0 1px var(--line)}
-.sec--white .tile--consuel{background:var(--creme);box-shadow:none}
 .tile .ic{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.6);display:grid;place-items:center;margin-bottom:auto}
 .tile .ic + .big{padding-top:16px}
 .tile .big.word{font-size:32px;letter-spacing:-.03em}
@@ -582,7 +587,7 @@ section{position:relative}
   </div>
 </section>
 
-<section class="sec" id="prix">
+<section class="sec sec--brume" id="prix">
   <div class="wrap">
     <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Le prix de l'électricité</span>
     <h2 class="h2">Le kWh coûte <em>29&nbsp;% de plus</em> qu'en 2020</h2>
@@ -611,7 +616,7 @@ section{position:relative}
   </div>
 </section>
 
-<section class="sec sec--white" id="etapes">
+<section class="sec sec--lavande" id="etapes">
   <div class="wrap">
     <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Votre bilan, étape par étape</span>
     <h2 class="h2">On ne se déplace pas chez vous avant que vous ayez lu vos chiffres</h2>
@@ -647,7 +652,7 @@ section{position:relative}
   </div>
 </section>
 
-<section class="sec sec--white" id="realisations">
+<section class="sec sec--beige" id="realisations">
   <div class="wrap">
     <div class="gal-head">
       <div>
@@ -660,11 +665,11 @@ section{position:relative}
       </div>
     </div>
     <div class="gal" id="gal" tabindex="0" aria-label="Photos d'installations">
-      <figure class="shot"><img src="img/real-tuiles-canal-720.webp" alt="Panneaux solaires noirs posés sur un toit en tuiles canal, piscine en contrebas" loading="lazy" width="720" height="900"><figcaption><b>Toit en tuiles canal</b><span>Panneaux full black, vue sur la piscine</span></figcaption></figure>
       <figure class="shot"><img src="img/real-volets-bleus-720.webp" alt="Maison aux volets bleus avec deux rangées de panneaux solaires" loading="lazy" width="720" height="900"><figcaption><b>Maison familiale</b><span>Deux champs de panneaux sur tuiles</span></figcaption></figure>
       <figure class="shot"><img src="img/real-vue-drone-720.webp" alt="Vue aérienne d'une maison avec panneaux solaires sur toit en tuiles rouges" loading="lazy" width="720" height="900"><figcaption><b>Maison en coteau</b><span>Vue drone, toiture en tuiles</span></figcaption></figure>
       <figure class="shot"><img src="img/real-maison-recente-720.webp" alt="Maison récente avec panneaux solaires sur deux pans de toit" loading="lazy" width="720" height="900"><figcaption><b>Construction récente</b><span>Deux pans de toit équipés</span></figcaption></figure>
       <figure class="shot"><img src="img/real-chalet-720.webp" alt="Chalet en montagne équipé de panneaux solaires" loading="lazy" width="448" height="560"><figcaption><b>Chalet de montagne</b><span>Toiture à forte pente</span></figcaption></figure>
+      <figure class="shot"><img src="img/real-tuiles-canal-720.webp" alt="Panneaux solaires noirs posés sur un toit en tuiles canal, piscine en contrebas" loading="lazy" width="720" height="900"><figcaption><b>Toit en tuiles canal</b><span>Panneaux full black, vue sur la piscine</span></figcaption></figure>
       <figure class="shot"><img src="img/real-veranda-720.webp" alt="Maison avec véranda et panneaux solaires sur le toit" loading="lazy" width="720" height="900"><figcaption><b>Maison avec véranda</b><span>Panneaux sur le toit principal</span></figcaption></figure>
       <figure class="shot"><img src="img/real-plain-pied-720.webp" alt="Vue aérienne d'une maison de plain-pied avec panneaux solaires" loading="lazy" width="448" height="560"><figcaption><b>Maison de plain-pied</b><span>Toiture quatre pans</span></figcaption></figure>
       <figure class="shot"><img src="img/real-toiture-ardoise-720.webp" alt="Panneaux solaires noirs sur une toiture sombre" loading="lazy" width="720" height="900"><figcaption><b>Toiture sombre</b><span>Les panneaux se fondent dans le toit</span></figcaption></figure>
