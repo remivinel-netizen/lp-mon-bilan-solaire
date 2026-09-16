@@ -256,6 +256,8 @@ section{position:relative}
 .fixed__big{font-size:64px;font-weight:900;letter-spacing:-.04em;line-height:1}
 .fixed__big small{font-size:20px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.7)}
 .fixed p{color:rgba(255,255,255,.82);font-size:16px}
+.flat__cap{font-size:15px;color:rgba(255,255,255,.62);margin-bottom:8px}
+.flat__axis{display:flex;justify-content:space-between;gap:12px;font-size:15px;color:rgba(255,255,255,.55);margin-top:8px}
 .flat{position:relative;height:56px;border-radius:14px;background:rgba(255,255,255,.07);overflow:hidden}
 .flat::before{content:"";position:absolute;left:14px;right:14px;top:50%;height:2px;background:var(--ambre);border-radius:2px}
 .flat i{position:absolute;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--ambre);box-shadow:0 0 0 2px var(--ink)}
@@ -601,7 +603,11 @@ section{position:relative}
           <div class="fixed__big" style="margin:14px 0 12px">110&nbsp;€<small>/mois<a href="#notes" style="color:inherit;text-decoration:none">*</a></small></div>
           <p>Votre mensualité de crédit est fixée à la signature. Elle reste la même jusqu'au dernier remboursement, quels que soient les prochains tarifs de l'électricité.</p>
         </div>
-        <div class="flat" aria-hidden="true"><i style="left:14px"></i><i style="left:33%"></i><i style="left:66%"></i><i style="left:calc(100% - 14px)"></i></div>
+        <div class="flatwrap">
+          <p class="flat__cap">Votre mensualité, mois après mois</p>
+          <div class="flat" aria-hidden="true"><i style="left:14px"></i><i style="left:33%"></i><i style="left:66%"></i><i style="left:calc(100% - 14px)"></i></div>
+          <p class="flat__axis" aria-hidden="true"><span>Signature</span><span>Dernier remboursement</span></p>
+        </div>
         <p class="fine">*Exemple de mensualité. Conditions du crédit en bas de page.</p>
       </div>
     </div>
