@@ -256,11 +256,10 @@ section{position:relative}
 .fixed__big{font-size:64px;font-weight:900;letter-spacing:-.04em;line-height:1}
 .fixed__big small{font-size:20px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.7)}
 .fixed p{color:rgba(255,255,255,.82);font-size:16px}
-.flat__cap{font-size:15px;color:rgba(255,255,255,.62);margin-bottom:8px}
-.flat__axis{display:flex;justify-content:space-between;gap:12px;font-size:15px;color:rgba(255,255,255,.55);margin-top:8px}
-.flat{position:relative;height:56px;border-radius:14px;background:rgba(255,255,255,.07);overflow:hidden}
-.flat::before{content:"";position:absolute;left:14px;right:14px;top:50%;height:2px;background:var(--ambre);border-radius:2px}
-.flat i{position:absolute;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--ambre);box-shadow:0 0 0 2px var(--ink)}
+.legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:15px;color:var(--ink-2)}
+.legend__i{width:18px;height:3px;border-radius:2px;flex:0 0 auto;margin-right:-10px}
+.legend__i--fac{background:var(--corail)}
+.legend__i--men{background:var(--ambre)}
 .fixed .fine{font-size:15px;color:rgba(255,255,255,.55)}
 
 /* steps */
@@ -593,9 +592,10 @@ section{position:relative}
 
     <div class="price">
       <div class="card chart">
-        <div class="chart__head"><span class="chart__title">Prix du kWh, tarif réglementé option Base</span><span class="chart__unit">€ TTC par kWh</span></div>
+        <div class="chart__head"><span class="chart__title">Ce que coûte la même consommation, mois après mois</span><span class="chart__unit">€ TTC par mois</span></div>
+        <p class="legend"><span class="legend__i legend__i--fac"></span>Facture d'électricité<span class="legend__i legend__i--men"></span>Votre mensualité</p>
         <div class="chart__svg" id="chart"><div class="tip" id="chart-tip"></div></div>
-        <p class="chart__src">Source&nbsp;: grilles du Tarif Bleu EDF, option Base, TTC, hors abonnement.</p>
+        <p class="chart__src">Exemple pour un foyer dont la facture atteint 150&nbsp;€ par mois au tarif d'août 2026, à consommation constante&nbsp;: seul le prix du kWh change. Source&nbsp;: grilles du Tarif Bleu EDF, option Base, TTC, hors abonnement.</p>
       </div>
       <div class="card fixed">
         <div>
@@ -603,12 +603,7 @@ section{position:relative}
           <div class="fixed__big" style="margin:14px 0 12px">110&nbsp;€<small>/mois<a href="#notes" style="color:inherit;text-decoration:none">*</a></small></div>
           <p>Votre mensualité de crédit est fixée à la signature. Elle reste la même jusqu'au dernier remboursement, quels que soient les prochains tarifs de l'électricité.</p>
         </div>
-        <div class="flatwrap">
-          <p class="flat__cap">Votre mensualité, mois après mois</p>
-          <div class="flat" aria-hidden="true"><i style="left:14px"></i><i style="left:33%"></i><i style="left:66%"></i><i style="left:calc(100% - 14px)"></i></div>
-          <p class="flat__axis" aria-hidden="true"><span>Signature</span><span>Dernier remboursement</span></p>
-        </div>
-        <p class="fine">*Exemple de mensualité. Conditions du crédit en bas de page.</p>
+                <p class="fine">*Exemple de mensualité. Conditions du crédit en bas de page.</p>
       </div>
     </div>
   </div>
@@ -1072,7 +1067,12 @@ section{position:relative}
   ];
   var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
   var pts = DATA.map(function(d){ return {t: new Date(d[0] + 'T00:00:00').getTime(), v: d[1], d: d[0]}; });
+  /* Foyer de référence : une facture de 150 € par mois au tarif du 1er août 2026.
+     La consommation est supposée constante, seul le prix du kWh bouge. */
+  var REF_EUR = 150, REF_PRIX = .2001, KWH = REF_EUR / REF_PRIX, MENS = 110;
+  pts.forEach(function(p){ p.m = p.v * KWH; });
   function eur(v){ return v.toFixed(4).replace('.', ',') + NB + '€'; }
+  function eurMois(v){ return Math.round(v) + NB + '€'; }
   function moisAn(ts){ var d = new Date(ts); return MOIS[d.getMonth()] + ' ' + d.getFullYear(); }
 
   var box = document.getElementById('chart');
@@ -1084,20 +1084,20 @@ section{position:relative}
     var old = box.querySelector('svg'); if (old) box.removeChild(old);
     var W = Math.max(280, box.clientWidth), H = Math.round(Math.max(220, Math.min(310, W * .5)));
     var narrow = W < 460;
-    var P = {l: 46, r: narrow ? 12 : 18, t: 34, b: 28};
+    var P = {l: 52, r: narrow ? 12 : 18, t: 34, b: 28};
     var t0 = new Date('2020-01-01T00:00:00').getTime(), t1 = new Date('2026-10-01T00:00:00').getTime();
-    var v0 = .14, v1 = .27;
+    var v0 = 100, v1 = 200;
     function X(t){ return P.l + (t - t0) / (t1 - t0) * (W - P.l - P.r); }
     function Y(v){ return P.t + (1 - (v - v0) / (v1 - v0)) * (H - P.t - P.b); }
-    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Prix du kWh au tarif réglementé option Base, de 0,1546 € en février 2020 à 0,2001 € en août 2026, avec un pic à 0,2516 € en février 2024.'});
+    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Pour une même consommation, la facture d\'électricité est passée de 116 € par mois en février 2020 à 150 € en août 2026, avec un pic à 189 € en février 2024. La mensualité Mon Bilan Soleil, elle, reste à 110 € par mois.'});
     var defs = el('defs', {}, svg);
     var grad = el('linearGradient', {id: 'g-area', x1: 0, y1: 0, x2: 0, y2: 1}, defs);
     el('stop', {offset: '0', 'stop-color': '#E85D4C', 'stop-opacity': '.18'}, grad);
     el('stop', {offset: '1', 'stop-color': '#E85D4C', 'stop-opacity': '0'}, grad);
 
-    [.15, .20, .25].forEach(function(v){
+    [120, 150, 180].forEach(function(v){
       el('line', {x1: P.l, x2: W - P.r, y1: Y(v), y2: Y(v), stroke: 'rgba(38,37,35,.10)', 'stroke-width': 1}, svg);
-      var tx = el('text', {x: P.l - 8, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': 15, fill: '#6F6A62'}, svg); tx.textContent = v.toFixed(2).replace('.', ',') + NB + '€';
+      var tx = el('text', {x: P.l - 8, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': 15, fill: '#6F6A62'}, svg); tx.textContent = v + NB + '€';
     });
     for (var y = 2020; y <= 2026; y++){
       if (narrow && y % 2) continue;
@@ -1105,21 +1105,26 @@ section{position:relative}
       var lab = el('text', {x: X(tx), y: H - 8, 'text-anchor': 'middle', 'font-size': 15, fill: '#6F6A62'}, svg); lab.textContent = y;
     }
     var now = Math.min(Date.now(), t1);
-    var d = 'M' + X(pts[0].t) + ' ' + Y(pts[0].v);
-    for (var i = 1; i < pts.length; i++) d += ' H' + X(pts[i].t) + ' V' + Y(pts[i].v);
+    var d = 'M' + X(pts[0].t) + ' ' + Y(pts[0].m);
+    for (var i = 1; i < pts.length; i++) d += ' H' + X(pts[i].t) + ' V' + Y(pts[i].m);
     d += ' H' + X(now);
     el('path', {d: d + ' V' + (H - P.b) + ' H' + X(pts[0].t) + ' Z', fill: 'url(#g-area)'}, svg);
     el('path', {d: d, fill: 'none', stroke: '#E85D4C', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
 
     function marker(p, text, anchor, dx, dy){
-      el('circle', {cx: X(p.t), cy: Y(p.v), r: 5, fill: '#E85D4C', stroke: '#fff', 'stroke-width': 2}, svg);
-      var g = el('text', {x: X(p.t) + dx, y: Y(p.v) + dy, 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
+      el('circle', {cx: X(p.t), cy: Y(p.m), r: 5, fill: '#E85D4C', stroke: '#fff', 'stroke-width': 2}, svg);
+      var g = el('text', {x: X(p.t) + dx, y: Y(p.m) + dy, 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
       g.textContent = text;
     }
     var last = pts[pts.length - 1], peak = pts[7];
-    marker(pts[0], eur(pts[0].v), 'start', -4, -12);
-    marker(peak, 'Pic ' + eur(peak.v), 'middle', 0, -13);
-    marker(last, eur(last.v), 'end', 4, -22);
+    marker(pts[0], eurMois(pts[0].m), 'start', -4, -12);
+    marker(peak, 'Pic ' + eurMois(peak.m), 'middle', 0, -13);
+    marker(last, eurMois(last.m), 'end', 4, -22);
+
+    /* seconde série : la mensualité, plate par construction */
+    el('line', {x1: P.l, x2: W - P.r, y1: Y(MENS), y2: Y(MENS), stroke: '#EEAF51', 'stroke-width': 2.5, 'stroke-linecap': 'round'}, svg);
+    var ml = el('text', {x: W - P.r - 2, y: Y(MENS) - 9, 'text-anchor': 'end', 'font-size': 15, 'font-weight': 700, fill: '#8A6520'}, svg);
+    ml.textContent = 'Votre mensualité ' + eurMois(MENS);
 
     var cross = el('line', {y1: P.t - 6, y2: H - P.b, stroke: '#262523', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0}, svg);
     var dot = el('circle', {r: 6, fill: '#262523', stroke: '#fff', 'stroke-width': 2, opacity: 0}, svg);
@@ -1131,10 +1136,10 @@ section{position:relative}
       t = Math.max(pts[0].t, Math.min(now, t));
       var p = pts[0];
       for (var i = 0; i < pts.length; i++) if (pts[i].t <= t) p = pts[i];
-      var cx = X(t), cy = Y(p.v);
+      var cx = X(t), cy = Y(p.m);
       cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('opacity', 1);
       dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.setAttribute('opacity', 1);
-      tip.innerHTML = '<b>' + eur(p.v) + '</b><br>depuis ' + moisAn(p.t);
+      tip.innerHTML = '<b>' + eurMois(p.m) + ' / mois</b><br>' + eur(p.v) + ' le kWh, depuis ' + moisAn(p.t);
       var left = cx * (r.width / W);
       left = Math.max(60, Math.min(r.width - 60, left));
       tip.style.left = left + 'px'; tip.style.top = (cy * (r.height / H)) + 'px';
