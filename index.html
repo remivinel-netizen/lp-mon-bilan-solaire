@@ -264,7 +264,12 @@ section{position:relative}
 
 /* steps */
 .steps{list-style:none;margin:34px 0 0;padding:0;display:grid;gap:12px;counter-reset:s}
-.steps li{position:relative;background:#fff;border-radius:var(--r-md);padding:20px 20px 22px;box-shadow:0 0 0 1px var(--line)}
+.steps li{position:relative;background:#fff;border-radius:var(--r-md);padding:20px 20px 22px;box-shadow:0 0 0 1px var(--line);transition:background-color .22s ease,box-shadow .22s ease}
+/* survol : teinte seule, sans effet de soulèvement — ces cartes ne sont pas cliquables */
+@media (hover:hover){
+  .steps li:hover{background:var(--brume);box-shadow:0 0 0 1px var(--line-2)}
+  .steps li.hl:hover{background:#F7D8A6}
+}
 .steps .num{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .steps .num span{width:36px;height:36px;border-radius:12px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700}
 .steps .num .ico{width:26px;height:26px;color:var(--ink-3)}
@@ -273,6 +278,8 @@ section{position:relative}
 .steps li.hl{background:var(--ble);box-shadow:none}
 .steps li.hl .num span{background:var(--corail)}
 .steps li.hl p{color:#4a463d}
+.steps-cta{margin-top:26px;display:flex;flex-direction:column;align-items:stretch;gap:12px}
+.steps-cta__note{font-size:15px;color:var(--ink);opacity:.72;text-align:center}
 
 /* bento */
 .bento{display:grid;gap:12px;margin-top:34px;grid-template-columns:1fr 1fr}
@@ -378,6 +385,7 @@ section{position:relative}
   .chart{padding:26px 26px 18px}
   .fixed{padding:30px 28px;align-self:start;justify-content:flex-start;gap:22px}
   .steps{grid-template-columns:repeat(4,1fr);margin-top:48px}
+  .steps-cta{flex-direction:row;align-items:center;gap:18px;margin-top:40px}
   .bento{grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(190px,auto);margin-top:48px}
   .tile{padding:22px}
   .tile--90{grid-column:span 2;grid-row:span 2}
@@ -620,6 +628,10 @@ section{position:relative}
       <li class="hl"><div class="num"><span>3</span><svg class="ico"><use href="#i-mail"/></svg></div><h3>Vous recevez votre simulation par email</h3><p>Production estimée, économie sur la facture, mensualité. Vous la lisez tranquillement, chez vous.</p></li>
       <li><div class="num"><span>4</span><svg class="ico"><use href="#i-home"/></svg></div><h3>On vient si elle vous convient</h3><p>Visite technique, puis pose en une journée. Le Consuel valide l'installation avant la mise en service.</p></li>
     </ol>
+    <div class="steps-cta">
+      <a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan<svg class="ico"><use href="#i-arrow"/></svg></a>
+      <span class="steps-cta__note">Une minute, sans engagement</span>
+    </div>
   </div>
 </section>
 
