@@ -16,6 +16,8 @@
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap">
 <link rel="preload" as="image" href="img/hero-900.webp" imagesrcset="img/hero-900.webp 900w, img/hero-1600.webp 1600w" imagesizes="100vw">
 
 <!-- Google Tag Manager : remplacer GTM-XXXXXXX puis décommenter
@@ -82,10 +84,13 @@ p{margin:0}
 .hero h1 em{font-style:normal;color:var(--ble)}
 .hero__lead{font-size:16.5px;line-height:1.5;color:rgba(255,255,255,.94);max-width:34em;text-shadow:0 1px 14px rgba(0,0,0,.3)}
 .hero__lead b{color:#fff;font-weight:700}
+.hero__lead b.hl{color:var(--ambre)}
 .checks{list-style:none;padding:0;margin:22px 0 0;display:none;gap:12px}
 .checks li{display:flex;gap:12px;align-items:center;font-weight:500}
 .checks .tick{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:0 0 auto;box-shadow:0 0 0 1px rgba(255,255,255,.25) inset}
 .checks .tick .ico{width:16px;height:16px;color:var(--ble);stroke-width:2.6}
+.hand{display:flex;align-items:flex-start;gap:8px;margin:20px 0 0;color:var(--ble);font-family:'Caveat',var(--font);font-weight:600;font-size:clamp(20px,5vw,26px);line-height:1.15;transform:rotate(-1.5deg);transform-origin:left center;text-shadow:0 1px 12px rgba(0,0,0,.35)}
+.hand svg{width:34px;height:34px;flex:0 0 auto;color:var(--ambre);margin-top:-2px}
 
 /* ---------- quiz card (iOS feel) ---------- */
 .quiz{position:relative;background:rgba(255,255,255,.97);border-radius:30px;box-shadow:var(--shadow-card);padding:18px 18px 16px;scroll-margin-top:12px}
@@ -167,6 +172,9 @@ p{margin:0}
 .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
 .quiz__foot{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;font-size:13px;color:var(--ink-3)}
 .quiz__foot .ico{width:15px;height:15px}
+.trust{flex-wrap:wrap;gap:7px 18px;font-size:12.5px;font-weight:500}
+.trust > span{display:inline-flex;align-items:center;gap:6px}
+.trust .ico{width:14px;height:14px;color:var(--ok);flex:0 0 auto}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .spin{width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -429,14 +437,17 @@ section{position:relative}
   </div>
   <div class="wrap hero__inner">
     <div class="hero__copy">
-      <span class="eyebrow"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan solaire gratuit pour les propriétaires</span>
+      <span class="eyebrow"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
       <h1>Une mensualité <em>fixe</em> à la place de votre facture d'électricité</h1>
-      <p class="hero__lead">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b>90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
+      <p class="hero__lead">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b class="hl">90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
       <ul class="checks">
         <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Votre simulation arrive par email, avant tout rendez-vous</li>
         <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Installateur certifié RGE, pose en une journée</li>
         <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Panneaux garantis 30 ans, installation validée par le Consuel</li>
       </ul>
+      <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
+        <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </p>
     </div>
 
     <div class="quiz" id="bilan">
@@ -538,7 +549,7 @@ section{position:relative}
         </a>
       </div>
 
-      <p class="quiz__foot" id="q-foot"><svg class="ico"><use href="#i-lock"/></svg>Gratuit et sans engagement</p>
+      <p class="quiz__foot trust" id="q-foot"><span><svg class="ico"><use href="#i-lock"/></svg>100&nbsp;% gratuit</span><span><svg class="ico"><use href="#i-check"/></svg>Sans engagement</span><span><svg class="ico"><use href="#i-mail"/></svg>Simulation par email</span></p>
     </div>
   </div>
 </section>
