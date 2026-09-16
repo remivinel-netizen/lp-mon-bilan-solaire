@@ -521,7 +521,7 @@ section{position:relative}
 
           <fieldset class="step" data-step="code_postal">
             <legend class="step__q" tabindex="-1">Où se trouve votre maison&nbsp;?</legend>
-            <p class="step__hint">Le code postal nous sert à estimer l'ensoleillement de votre secteur et à vérifier qu'on intervient chez vous.</p>
+            <p class="step__hint">Le code postal nous sert à estimer l'ensoleillement de votre secteur.</p>
             <div class="group">
               <div class="field cp"><label for="f-cp">Code postal</label><input id="f-cp" name="code_postal" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="69000" pattern="[0-9]{5}"></div>
             </div>
@@ -877,7 +877,7 @@ section{position:relative}
     if (!started) { started = true; track('quiz_start', {first_answer: input.value}); }
     if (name === 'facture'){
       var an = input.getAttribute('data-an');
-      $('#q-annual').innerHTML = 'Avec cette facture, <b>' + an + '</b> partent chez votre fournisseur d’électricité.';
+      $('#q-annual').innerHTML = 'Cela représente <b>' + an + '</b>. Dites-nous à quel horizon vous vous projetez.';
     }
     clearTimeout(timer);
     timer = setTimeout(next, 300);
