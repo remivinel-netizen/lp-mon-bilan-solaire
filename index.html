@@ -76,7 +76,7 @@ p{margin:0}
 .hero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 60%}
 .hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,22,20,.66) 0%,rgba(24,22,20,.56) 55%,rgba(24,22,20,.3) 100%)}
 .hero__inner{position:relative;display:grid;gap:22px;padding-top:26px}
-.hero__copy{color:#fff}
+.hero__copy{color:#fff;min-width:0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 7px;border-radius:999px;background:rgba(255,255,255,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:13.5px;font-weight:500;box-shadow:0 0 0 1px rgba(255,255,255,.22) inset}
 .eyebrow .sunbadge{width:22px;height:22px;border-radius:50%;background:var(--ambre);display:grid;place-items:center}
 .eyebrow .sunbadge svg{width:15px;height:15px;color:#fff}
@@ -85,12 +85,21 @@ p{margin:0}
 .hero__lead{font-size:16.5px;line-height:1.5;color:rgba(255,255,255,.94);max-width:34em;text-shadow:0 1px 14px rgba(0,0,0,.3)}
 .hero__lead b{color:#fff;font-weight:700}
 .hero__lead b.hl{color:var(--ambre)}
-.checks{list-style:none;padding:0;margin:22px 0 0;display:none;gap:12px}
-.checks li{display:flex;gap:12px;align-items:center;font-weight:500}
-.checks .tick{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:0 0 auto;box-shadow:0 0 0 1px rgba(255,255,255,.25) inset}
-.checks .tick .ico{width:16px;height:16px;color:var(--ble);stroke-width:2.6}
-.hand{display:flex;align-items:flex-start;gap:8px;margin:20px 0 0;color:var(--ble);font-family:'Caveat',var(--font);font-weight:600;font-size:clamp(20px,5vw,26px);line-height:1.15;transform:rotate(-1.5deg);transform-origin:left center;text-shadow:0 1px 12px rgba(0,0,0,.35)}
+.feats{list-style:none;min-width:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;margin:20px -16px 0;padding:0 16px;scroll-padding:0 16px}
+.feats::-webkit-scrollbar{display:none}
+.feats li{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 15px 8px 8px;border-radius:999px;background:rgba(255,255,255,.14);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset;scroll-snap-align:start}
+@supports (backdrop-filter:blur(10px)){.feats li{background:rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}}
+.feats .fi{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;color:var(--ink)}
+.feats .fi .ico{width:17px;height:17px}
+.feats .ft{line-height:1.2;white-space:nowrap}
+.feats b{display:block;font-size:14px;font-weight:700}
+.feats small{display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,.74)}
+.hero__notes{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 0}
+.hand{display:flex;align-items:flex-start;gap:8px;margin:0;color:var(--ble);font-family:'Caveat',var(--font);font-weight:600;font-size:clamp(20px,5vw,26px);line-height:1.15;transform:rotate(-1.5deg);transform-origin:left center;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .hand svg{width:34px;height:34px;flex:0 0 auto;color:var(--ambre);margin-top:-2px}
+.sticker{flex:0 0 auto;width:84px;height:84px;border-radius:50%;background:var(--ambre);color:#2A2419;display:grid;place-content:center;text-align:center;line-height:1.1;transform:rotate(-8deg);box-shadow:0 12px 26px -10px rgba(0,0,0,.6),0 0 0 4px rgba(255,255,255,.18)}
+.sticker b{display:block;font-size:21px;font-weight:900;letter-spacing:-.02em}
+.sticker i{display:block;font-style:normal;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
 
 /* ---------- quiz card (iOS feel) ---------- */
 .quiz{position:relative;background:rgba(255,255,255,.97);border-radius:30px;box-shadow:var(--shadow-card);padding:18px 18px 16px;scroll-margin-top:12px}
@@ -209,6 +218,7 @@ section{position:relative}
 .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--corail);margin-bottom:12px}
 .kicker svg{width:16px;height:16px}
 .h2{font-size:clamp(29px,6.4vw,46px);text-wrap:balance}
+.h2 em{font-style:normal;color:var(--corail)}
 .sub{font-size:18px;color:var(--ink-2);margin-top:14px;max-width:40em}
 
 /* proof strip */
@@ -356,7 +366,10 @@ section{position:relative}
   .hero__media::after{background:linear-gradient(95deg,rgba(24,22,20,.8) 0%,rgba(24,22,20,.62) 45%,rgba(24,22,20,.12) 78%)}
   .hero__inner{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:56px;align-items:center;padding:64px 40px 64px 56px;min-height:680px}
   .hero__lead{font-size:20px}
-  .checks{display:grid}
+  .feats{flex-direction:column;align-items:flex-start;overflow:visible;gap:9px;margin:26px 0 0;padding:0}
+  .feats li{padding:9px 18px 9px 9px}
+  .sticker{width:96px;height:96px}
+  .sticker b{font-size:24px}
   .quiz{padding:22px 24px 18px;max-width:480px;justify-self:end;width:100%}
   .sec{padding:104px 0}
   .price{grid-template-columns:1.55fr 1fr;margin-top:48px}
@@ -440,14 +453,18 @@ section{position:relative}
       <span class="eyebrow"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
       <h1>Une mensualité <em>fixe</em> à la place de votre facture d'électricité</h1>
       <p class="hero__lead">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b class="hl">90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
-      <ul class="checks">
-        <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Votre simulation arrive par email, avant tout rendez-vous</li>
-        <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Installateur certifié RGE, pose en une journée</li>
-        <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Panneaux garantis 30 ans, installation validée par le Consuel</li>
+      <ul class="feats">
+        <li><span class="fi c-ambre"><svg class="ico"><use href="#i-euro"/></svg></span><span class="ft"><b>Sans apport</b><small>ni avance de fonds</small></span></li>
+        <li><span class="fi c-brume"><svg class="ico"><use href="#i-mail"/></svg></span><span class="ft"><b>Simulation par email</b><small>avant tout rendez-vous</small></span></li>
+        <li><span class="fi c-lavande"><svg class="ico"><use href="#i-shield"/></svg></span><span class="ft"><b>Installateur certifié RGE</b><small>pose en une journée</small></span></li>
+        <li><span class="fi c-ble"><svg class="ico"><use href="#i-panel"/></svg></span><span class="ft"><b>Panneaux garantis 30 ans</b><small>validés par le Consuel</small></span></li>
       </ul>
-      <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
-        <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </p>
+      <div class="hero__notes">
+        <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
+          <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </p>
+        <span class="sticker" aria-hidden="true"><b>100&nbsp;%</b><i>gratuit<br>en 2 min</i></span>
+      </div>
     </div>
 
     <div class="quiz" id="bilan">
@@ -568,7 +585,7 @@ section{position:relative}
 <section class="sec" id="prix">
   <div class="wrap">
     <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Le prix de l'électricité</span>
-    <h2 class="h2">Le kWh coûte 29&nbsp;% de plus qu'en 2020</h2>
+    <h2 class="h2">Le kWh coûte <em>29&nbsp;% de plus</em> qu'en 2020</h2>
     <p class="sub">Au tarif réglementé, il est passé de 0,1546&nbsp;€ en février 2020 à 0,2001&nbsp;€ au 1<sup>er</sup> août 2026. Il est monté jusqu'à 0,2516&nbsp;€ en 2024, il a baissé, et il remonte depuis cet été. Votre facture suit ces décisions sans que vous ayez votre mot à dire.</p>
 
     <div class="price">
@@ -635,7 +652,7 @@ section{position:relative}
     <div class="gal-head">
       <div>
         <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Réalisations</span>
-        <h2 class="h2">Des maisons comme la vôtre, déjà équipées</h2>
+        <h2 class="h2">Des maisons comme la vôtre, <em>déjà équipées</em></h2>
       </div>
       <div class="gal-nav">
         <button type="button" data-gal="-1" aria-label="Photos précédentes"><svg class="ico"><use href="#i-chev-l"/></svg></button>
