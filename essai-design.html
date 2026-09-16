@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Essai design — Mon Bilan Solaire</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
+<style>
+:root{
+  /* la charte, retournée : les teintes claires deviennent de la lumière sur une surface sombre */
+  --ble:#FCED90; --ambre:#EEAF51; --corail:#E85D4C; --lavande:#9DACDA; --brume:#DCECF8;
+  --nuit:#141312; --nuit-2:#1D1B19; --nuit-3:#2A2724;
+  --clair:#F6F4EC; --clair-2:rgba(246,244,236,.72); --clair-3:rgba(246,244,236,.46);
+  --ease:cubic-bezier(.22,.68,0,1);
+  --font:'Satoshi',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{margin:0;background:var(--nuit);color:var(--clair);font-family:var(--font);font-size:17px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* ---------- la lumière : une seule source, en haut à droite ---------- */
+.glow{position:fixed;top:-38vmax;right:-22vmax;width:76vmax;height:76vmax;border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 50% 50%, rgba(238,175,81,.20) 0%, rgba(238,175,81,.10) 34%, rgba(232,93,76,.05) 55%, transparent 72%);
+  animation:respire 9s var(--ease) infinite alternate}
+@keyframes respire{from{transform:scale(1);opacity:.85}to{transform:scale(1.10);opacity:1}}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+main{position:relative;z-index:2}
+
+/* ---------- entrée orchestrée : une seule séquence, au chargement ---------- */
+.up{opacity:0;transform:translateY(18px);animation:up .9s var(--ease) forwards}
+@keyframes up{to{opacity:1;transform:none}}
+.d1{animation-delay:.05s}.d2{animation-delay:.16s}.d3{animation-delay:.27s}
+.d4{animation-delay:.38s}.d5{animation-delay:.49s}.d6{animation-delay:.60s}
+
+/* ---------- en-tête ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 0}
+.mark{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.02em;font-size:19px}
+.sun{width:30px;height:30px;flex:0 0 auto;color:var(--ambre);filter:drop-shadow(0 0 10px rgba(238,175,81,.55));
+  animation:tourne 26s linear infinite}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.live{display:inline-flex;align-items:center;gap:9px;font-size:14px;color:var(--clair-2);
+  padding:8px 15px;border-radius:999px;background:rgba(246,244,236,.05);box-shadow:0 0 0 1px rgba(246,244,236,.09) inset}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ble);box-shadow:0 0 0 0 rgba(252,237,144,.6);animation:bat 2.4s ease-out infinite}
+@keyframes bat{0%{box-shadow:0 0 0 0 rgba(252,237,144,.55)}70%{box-shadow:0 0 0 9px rgba(252,237,144,0)}100%{box-shadow:0 0 0 0 rgba(252,237,144,0)}}
+
+/* ---------- hero ---------- */
+.hero{padding:34px 0 76px}
+h1{font-size:clamp(38px,7.6vw,82px);line-height:.98;letter-spacing:-.035em;font-weight:900;margin:22px 0 0;max-width:13em}
+h1 .lum{color:var(--ambre);text-shadow:0 0 44px rgba(238,175,81,.42)}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ambre)}
+.kicker i{width:26px;height:1px;background:linear-gradient(90deg,var(--ambre),transparent);display:block}
+.lead{margin:26px 0 0;font-size:clamp(17px,2vw,21px);color:var(--clair-2);max-width:32em}
+
+/* ---------- l'instrument : deux séries, un seul cadran ---------- */
+.panneau{margin-top:52px;border-radius:26px;background:linear-gradient(180deg,var(--nuit-2),#171514);
+  box-shadow:0 0 0 1px rgba(246,244,236,.08) inset, 0 50px 90px -50px #000;overflow:hidden}
+.panneau__tete{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:22px 24px 0;font-size:14px;color:var(--clair-3);letter-spacing:.04em}
+.panneau__tete b{color:var(--clair);font-size:16px;letter-spacing:0}
+.cadran{padding:14px 14px 4px}
+.cadran svg{width:100%;height:auto;display:block;overflow:visible}
+.trace{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.is-vu .trace{animation:trace 1.9s var(--ease) forwards}
+@keyframes trace{to{stroke-dashoffset:0}}
+.trace--cout{stroke:var(--corail);filter:drop-shadow(0 0 9px rgba(232,93,76,.45))}
+.trace--mens{stroke:var(--ambre);filter:drop-shadow(0 0 9px rgba(238,175,81,.45))}
+.is-vu .trace--mens{animation-delay:.5s}
+.grad{stroke:rgba(246,244,236,.07);stroke-width:1}
+.axe{fill:var(--clair-3);font-size:15px;font-family:var(--font)}
+.pt{font-family:var(--font);font-weight:700;font-size:17px}
+.pt--cout{fill:var(--corail)}.pt--mens{fill:var(--ambre)}
+@media(max-width:760px){.axe{font-size:34px}.pt{font-size:36px}}
+.pastilleG{opacity:0}
+.is-vu .pastilleG{animation:up .7s var(--ease) 1.7s forwards}
+.legende{display:flex;flex-wrap:wrap;gap:10px 24px;padding:6px 24px 22px;font-size:15px;color:var(--clair-2)}
+.legende span{display:inline-flex;align-items:center;gap:9px}
+.legende i{width:20px;height:3px;border-radius:2px;display:block}
+
+/* ---------- les compteurs ---------- */
+.rangee{display:grid;gap:14px;margin-top:14px;grid-template-columns:1fr}
+@media(min-width:760px){.rangee{grid-template-columns:repeat(3,1fr)}}
+.compteur{position:relative;border-radius:22px;padding:24px 22px 22px;background:var(--nuit-2);overflow:hidden;
+  box-shadow:0 0 0 1px rgba(246,244,236,.07) inset;
+  transition:transform .45s var(--ease), box-shadow .45s var(--ease)}
+.compteur::after{content:"";position:absolute;inset:0;border-radius:22px;opacity:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 0%, rgba(238,175,81,.16), transparent 62%);
+  transition:opacity .45s var(--ease)}
+@media(hover:hover){
+  .compteur:hover{transform:translateY(-5px);box-shadow:0 0 0 1px rgba(238,175,81,.35) inset, 0 26px 50px -28px rgba(0,0,0,.9)}
+  .compteur:hover::after{opacity:1}
+}
+.compteur .val{font-size:clamp(44px,6vw,62px);font-weight:900;letter-spacing:-.04em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.compteur .val small{font-size:.38em;font-weight:700;letter-spacing:-.01em;margin-left:.15em;color:var(--clair-2)}
+.compteur .lbl{margin-top:11px;font-weight:700;font-size:17px}
+.compteur p{margin:7px 0 0;font-size:15px;color:var(--clair-3);line-height:1.45}
+.c-ambre .val{color:var(--ambre)}.c-ble .val{color:var(--ble)}.c-lav .val{color:var(--lavande)}
+
+/* ---------- appel ---------- */
+.appel{padding:80px 0 96px;text-align:center}
+.appel h2{font-size:clamp(30px,5vw,52px);line-height:1.02;letter-spacing:-.03em;font-weight:900;margin:0 auto;max-width:15em}
+.btn{position:relative;display:inline-flex;align-items:center;gap:13px;margin-top:30px;padding:0 34px;min-height:64px;
+  border:0;border-radius:999px;font:inherit;font-size:19px;font-weight:700;cursor:pointer;
+  color:var(--nuit);background:linear-gradient(180deg,var(--ble),var(--ambre));
+  box-shadow:0 0 0 1px rgba(252,237,144,.5), 0 20px 46px -18px rgba(238,175,81,.75);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(252,237,144,.75), 0 28px 60px -18px rgba(238,175,81,.95)}
+.btn:active{transform:translateY(-1px) scale(.985)}
+.btn:focus-visible{outline:3px solid var(--brume);outline-offset:4px}
+.btn svg{width:21px;height:21px;transition:transform .35s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.appel .note{margin-top:18px;font-size:15px;color:var(--clair-3)}
+
+.pied{border-top:1px solid rgba(246,244,236,.08);padding:26px 0 40px;font-size:15px;color:var(--clair-3)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .up,.pastilleG{opacity:1;transform:none}
+  .trace{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<main>
+<div class="wrap">
+
+  <header class="top up d1">
+    <div class="mark">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.4" fill="currentColor"/>
+        <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M12 1.8v2.6M12 19.6v2.6M22.2 12h-2.6M4.4 12H1.8M19.2 4.8l-1.8 1.8M6.6 17.4l-1.8 1.8M19.2 19.2l-1.8-1.8M6.6 6.6L4.8 4.8"/>
+        </g>
+      </svg>
+      Mon Bilan Solaire
+    </div>
+    <span class="live"><span class="dot"></span>Essai de direction visuelle</span>
+  </header>
+
+  <section class="hero">
+    <span class="kicker up d2"><i></i>Panneaux + batterie</span>
+    <h1 class="up d3">Votre toit produit.<br>Votre facture <span class="lum">s'arrête</span> de grimper.</h1>
+    <p class="lead up d4">Une mensualité fixée à la signature, à la place d'un tarif révisé deux fois par an sans vous demander votre avis.</p>
+
+    <div class="panneau up d5">
+      <div class="panneau__tete">
+        <b>Ce que coûte la même consommation</b>
+        <span>€ TTC par mois · tarif réglementé</span>
+      </div>
+      <div class="cadran" id="cadran">
+        <svg viewBox="0 0 720 300" role="img" aria-label="La facture d'électricité passe de 116 € par mois en 2020 à 150 € en 2026, avec un pic à 189 € en 2024. La mensualité reste à 110 € par mois.">
+          <g id="grilles"></g>
+          <path class="trace trace--cout" id="tCout"></path>
+          <path class="trace trace--mens" id="tMens"></path>
+          <g class="pastilleG" id="pastilles"></g>
+        </svg>
+      </div>
+      <p class="legende">
+        <span><i style="background:var(--corail)"></i>Facture d'électricité</span>
+        <span><i style="background:var(--ambre)"></i>Votre mensualité</span>
+      </p>
+    </div>
+
+    <div class="rangee">
+      <div class="compteur c-ambre up d6">
+        <div class="val" data-fin="110" data-suf="&nbsp;€">0<small>/mois</small></div>
+        <div class="lbl">Fixe jusqu'au bout</div>
+        <p>Le montant est arrêté à la signature. Il ne bouge plus.</p>
+      </div>
+      <div class="compteur c-ble up d6" style="animation-delay:.70s">
+        <div class="val" data-fin="90" data-suf="&nbsp;%">0</div>
+        <div class="lbl">D'économie visée</div>
+        <p>Sur la facture d'électricité, batterie comprise.</p>
+      </div>
+      <div class="compteur c-lav up d6" style="animation-delay:.80s">
+        <div class="val" data-fin="0" data-suf="&nbsp;€">0</div>
+        <div class="lbl">À avancer</div>
+        <p>Le chantier démarre sans apport de votre part.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="appel">
+    <h2>Et chez vous, ça donnerait quoi&nbsp;?</h2>
+    <button class="btn" type="button">
+      Faire mon bilan
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+    </button>
+    <p class="note">Six questions, une minute. Sans engagement.</p>
+  </section>
+
+  <p class="pied">Essai de direction visuelle — la page validée reste sur <a href="index.html" style="color:var(--ambre)">l'accueil</a>.</p>
+</div>
+</main>
+
+<script>
+(function(){
+  var NB = ' ';
+  /* les vraies valeurs : Tarif Bleu appliqué à une consommation constante, base 150 €/mois en août 2026 */
+  var DATA = [['2020-02',.1546],['2020-08',.1557],['2021-02',.1582],['2021-08',.1558],['2022-02',.1740],
+              ['2023-02',.2062],['2023-08',.2276],['2024-02',.2516],['2025-02',.2016],['2025-08',.1952],
+              ['2026-02',.1940],['2026-08',.2001]];
+  var KWH = 150/.2001, MENS = 110;
+  var W=720,H=300,P={l:58,r:20,t:30,b:38};
+  var t0=+new Date('2020-01-01'), t1=+new Date('2026-10-01'), v0=100, v1=200;
+  var pts = DATA.map(function(d){ return {t:+new Date(d[0]+'-01'), m:d[1]*KWH}; });
+  function X(t){ return P.l+(t-t0)/(t1-t0)*(W-P.l-P.r); }
+  function Y(v){ return P.t+(1-(v-v0)/(v1-v0))*(H-P.t-P.b); }
+  var NS='http://www.w3.org/2000/svg';
+  function el(n,a,p){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); if(p)p.appendChild(e); return e; }
+
+  var g=document.getElementById('grilles');
+  [120,150,180].forEach(function(v){
+    el('line',{x1:P.l,x2:W-P.r,y1:Y(v),y2:Y(v),class:'grad'},g);
+    var t=el('text',{x:P.l-10,y:Y(v)+5,'text-anchor':'end',class:'axe'},g); t.textContent=v+NB+'€';
+  });
+  [2020,2022,2024,2026].forEach(function(y){
+    var t=el('text',{x:X(+new Date(y+'-01-01')),y:H-12,'text-anchor':'middle',class:'axe'},g); t.textContent=y;
+  });
+
+  var d='M'+X(pts[0].t)+' '+Y(pts[0].m);
+  for(var i=1;i<pts.length;i++) d+=' H'+X(pts[i].t)+' V'+Y(pts[i].m);
+  var cout=document.getElementById('tCout'); cout.setAttribute('d',d);
+  var mens=document.getElementById('tMens');
+  mens.setAttribute('d','M'+P.l+' '+Y(MENS)+' H'+(W-P.r));
+  [cout,mens].forEach(function(p){ var L=p.getTotalLength(); p.style.setProperty('--len',L); });
+
+  var pg=document.getElementById('pastilles');
+  function marque(x,y,txt,col,anchor,dx){
+    el('circle',{cx:x,cy:y,r:6,fill:col,stroke:'#141312','stroke-width':2},pg);
+    var t=el('text',{x:x+dx,y:y-16,'text-anchor':anchor,class:'pt pt--cout'},pg);
+    t.textContent=txt;
+  }
+  var pic=pts[7], last=pts[pts.length-1];
+  marque(X(pts[0].t),Y(pts[0].m),Math.round(pts[0].m)+NB+'€','#E85D4C','start',-4);
+  marque(X(pic.t),Y(pic.m),Math.round(pic.m)+NB+'€','#E85D4C','middle',0);
+  marque(X(last.t),Y(last.m),Math.round(last.m)+NB+'€','#E85D4C','end',6);
+  var tm=el('text',{x:W-P.r-2,y:Y(MENS)-15,'text-anchor':'end',class:'pt pt--mens'},pg);
+  tm.textContent='110'+NB+'€ · votre mensualité';
+
+  /* le tracé se dessine quand le cadran entre à l'écran, une seule fois */
+  var cadran=document.getElementById('cadran');
+  var doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(doux || !('IntersectionObserver' in window)) cadran.classList.add('is-vu');
+  else new IntersectionObserver(function(es,o){
+    if(es[0].isIntersecting){ cadran.classList.add('is-vu'); o.disconnect(); }
+  },{threshold:.35}).observe(cadran);
+
+  /* les compteurs montent à leur valeur, une seule fois */
+  document.querySelectorAll('.val[data-fin]').forEach(function(n){
+    var fin=+n.getAttribute('data-fin'), suf=n.getAttribute('data-suf')||'';
+    var petit=n.querySelector('small');
+    /* un nœud texte dédié : on n'écrit que lui, le <small> n'est jamais reconstruit */
+    var chiffre=document.createTextNode('0'+suf);
+    n.textContent=''; n.appendChild(chiffre); if(petit) n.appendChild(petit);
+    if(doux){ chiffre.nodeValue=fin+suf; return; }
+    var vu=false;
+    new IntersectionObserver(function(es,o){
+      if(!es[0].isIntersecting||vu) return; vu=true; o.disconnect();
+      var dur=1100, dep=performance.now();
+      (function pas(now){
+        var t=Math.min(1,(now-dep)/dur), e=1-Math.pow(1-t,3);
+        chiffre.nodeValue=Math.round(fin*e)+suf;
+        if(t<1) requestAnimationFrame(pas);
+      })(dep);
+    },{threshold:.5}).observe(n);
+  });
+})();
+</script>
+</body>
+</html>
