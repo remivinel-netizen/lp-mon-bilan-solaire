@@ -1097,6 +1097,49 @@ section{position:relative}
     });
   });
 
+  /* défilement automatique, mobile seulement : le desktop a ses flèches.
+     S'arrête définitivement dès que le visiteur touche le carrousel — WCAG 2.2.2
+     demande qu'un mouvement automatique puisse être interrompu. */
+  (function(){
+    if (!gal) return;
+    var mqDoux = matchMedia('(prefers-reduced-motion: reduce)');
+    var mqMob  = matchMedia('(max-width: 1023px)');
+    var minuteur = null, visible = false, stoppe = false;
+
+    function pas(){
+      var card = gal.querySelector('.shot');
+      if (!card) return;
+      var largeur = card.getBoundingClientRect().width + 12;
+      var fin = gal.scrollWidth - gal.clientWidth - 4;
+      var cible = gal.scrollLeft >= fin ? 0 : gal.scrollLeft + largeur;
+      gal.scrollTo({left: cible, behavior: 'smooth'});
+    }
+    function demarre(){
+      if (stoppe || minuteur || mqDoux.matches || !mqMob.matches || !visible) return;
+      minuteur = setInterval(pas, 3400);
+    }
+    function suspend(){ clearInterval(minuteur); minuteur = null; }
+    function arrete(){ stoppe = true; suspend(); }
+
+    ['pointerdown','touchstart','wheel','keydown'].forEach(function(ev){
+      gal.addEventListener(ev, arrete, {passive: true, once: true});
+    });
+    document.querySelectorAll('[data-gal]').forEach(function(b){
+      b.addEventListener('click', arrete, {once: true});
+    });
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) suspend(); else demarre();
+    });
+    mqMob.addEventListener('change', function(){ mqMob.matches ? demarre() : suspend(); });
+
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        visible = es[0].isIntersecting;
+        visible ? demarre() : suspend();
+      }, {threshold: .4}).observe(gal);
+    } else { visible = true; demarre(); }
+  })();
+
   /* ---------- graphique prix du kWh ---------- */
   var DATA = [
     ['2020-02-01', .1546], ['2020-08-01', .1557], ['2021-02-01', .1582], ['2021-08-01', .1558],
