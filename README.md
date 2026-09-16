@@ -1,6 +1,6 @@
-# Mon Bilan Soleil, landing page
+# Mon Bilan Solaire, landing page
 
-Landing page Google Ads pour Mon Bilan Soleil (service d'EKO HABITATIONS), avec questionnaire en hero.
+Landing page Google Ads pour Mon Bilan Solaire (service d'EKO HABITATIONS), avec questionnaire en hero.
 
 ## Fichiers
 - `index.html` : page complète (CSS et JS intégrés)
