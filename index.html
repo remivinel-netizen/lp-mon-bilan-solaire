@@ -24,6 +24,7 @@
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
 -->
 
+<script>document.documentElement.className+=' js';</script>
 <style>
 :root{
   --lavande:#9DACDA; --brume:#DCECF8; --ble:#FCED90; --ambre:#EEAF51;
@@ -62,6 +63,8 @@ p{margin:0}
 @media (min-width:480px){.pill__long{display:inline}.pill__short{display:none}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border:0;border-radius:999px;font-weight:700;font-size:19px;text-decoration:none;cursor:pointer;transition:transform .2s var(--ease),background-color .2s ease,box-shadow .2s ease;-webkit-tap-highlight-color:transparent}
 .btn:active{transform:scale(.97)}
+.btn:focus-visible,.qbtn:focus-visible,.gal-nav button:focus-visible,.faq summary:focus-visible{outline:3px solid var(--lavande);outline-offset:3px}
+.foot nav a:focus-visible{outline:2px solid var(--ble);outline-offset:3px;border-radius:4px}
 .btn--ink{background:var(--ink);color:#fff}
 .btn--ink:hover{background:#000}
 .btn--corail{background:var(--corail);color:#fff;box-shadow:0 10px 24px -10px rgba(232,93,76,.8)}
@@ -69,6 +72,24 @@ p{margin:0}
 .btn--white{background:#fff;color:var(--ink)}
 .btn--sm{min-height:42px;padding:0 18px;font-size:15px}
 .top .btn{display:none}
+
+/* ---------- animations : une seule séquence d'entrée, puis du mouvement qui répond ---------- */
+.ent{opacity:0;transform:translateY(14px);animation:ent .8s var(--ease) forwards}
+@keyframes ent{to{opacity:1;transform:none}}
+.e1{animation-delay:.04s}.e2{animation-delay:.13s}.e3{animation-delay:.22s}
+.e4{animation-delay:.31s}.e5{animation-delay:.40s}.e6{animation-delay:.16s}
+
+/* le tracé du graphique se construit : c'est l'écart qui se creuse sous les yeux */
+.js .chart__svg .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.chart__svg.is-vu .draw{animation:draw 1.5s var(--ease) forwards}
+.chart__svg.is-vu .draw--mens{animation-delay:.45s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.js .chart__svg .fadein{opacity:0}
+.chart__svg.is-vu .fadein{animation:ent .6s var(--ease) 1.25s forwards}
+
+/* les tuiles arrivent en cascade, une seule fois */
+.js .bento .tile{opacity:0;transform:translateY(16px)}
+.bento.is-vu .tile{animation:ent .7s var(--ease) forwards;animation-delay:calc(var(--i) * 70ms)}
 
 /* ---------- hero ---------- */
 .hero{position:relative;padding-bottom:28px}
@@ -231,7 +252,7 @@ section{position:relative}
 /* proof strip */
 .proof{padding:10px 0 34px}
 .proof ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.proof li{display:flex;gap:12px;align-items:center;background:#fff;border-radius:20px;padding:14px;box-shadow:0 0 0 1px var(--line)}
+.proof li{display:flex;gap:12px;align-items:center;background:#fff;border-radius:20px;padding:14px;box-shadow:0 0 0 1px var(--line),0 12px 24px -18px rgba(38,37,35,.35)}
 .proof .b{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto}
 .proof .b{color:var(--ink)}
 .proof .b .ico{width:21px;height:21px}
@@ -241,7 +262,7 @@ section{position:relative}
 
 /* price section */
 .price{display:grid;gap:14px;margin-top:34px}
-.card{background:#fff;border-radius:var(--r-md);box-shadow:0 0 0 1px var(--line)}
+.card{background:#fff;border-radius:var(--r-md);box-shadow:0 0 0 1px var(--line),0 24px 44px -32px rgba(38,37,35,.40)}
 .chart{padding:20px 18px 14px}
 .chart__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .chart__title{font-size:16px;font-weight:700}
@@ -264,7 +285,7 @@ section{position:relative}
 
 /* steps */
 .steps{list-style:none;margin:34px 0 0;padding:0;display:grid;gap:12px;counter-reset:s}
-.steps li{position:relative;background:#fff;border-radius:var(--r-md);padding:20px 20px 22px;box-shadow:0 0 0 1px var(--line);transition:background-color .22s ease,box-shadow .22s ease}
+.steps li{position:relative;background:#fff;border-radius:var(--r-md);padding:20px 20px 22px;box-shadow:0 0 0 1px var(--line),0 16px 30px -24px rgba(38,37,35,.40);transition:background-color .22s ease,box-shadow .22s ease}
 /* survol : teinte seule, sans effet de soulèvement — ces cartes ne sont pas cliquables */
 @media (hover:hover){
   .steps li:hover{background:var(--brume);box-shadow:0 0 0 1px var(--line-2)}
@@ -323,7 +344,8 @@ section{position:relative}
 
 /* faq */
 .faq{margin-top:30px;display:grid;gap:10px}
-.faq details{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.faq details{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 14px 28px -22px rgba(38,37,35,.35);transition:box-shadow .3s var(--ease)}
+.faq details[open]{box-shadow:0 0 0 1px var(--line-2),0 22px 40px -26px rgba(38,37,35,.45)}
 .faq summary .pm{background:var(--creme)!important}
 .faq summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 18px 18px 20px;font-weight:700;font-size:17px;line-height:1.3;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .faq summary::-webkit-details-marker{display:none}
@@ -460,16 +482,16 @@ section{position:relative}
   </div>
   <div class="wrap hero__inner">
     <div class="hero__copy">
-      <span class="eyebrow"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
-      <h1>Une mensualité <em>fixe</em> à la place de votre facture d'électricité</h1>
-      <p class="hero__lead">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b class="hl">90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
-      <ul class="feats">
+      <span class="eyebrow ent e1"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
+      <h1 class="ent e2">Une mensualité <em>fixe</em> à la place de votre facture d'électricité</h1>
+      <p class="hero__lead ent e3">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b class="hl">90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
+      <ul class="feats ent e4">
         <li><span class="fi c-ambre"><svg class="ico"><use href="#i-euro"/></svg></span><span class="ft"><b>Sans apport</b><small>ni avance de fonds</small></span></li>
         <li><span class="fi c-brume"><svg class="ico"><use href="#i-mail"/></svg></span><span class="ft"><b>Simulation par email</b><small>avant tout rendez-vous</small></span></li>
         <li><span class="fi c-lavande"><svg class="ico"><use href="#i-shield"/></svg></span><span class="ft"><b>Installateur certifié RGE</b><small>pose en une journée</small></span></li>
         <li><span class="fi c-ble"><svg class="ico"><use href="#i-panel"/></svg></span><span class="ft"><b>Panneaux garantis 30 ans</b><small>validés par le Consuel</small></span></li>
       </ul>
-      <div class="hero__notes">
+      <div class="hero__notes ent e5">
         <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </p>
@@ -477,7 +499,7 @@ section{position:relative}
       </div>
     </div>
 
-    <div class="quiz" id="bilan">
+    <div class="quiz ent e6" id="bilan">
       <div class="quiz__bar">
         <button type="button" class="qbtn" id="q-back" aria-label="Question précédente" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
         <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -640,19 +662,19 @@ section{position:relative}
     <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Ce qui est compris</span>
     <h2 class="h2">Une installation complète, zéro euro à sortir.</h2>
     <div class="bento">
-      <div class="tile tile--90">
+      <div class="tile tile--90" style="--i:0">
         <svg class="sun sunbg" aria-hidden="true"><use href="#i-sun"/></svg>
         <span class="pre">Jusqu'à</span>
         <span class="big">90&nbsp;%</span>
         <span class="lbl">d'économie sur votre facture d'électricité<a href="#notes" style="color:inherit;text-decoration:none">*</a></span>
         <p>Les panneaux produisent en journée. La batterie garde le surplus pour le soir, au lieu de le laisser partir sur le réseau.</p>
       </div>
-      <div class="tile tile--0"><span class="ic"><svg class="ico"><use href="#i-euro"/></svg></span><span class="big">0&nbsp;€</span><span class="lbl">d'apport à prévoir</span><p>L'installation est financée par un crédit, sous réserve d'acceptation du dossier.</p></div>
-      <div class="tile tile--1j"><span class="ic"><svg class="ico"><use href="#i-clock"/></svg></span><span class="big">1&nbsp;jour</span><span class="lbl">de chantier, en général</span><p>Les équipes arrivent le matin et repartent le soir.</p></div>
-      <div class="tile tile--30" style="background-image:url('img/panneaux-900.webp')"><span class="big">30&nbsp;ans</span><span class="lbl">de garantie sur les panneaux</span><p>Des panneaux de marque française. La garantie décennale de l'installateur couvre en plus les travaux.</p></div>
-      <div class="tile tile--rge"><span class="ic"><svg class="ico"><use href="#i-shield"/></svg></span><span class="big word">RGE</span><span class="lbl">Installateur certifié QualiPV</span></div>
-      <div class="tile tile--consuel"><span class="ic" style="background:var(--brume)"><svg class="ico"><use href="#i-check"/></svg></span><span class="big word">Consuel</span><span class="lbl">Conformité électrique validée avant la mise en service</span></div>
-      <div class="tile tile--bat"><span class="ic"><svg class="ico"><use href="#i-battery"/></svg></span><span class="big word">Batterie</span><span class="lbl">de stockage incluse</span><p>Ce que vos panneaux produisent à midi, vous l'utilisez pour le dîner.</p></div>
+      <div class="tile tile--0" style="--i:1"><span class="ic"><svg class="ico"><use href="#i-euro"/></svg></span><span class="big">0&nbsp;€</span><span class="lbl">d'apport à prévoir</span><p>L'installation est financée par un crédit, sous réserve d'acceptation du dossier.</p></div>
+      <div class="tile tile--1j" style="--i:2"><span class="ic"><svg class="ico"><use href="#i-clock"/></svg></span><span class="big">1&nbsp;jour</span><span class="lbl">de chantier, en général</span><p>Les équipes arrivent le matin et repartent le soir.</p></div>
+      <div class="tile tile--30" style="background-image:url('img/panneaux-900.webp');--i:3"><span class="big">30&nbsp;ans</span><span class="lbl">de garantie sur les panneaux</span><p>Des panneaux de marque française. La garantie décennale de l'installateur couvre en plus les travaux.</p></div>
+      <div class="tile tile--rge" style="--i:4"><span class="ic"><svg class="ico"><use href="#i-shield"/></svg></span><span class="big word">RGE</span><span class="lbl">Installateur certifié QualiPV</span></div>
+      <div class="tile tile--consuel" style="--i:5"><span class="ic" style="background:var(--brume)"><svg class="ico"><use href="#i-check"/></svg></span><span class="big word">Consuel</span><span class="lbl">Conformité électrique validée avant la mise en service</span></div>
+      <div class="tile tile--bat" style="--i:6"><span class="ic"><svg class="ico"><use href="#i-battery"/></svg></span><span class="big word">Batterie</span><span class="lbl">de stockage incluse</span><p>Ce que vos panneaux produisent à midi, vous l'utilisez pour le dîner.</p></div>
     </div>
   </div>
 </section>
@@ -1125,11 +1147,11 @@ section{position:relative}
     for (var i = 1; i < pts.length; i++) d += ' H' + X(pts[i].t) + ' V' + Y(pts[i].m);
     d += ' H' + X(now);
     el('path', {d: d + ' V' + (H - P.b) + ' H' + X(pts[0].t) + ' Z', fill: 'url(#g-area)'}, svg);
-    el('path', {d: d, fill: 'none', stroke: '#E85D4C', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
+    var pCout = el('path', {d: d, fill: 'none', stroke: '#E85D4C', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', class: 'draw'}, svg);
 
     function marker(p, text, anchor, dx, dy){
-      el('circle', {cx: X(p.t), cy: Y(p.m), r: 5, fill: '#E85D4C', stroke: '#fff', 'stroke-width': 2}, svg);
-      var g = el('text', {x: X(p.t) + dx, y: Y(p.m) + dy, 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
+      el('circle', {cx: X(p.t), cy: Y(p.m), r: 5, fill: '#E85D4C', stroke: '#fff', 'stroke-width': 2, class: 'fadein'}, svg);
+      var g = el('text', {class: 'fadein', x: X(p.t) + dx, y: Y(p.m) + dy, 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
       g.textContent = text;
     }
     var last = pts[pts.length - 1], peak = pts[7];
@@ -1138,8 +1160,8 @@ section{position:relative}
     marker(last, eurMois(last.m), 'end', 4, -22);
 
     /* seconde série : la mensualité, plate par construction */
-    el('line', {x1: P.l, x2: W - P.r, y1: Y(MENS), y2: Y(MENS), stroke: '#EEAF51', 'stroke-width': 2.5, 'stroke-linecap': 'round'}, svg);
-    var ml = el('text', {x: W - P.r - 2, y: Y(MENS) - 9, 'text-anchor': 'end', 'font-size': 15, 'font-weight': 700, fill: '#8A6520'}, svg);
+    var pMens = el('line', {x1: P.l, x2: W - P.r, y1: Y(MENS), y2: Y(MENS), stroke: '#EEAF51', 'stroke-width': 2.5, 'stroke-linecap': 'round', class: 'draw draw--mens'}, svg);
+    var ml = el('text', {class: 'fadein', x: W - P.r - 2, y: Y(MENS) - 9, 'text-anchor': 'end', 'font-size': 15, 'font-weight': 700, fill: '#8A6520'}, svg);
     ml.textContent = 'Votre mensualité ' + eurMois(MENS);
 
     var cross = el('line', {y1: P.t - 6, y2: H - P.b, stroke: '#262523', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0}, svg);
@@ -1169,6 +1191,27 @@ section{position:relative}
   }
   draw();
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(draw, 120); });
+
+  /* ---------- déclencheurs d'animation ---------- */
+  var doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function auScroll(el, seuil){
+    if (!el) return;
+    if (doux || !('IntersectionObserver' in window)) { el.classList.add('is-vu'); return; }
+    new IntersectionObserver(function(es, o){
+      if (es[0].isIntersecting) { el.classList.add('is-vu'); o.disconnect(); }
+    }, {threshold: seuil}).observe(el);
+  }
+  /* le tracé : la longueur doit être relue à chaque redessin */
+  function armerTrace(){
+    box.querySelectorAll('.draw').forEach(function(p){
+      p.style.setProperty('--len', p.getTotalLength());
+    });
+  }
+  armerTrace();
+  var _draw = draw;
+  draw = function(){ _draw(); armerTrace(); };
+  auScroll(box, .3);
+  auScroll(document.querySelector('.bento'), .12);
 })();
 </script>
 </body>
