@@ -544,7 +544,7 @@ section{position:relative}
     <a class="brand" href="#top"><img src="img/logo.svg" alt="Mon Bilan Solaire" width="200" height="42"></a>
     <div class="top__right">
       <span class="pill"><svg class="ico"><use href="#i-shield"/></svg><span class="pill__long">Installateur certifié RGE</span><span class="pill__short">Certifié RGE</span></span>
-      <a class="btn btn--ink btn--sm" href="#bilan" data-go>Faire mon bilan</a>
+      <a class="btn btn--ink btn--sm" href="#bilan" data-go>Vérifier mes aides</a>
     </div>
   </div>
 </header>
@@ -650,7 +650,7 @@ section{position:relative}
               <p id="q-consent-tel-text">Je demande à être rappelé(e) par téléphone par <b>EKO HABITATIONS</b>, sous 48&nbsp;heures, au sujet de ma demande d'estimation. <b>Mes coordonnées ne sont transmises à personne d'autre</b>&nbsp;: ni revendues, ni cédées à un réseau de partenaires. Ce consentement est révocable à tout moment, par email à <a href="mailto:contact@eko-habitations.fr">contact@eko-habitations.fr</a>. Je peux demander la preuve de mon consentement sur support durable.</p>
             </label>
             <p class="note" id="q-tel-note" aria-live="polite"></p>
-            <div class="step__actions"><button type="submit" class="btn btn--corail" id="q-send">Recevoir ma simulation</button></div>
+            <div class="step__actions"><button type="submit" class="btn btn--corail" id="q-send">Recevoir mes aides par email</button></div>
             <p class="rgpd-droits">Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données.</p>
           </fieldset>
 
@@ -664,7 +664,7 @@ section{position:relative}
         <p>Votre demande est bien arrivée chez EKO HABITATIONS, l'installateur certifié RGE qui réalise les bilans Mon Bilan Solaire.</p>
         <ol class="timeline">
           <li><span class="n">1</span><div><b>On vous téléphone</b><span>au <span data-fill="tel"></span>, pour vérifier deux ou trois points sur votre maison.</span></div></li>
-          <li><span class="n">2</span><div><b>Vous recevez votre simulation par email</b><span>à <span data-fill="email"></span>, avec l'économie estimée et la mensualité.</span></div></li>
+          <li><span class="n">2</span><div><b>Vous recevez votre simulation par email</b><span>à <span data-fill="email"></span>, avec les aides qui s'appliquent, l'économie estimée et la mensualité.</span></div></li>
           <li><span class="n">3</span><div><b>Vous décidez</b><span>Si les chiffres vous conviennent, on organise la visite technique.</span></div></li>
         </ol>
         <a class="pro" href="https://eko-habitations.fr/" target="_blank" rel="noopener">
@@ -732,11 +732,11 @@ section{position:relative}
     <ol class="steps">
       <li><div class="num"><span>1</span><svg class="ico"><use href="#i-doc"/></svg></div><h3>Vous répondez à 6 questions</h3><p>Votre statut, votre facture, votre code postal. Ça prend une minute.</p></li>
       <li><div class="num"><span>2</span><svg class="ico"><use href="#i-phone"/></svg></div><h3>On vous téléphone avant de calculer</h3><p>Quelques minutes pour vérifier votre consommation et votre toiture, histoire de ne pas vous envoyer un chiffre au hasard.</p></li>
-      <li class="hl"><div class="num"><span>3</span><svg class="ico"><use href="#i-mail"/></svg></div><h3>Vous recevez votre simulation par email</h3><p>Production estimée, économie sur la facture, mensualité. Vous la lisez tranquillement, chez vous.</p></li>
+      <li class="hl"><div class="num"><span>3</span><svg class="ico"><use href="#i-mail"/></svg></div><h3>Vous recevez votre simulation par email</h3><p>Les aides applicables, la production estimée, l'économie sur la facture, la mensualité. Vous la lisez tranquillement, chez vous.</p></li>
       <li><div class="num"><span>4</span><svg class="ico"><use href="#i-home"/></svg></div><h3>On vient si elle vous convient</h3><p>Visite technique, puis pose en une journée. Le Consuel valide l'installation avant la mise en service.</p></li>
     </ol>
     <div class="sec-cta">
-      <a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan</a>
+      <a class="btn btn--corail" href="#bilan" data-go>Vérifier mes aides</a>
       <span class="sec-cta__note">Une minute, sans engagement</span>
     </div>
   </div>
@@ -786,8 +786,8 @@ section{position:relative}
       <figure class="shot"><img src="img/real-toiture-ardoise-720.webp" alt="Panneaux solaires noirs sur une toiture sombre" loading="lazy" width="720" height="900"><figcaption><b>Toiture sombre</b><span>Les panneaux se fondent dans le toit</span></figcaption></figure>
     </div>
     <div class="sec-cta">
-      <a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan</a>
-      <span class="sec-cta__note">Et voir ce que donnerait votre toiture</span>
+      <a class="btn btn--corail" href="#bilan" data-go>Vérifier mes aides</a>
+      <span class="sec-cta__note">Et ce qu'elles changent sur votre facture</span>
     </div>
   </div>
 </section>
@@ -838,7 +838,7 @@ section{position:relative}
   </div>
 </footer>
 
-<div class="sticky" id="sticky"><a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan solaire</a></div>
+<div class="sticky" id="sticky"><a class="btn btn--corail" href="#bilan" data-go>Vérifier mes aides</a></div>
 <script>
 (function(){
   'use strict';
@@ -1405,10 +1405,10 @@ section{position:relative}
        buter sur la flèche ; on la raccourcit plutôt que de la descendre sur
        les années de l'axe. */
     ml.textContent = narrow ? 'Mensualité fixe' : 'Votre mensualité, fixe';
-    placer(ml, [[ax1, Y(MENS) - 9], [ax1, Y(MENS) - 31]]);
+    var mlx = ax1 - (narrow ? 16 : 30);
+    placer(ml, [[mlx, Y(MENS) - 9], [mlx, Y(MENS) - 31]]);
 
     var cross = el('line', {y1: P.t - 6, y2: H - P.b, stroke: '#262523', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0}, svg);
-    var dot = el('circle', {r: 6, fill: '#262523', stroke: '#fff', 'stroke-width': 2, opacity: 0}, svg);
     var hit = el('rect', {x: P.l, y: 0, width: W - P.l - P.r, height: H, fill: 'transparent'}, svg);
     function move(ev){
       var r = svg.getBoundingClientRect();
@@ -1419,14 +1419,13 @@ section{position:relative}
       for (var i = 0; i < pts.length; i++) if (pts[i].t <= t) p = pts[i];
       var cx = X(t), cy = Y(p.m);
       cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('opacity', 1);
-      dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.setAttribute('opacity', 1);
       tip.innerHTML = '<b>' + eurMois(p.m) + ' / mois</b><br>' + eur(p.v) + ' le kWh, depuis ' + moisAn(p.t);
       var left = cx * (r.width / W);
       left = Math.max(60, Math.min(r.width - 60, left));
       tip.style.left = left + 'px'; tip.style.top = (cy * (r.height / H)) + 'px';
       tip.style.opacity = 1;
     }
-    function leave(){ cross.setAttribute('opacity', 0); dot.setAttribute('opacity', 0); tip.style.opacity = 0; }
+    function leave(){ cross.setAttribute('opacity', 0); tip.style.opacity = 0; }
     hit.addEventListener('pointermove', move);
     hit.addEventListener('pointerdown', move);
     hit.addEventListener('pointerleave', leave);

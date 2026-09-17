@@ -65,7 +65,7 @@ footer a{color:var(--ink-2)}
 
       <ol>
         <li><span class="n">1</span><div><b>On vous téléphone</b><span id="etape-tel">pour vérifier deux ou trois points sur votre maison.</span></div></li>
-        <li><span class="n">2</span><div><b>Vous recevez votre simulation par email</b><span id="etape-mail">avec l'économie estimée et la mensualité.</span></div></li>
+        <li><span class="n">2</span><div><b>Vous recevez votre simulation par email</b><span id="etape-mail">avec les aides qui s'appliquent, l'économie estimée et la mensualité.</span></div></li>
         <li><span class="n">3</span><div><b>Vous décidez</b><span>Si les chiffres vous conviennent, on organise la visite technique.</span></div></li>
       </ol>
 
@@ -102,7 +102,7 @@ footer a{color:var(--ink-2)}
   if (d.telephone) document.getElementById('etape-tel').textContent =
     'au ' + d.telephone + ' pour vérifier deux ou trois points sur votre maison.';
   if (d.email) document.getElementById('etape-mail').textContent =
-    'à ' + d.email + ', avec l’économie estimée et la mensualité.';
+    'à ' + d.email + ', avec les aides qui s’appliquent, l’économie estimée et la mensualité.';
   try { sessionStorage.removeItem('mbs_lead'); } catch(e){}
 })();
 </script>
