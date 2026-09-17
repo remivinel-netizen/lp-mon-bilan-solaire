@@ -63,7 +63,7 @@ p{margin:0}
 .pill .ico{width:17px;height:17px;color:var(--ok)}
 .pill__long{display:none}
 @media (min-width:480px){.pill__long{display:inline}.pill__short{display:none}}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border:0;border-radius:999px;font-weight:700;font-size:19px;text-decoration:none;cursor:pointer;transition:transform .2s var(--ease),background-color .2s ease,box-shadow .2s ease;-webkit-tap-highlight-color:transparent}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border:0;border-radius:999px;font-weight:700;font-size:19px;text-decoration:none;cursor:pointer;transition:transform .28s var(--ease),background-color .2s ease,box-shadow .28s var(--ease);-webkit-tap-highlight-color:transparent}
 .btn:active{transform:scale(.97)}
 .btn:focus-visible,.qbtn:focus-visible,.gal-nav button:focus-visible,.faq summary:focus-visible{outline:3px solid var(--lavande);outline-offset:3px}
 .foot nav a:focus-visible{outline:2px solid var(--ble);outline-offset:3px;border-radius:4px}
@@ -71,6 +71,22 @@ p{margin:0}
 .btn--ink:hover{background:#000}
 .btn--corail{background:var(--corail);color:#fff;box-shadow:0 10px 24px -10px rgba(232,93,76,.8)}
 .btn--corail:hover{background:var(--corail-fonce)}
+/* survol : la couleur d'appui éclot depuis le point d'entrée du curseur.
+   Toujours vers un ton plus SOMBRE : sur ces fonds, assombrir monte le
+   contraste du texte blanc au lieu de le faire tomber. */
+.btn{position:relative;overflow:hidden;isolation:isolate;--bx:50%;--by:50%}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+  background:radial-gradient(circle at var(--bx) var(--by), var(--appui) 0%, var(--appui) 70%, transparent 71%);
+  transform:scale(0);opacity:0;transition:transform .5s var(--ease),opacity .3s ease}
+.btn--corail{--appui:var(--corail-sombre)}
+.btn--ink{--appui:#000}
+.btn--white{--appui:var(--creme)}
+@media (hover:hover){
+  .btn:hover::before{transform:scale(2.6);opacity:1}
+  .btn--corail:hover{box-shadow:0 16px 34px -12px rgba(155,47,32,.85)}
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(-1px) scale(.98)}
+}
 .btn--white{background:#fff;color:var(--ink)}
 .btn--sm{min-height:42px;padding:0 18px;font-size:15px}
 .top .btn{display:none}
@@ -1347,6 +1363,17 @@ section{position:relative}
   }
   draw();
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(draw, 120); });
+
+  /* ---------- le survol des boutons part du point d'entrée du curseur ---------- */
+  if (matchMedia('(hover: hover)').matches){
+    document.querySelectorAll('.btn').forEach(function(b){
+      b.addEventListener('pointerenter', function(e){
+        var r = b.getBoundingClientRect();
+        b.style.setProperty('--bx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        b.style.setProperty('--by', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      }, {passive: true});
+    });
+  }
 
   /* ---------- la lumière suit le curseur sur les tuiles ---------- */
   if (matchMedia('(hover: hover)').matches){
