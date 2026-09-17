@@ -1,7 +1,11 @@
-/*.html
-  Cache-Control: public, max-age=0, must-revalidate
+# Les URL canoniques n'ont pas d'extension (/merci, pas /merci.html), donc un
+# motif en /*.html ne matcherait rien. Les en-têtes de sûreté valent pour tout.
+/*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
+# Les images ne changent jamais sous le même nom : cache d'un an.
+# Les pages gardent le défaut de Cloudflare pour le HTML, soit
+# max-age=0, must-revalidate — vérifié en production.
 /img/*
   Cache-Control: public, max-age=31536000, immutable
