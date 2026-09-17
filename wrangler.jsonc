@@ -1,0 +1,26 @@
+{
+  "name": "mon-bilan-solaire",
+  // Les identifiants voient cinq comptes Cloudflare : on désigne le bon,
+  // sinon wrangler demande à chaque déploiement (et se trompe en CI).
+  "account_id": "b2ac01a9207feba10a24902f854a4a94",
+  "compatibility_date": "2026-09-17",
+  // Site entièrement statique : pas de champ "main", donc aucun code Worker.
+  // Cloudflare sert les fichiers de dist/ directement.
+  //
+  // html_handling reste au défaut "auto-trailing-slash". Mesuré en local :
+  //   /                        → 200 (index.html)
+  //   /merci.html              → 307 vers /merci
+  // L'option "none" servirait /merci.html tel quel, mais renvoie 404 sur la
+  // racine — donc inutilisable ici. Les URL canoniques en production sont
+  // donc SANS extension : c'est sur /merci, /merci-hors-zone et
+  // /merci-non-eligible qu'il faut régler les conversions Google Ads.
+  "assets": {
+    "directory": "./dist/",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "mon-bilan-solaire.fr", "custom_domain": true },
+    { "pattern": "www.mon-bilan-solaire.fr", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}
