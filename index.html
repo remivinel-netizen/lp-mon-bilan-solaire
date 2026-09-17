@@ -1317,8 +1317,6 @@ section{position:relative}
     }
     var now = Math.min(Date.now(), t1);
 
-    var last = pts[pts.length - 1], peak = pts[7];
-
     /* La flèche est devenue le sujet du graphique : elle part de 2020, monte
        vers la droite et se termine pointe en haut. Le liseré blanc la garde
        nette là où elle traverse les repères et l'aplat de la facture. */
@@ -1388,15 +1386,6 @@ section{position:relative}
     pc.textContent = '+29' + NB + '%';
     placer(pc, [[mi.x - 12, mi.y - 14], [mi.x - 12, mi.y - 38],
                 [mi.x - 46, mi.y - 14], [mi.x + 34, mi.y + 26]]);
-
-    function marker(p, text, anchor, essais){
-      var g = el('text', {class: 'fadein', 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
-      g.textContent = text;
-      placer(g, essais.map(function(e){ return [X(p.t) + e[0], Y(p.m) + e[1]]; }));
-    }
-    marker(pts[0], eurMois(pts[0].m), 'start', [[-4, 18], [-4, -12], [-4, 32]]);
-    marker(peak, 'Pic ' + eurMois(peak.m), 'middle', [[0, 22], [0, -12], [0, 38], [-26, 22]]);
-    marker(last, eurMois(last.m), 'end', [[4, 20], [4, -12], [-34, 20], [4, 42], [-34, 42]]);
 
     /* seconde série : la mensualité, plate par construction */
     var pMens = el('line', {x1: P.l, x2: W - P.r, y1: Y(MENS), y2: Y(MENS), stroke: '#EEAF51', 'stroke-width': 2.5, 'stroke-linecap': 'round', class: 'draw draw--mens'}, svg);
