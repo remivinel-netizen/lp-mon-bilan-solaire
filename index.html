@@ -154,6 +154,7 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .js .chart__svg .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
 .chart__svg.is-vu .draw{animation:draw 1.5s var(--ease) forwards}
 .chart__svg.is-vu .draw--mens{animation-delay:.45s}
+.chart__svg.is-vu .draw--fleche,.chart__svg.is-vu .draw--halo{animation-delay:.9s}
 @keyframes draw{to{stroke-dashoffset:0}}
 .js .chart__svg .fadein{opacity:0}
 .chart__svg.is-vu .fadein{animation:ent .6s var(--ease) 1.25s forwards}
@@ -1325,14 +1326,36 @@ section{position:relative}
     var pCout = el('path', {d: d, fill: 'none', stroke: '#E85D4C', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', class: 'draw'}, svg);
 
     function marker(p, text, anchor, dx, dy){
-      el('circle', {cx: X(p.t), cy: Y(p.m), r: 5, fill: '#E85D4C', stroke: '#fff', 'stroke-width': 2, class: 'fadein'}, svg);
       var g = el('text', {class: 'fadein', x: X(p.t) + dx, y: Y(p.m) + dy, 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
       g.textContent = text;
     }
     var last = pts[pts.length - 1], peak = pts[7];
-    marker(pts[0], eurMois(pts[0].m), 'start', -4, -12);
-    marker(peak, 'Pic ' + eurMois(peak.m), 'middle', 0, -13);
-    marker(last, eurMois(last.m), 'end', 4, -22);
+
+    /* Une flèche courbe part de 2020 et vise la valeur d'aujourd'hui. Elle passe
+       au-dessus de la courbe, donc elle doit s'en distinguer : rouge plus sombre,
+       et doublée d'un liseré blanc pour se détacher du tracé qu'elle croise. */
+    var ax0 = X(pts[0].t) + 16, ay0 = Y(pts[0].m) - 18;
+    var ax1 = X(last.t) - 4,    ay1 = Y(last.m) - 30;
+    var sommet = Y(v1) + 6;
+    var courbe = 'M' + ax0 + ' ' + ay0 +
+       ' C' + (ax0 + (ax1 - ax0) * .3) + ' ' + sommet +
+       ' ' + (ax1 - (ax1 - ax0) * .2) + ' ' + sommet +
+       ' ' + ax1 + ' ' + ay1;
+    var pointe = 'M' + (ax1 - 14) + ' ' + (ay1 - 10) + ' L' + ax1 + ' ' + ay1 + ' L' + (ax1 - 15) + ' ' + (ay1 + 6);
+    /* liseré */
+    el('path', {class: 'draw draw--halo', fill: 'none', stroke: '#fff', 'stroke-width': 8,
+      'stroke-linecap': 'round', d: courbe}, svg);
+    el('path', {class: 'fadein', fill: 'none', stroke: '#fff', 'stroke-width': 8,
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: pointe}, svg);
+    /* flèche */
+    el('path', {class: 'draw draw--fleche', fill: 'none', stroke: '#9B2F20', 'stroke-width': 3.5,
+      'stroke-linecap': 'round', d: courbe}, svg);
+    el('path', {class: 'fadein', fill: 'none', stroke: '#9B2F20', 'stroke-width': 3.5,
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: pointe}, svg);
+
+    marker(pts[0], eurMois(pts[0].m), 'start', -4, 18);
+    marker(peak, 'Pic ' + eurMois(peak.m), 'middle', 0, 22);
+    marker(last, eurMois(last.m), 'end', 4, 20);
 
     /* seconde série : la mensualité, plate par construction */
     var pMens = el('line', {x1: P.l, x2: W - P.r, y1: Y(MENS), y2: Y(MENS), stroke: '#EEAF51', 'stroke-width': 2.5, 'stroke-linecap': 'round', class: 'draw draw--mens'}, svg);
