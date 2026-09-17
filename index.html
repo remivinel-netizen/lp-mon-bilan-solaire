@@ -312,10 +312,11 @@ section{position:relative}
 .proof ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .proof li{display:flex;gap:12px;align-items:center;background:#fff;border-radius:20px;padding:14px;box-shadow:0 0 0 1px var(--line)}
 .proof .b{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto}
+.proof .b-logo{height:32px;width:auto;flex:0 0 auto;display:block}
 .proof .b{color:var(--ink)}
 .proof .b .ico{width:21px;height:21px}
 .proof strong{display:block;font-size:16px;line-height:1.2}
-@media (max-width:639px){.proof li{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 14px 15px}}
+@media (max-width:1023px){.proof li{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 14px 15px}}
 .proof span{display:block;font-size:15px;color:var(--ink-3);line-height:1.3;margin-top:2px}
 
 /* price section */
@@ -673,7 +674,7 @@ section{position:relative}
 <section class="proof" aria-label="Nos garanties">
   <div class="wrap">
     <ul>
-      <li><span class="b c-lavande"><svg class="ico"><use href="#i-shield"/></svg></span><div><strong>Certifié RGE</strong><span>QualiPV</span></div></li>
+      <li><img class="b-logo" src="img/qualipv-rge.png" alt="Qualification RGE QualiPV" width="1200" height="509" loading="lazy"><div><strong>Certifié RGE</strong><span>par Qualit'EnR</span></div></li>
       <li><span class="b c-brume"><svg class="ico"><use href="#i-panel"/></svg></span><div><strong>Panneaux français</strong><span>garantis 30 ans</span></div></li>
       <li><span class="b c-ble"><svg class="ico"><use href="#i-clock"/></svg></span><div><strong>Pose en 1 jour</strong><span>contrôle Consuel</span></div></li>
       <li><span class="b c-ambre"><svg class="ico"><use href="#i-euro"/></svg></span><div><strong>Sans apport</strong><span>mensualité fixe</span></div></li>
