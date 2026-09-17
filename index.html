@@ -342,7 +342,7 @@ section{position:relative}
 .fixed p{color:rgba(255,255,255,.82);font-size:16px}
 .legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:15px;color:var(--ink-2)}
 .legend__i{width:18px;height:3px;border-radius:2px;flex:0 0 auto;margin-right:-10px}
-.legend__i--fac{height:9px;background:var(--corail)}
+.legend__i--fac{background:var(--corail)}
 .legend__i--men{background:var(--ambre)}
 .fixed .fine{font-size:15px;color:rgba(255,255,255,.55)}
 
@@ -1301,16 +1301,11 @@ section{position:relative}
     var v0 = 100, v1 = 200;
     function X(t){ return P.l + (t - t0) / (t1 - t0) * (W - P.l - P.r); }
     function Y(v){ return P.t + (1 - (v - v0) / (v1 - v0)) * (H - P.t - P.b); }
-    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Pour une même consommation, la facture d\'électricité est passée de 116 € par mois en février 2020 à 150 € en août 2026, avec un pic à 189 € en février 2024. La mensualité Mon Bilan Solaire, elle, ne varie pas.'});
+    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Pour une même consommation, la facture d\'électricité est passée de 116 € par mois en février 2020 à 150 € en août 2026, soit 29 % de plus, avec un pic à 189 € en février 2024. La mensualité Mon Bilan Solaire, elle, ne varie pas.'});
     /* Inséré tout de suite, et pas en fin de tracé : sur un noeud détaché,
        getBBox() d'un texte renvoie une boîte vide, et le placement des
        libellés ne verrait jamais la flèche. */
     box.insertBefore(svg, tip);
-    var defs = el('defs', {}, svg);
-    var grad = el('linearGradient', {id: 'g-area', x1: 0, y1: 0, x2: 0, y2: 1}, defs);
-    el('stop', {offset: '0', 'stop-color': '#E85D4C', 'stop-opacity': '.18'}, grad);
-    el('stop', {offset: '1', 'stop-color': '#E85D4C', 'stop-opacity': '0'}, grad);
-
     [120, 150, 180].forEach(function(v){
       el('line', {x1: P.l, x2: W - P.r, y1: Y(v), y2: Y(v), stroke: 'rgba(38,37,35,.10)', 'stroke-width': 1}, svg);
       var tx = el('text', {x: P.l - 8, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': 15, fill: '#6F6A62'}, svg); tx.textContent = v + NB + '€';
@@ -1321,12 +1316,6 @@ section{position:relative}
       var lab = el('text', {x: X(tx), y: H - 8, 'text-anchor': 'middle', 'font-size': 15, fill: '#6F6A62'}, svg); lab.textContent = y;
     }
     var now = Math.min(Date.now(), t1);
-    /* une ligne brisée reliant les relevés réels, au lieu d'un escalier :
-       plus lisible, et chaque sommet reste un tarif publié */
-    var d = 'M' + X(pts[0].t) + ' ' + Y(pts[0].m);
-    for (var i = 1; i < pts.length; i++) d += ' L' + X(pts[i].t) + ' ' + Y(pts[i].m);
-    d += ' H' + X(now);
-    el('path', {d: d + ' V' + (H - P.b) + ' H' + X(pts[0].t) + ' Z', fill: 'url(#g-area)'}, svg);
 
     var last = pts[pts.length - 1], peak = pts[7];
 
@@ -1390,6 +1379,16 @@ section{position:relative}
       }
       occupe.push(node.getBBox());
     }
+    /* La hausse elle-même, posée sur la flèche : c'est le chiffre du titre de
+       section. Corail en gras à 19 px minimum, ce qui le fait passer comme
+       grand texte au seuil de 3:1 (il est à 3,44:1 sur blanc). */
+    var mi = fleche.getPointAtLength(fleche.getTotalLength() * .52);
+    var pc = el('text', {class: 'fadein', 'text-anchor': 'end',
+      'font-size': narrow ? 19 : 22, 'font-weight': 800, fill: '#E85D4C'}, svg);
+    pc.textContent = '+29' + NB + '%';
+    placer(pc, [[mi.x - 12, mi.y - 14], [mi.x - 12, mi.y - 38],
+                [mi.x - 46, mi.y - 14], [mi.x + 34, mi.y + 26]]);
+
     function marker(p, text, anchor, essais){
       var g = el('text', {class: 'fadein', 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
       g.textContent = text;
