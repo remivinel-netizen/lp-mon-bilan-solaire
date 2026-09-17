@@ -230,6 +230,10 @@ p{margin:0}
 .stars{display:inline-flex;gap:1px;vertical-align:-2px;margin-right:4px}
 .stars svg{width:14px;height:14px;fill:var(--ambre)}
 .pro .ico{color:var(--ink-3)}
+.avis{padding:0 0 10px}
+.pro--lg{background:#fff;padding:18px;border-radius:22px;box-shadow:0 0 0 1px var(--line);max-width:640px;margin:0 auto;transition:box-shadow .25s var(--ease)}
+.pro--lg small{display:block;margin-top:5px;font-size:15px;color:var(--ink-3);line-height:1.4}
+@media (hover:hover){.pro--lg:hover{box-shadow:0 0 0 1px var(--line-2),0 18px 34px -26px rgba(38,37,35,.45)}}
 
 /* ---------- sections ---------- */
 section{position:relative}
@@ -410,6 +414,8 @@ section{position:relative}
   .gal-nav{display:flex}
   .gal{margin:40px 0 0;padding:0 0 8px;scroll-padding:0}
   .shot{flex-basis:calc((100% - 36px)/4)}
+  .avis{padding:0 0 24px}
+  .pro--lg{padding:22px 24px}
   .final{padding:0 0 104px}
   .final__box{padding:72px 72px}
   .final__box .sunbg{width:380px;height:380px;right:60px;top:50%;bottom:auto;transform:translateY(-50%);opacity:.7}
@@ -713,6 +719,16 @@ section{position:relative}
       <details><summary>Combien de temps sont garantis les panneaux&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>30 ans pour les panneaux de marque française que nous installons. Les travaux sont en plus couverts par la garantie décennale de l'installateur.</p></div></details>
     </div>
     </div>
+  </div>
+</section>
+
+<section class="avis">
+  <div class="wrap">
+    <a class="pro pro--lg" href="https://eko-habitations.fr/" target="_blank" rel="noopener">
+      <span class="pro__logo">EKO</span>
+      <span class="pro__txt"><b>EKO HABITATIONS, Lyon</b><span class="stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>4,8/5 sur Google, 126 avis<small>L'installateur certifié RGE qui réalise les bilans Mon Bilan Solaire.</small></span>
+      <svg class="ico"><use href="#i-ext"/></svg>
+    </a>
   </div>
 </section>
 
@@ -1043,8 +1059,10 @@ section{position:relative}
     });
   }
 
+  var dernier = null;
   function finish(data){
     sent = true;
+    dernier = data;
     var dansZone = ZONE.indexOf(String(data.departement)) > -1;
     /* les coordonnées passent par sessionStorage, jamais par l'URL */
     try {
@@ -1060,13 +1078,20 @@ section{position:relative}
     setTimeout(function(){
       location.href = dansZone ? MERCI_ZONE : MERCI_HORS;
     }, 350);
+    /* filet : si la redirection n'aboutit pas, l'écran intégré prend le relais */
+    setTimeout(afficheEcran, 1600);
+    return;
+  }
+
+  function afficheEcran(){
+    var data = dernier || {};
     form.hidden = true; foot.hidden = true; document.querySelector('.quiz__bar').hidden = true;
     for (var i = 0; i < segs.length; i++) segs[i].classList.add('on');
     count.textContent = '';
     view.style.height = '';
     $('[data-fill="prenom"]', done).textContent = data.prenom ? ', ' + data.prenom : '';
-    $('[data-fill="email"]', done).textContent = data.email;
-    $('[data-fill="tel"]', done).textContent = data.telephone.replace(/(\d{2})(?=\d)/g, '$1' + NB);
+    $('[data-fill="email"]', done).textContent = data.email || '';
+    $('[data-fill="tel"]', done).textContent = (data.telephone || '').replace(/(\d{2})(?=\d)/g, '$1' + NB);
     done.classList.add('is-on');
     var r = quiz.getBoundingClientRect();
     if (r.top < 0) quiz.scrollIntoView({behavior: 'smooth', block: 'start'});
