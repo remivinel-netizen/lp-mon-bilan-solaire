@@ -327,7 +327,7 @@ section{position:relative}
 .tile .big{font-size:40px;font-weight:900;letter-spacing:-.04em;line-height:1;font-variant-numeric:var(--chiffres)}
 .tile .lbl{font-weight:700;font-size:15.5px;margin-top:6px;line-height:1.25}
 .tile p{font-size:15px;color:var(--ink-2);margin-top:8px;line-height:1.4}
-.tile--wide,.tile--90,.tile--30,.tile--bat{grid-column:1 / -1}
+.tile--wide,.tile--90,.tile--30,.tile--bat,.tile--appli{grid-column:1 / -1}
 .tile--90{background:var(--ble);min-height:210px}
 .tile--90 .big{font-size:76px}
 .tile--90 .sunbg{position:absolute;right:-40px;top:-40px;width:200px;height:200px;color:var(--ambre);opacity:.55}
@@ -338,6 +338,7 @@ section{position:relative}
 .tile--30 p{color:rgba(255,255,255,.85)}
 .tile--1j{background:var(--beige)}
 .tile--bat{background:#F7C6BF}
+.tile--appli{background:var(--brume)}
 .tile .pre{font-weight:700;font-size:15px;margin-bottom:2px}
 .tile--rge{background:#D5DCF0}
 .tile--consuel{background:#fff;box-shadow:0 0 0 1px var(--line)}
@@ -432,7 +433,7 @@ section{position:relative}
   .tile--90{grid-column:span 2;grid-row:span 2}
   .tile--90 .big{font-size:120px}
   .tile--90 .sunbg{width:320px;height:320px;right:-60px;top:-60px}
-  .tile--30,.tile--bat{grid-column:span 2}
+  .tile--30,.tile--bat,.tile--appli{grid-column:span 2}
   .gal-nav{display:flex}
   .gal{margin:40px 0 0;padding:0 0 8px;scroll-padding:0}
   .shot{flex-basis:calc((100% - 36px)/4)}
@@ -687,7 +688,7 @@ section{position:relative}
         <span class="pre">Jusqu'à</span>
         <span class="big">90&nbsp;%</span>
         <span class="lbl">d'économie sur votre facture d'électricité<a href="#notes" style="color:inherit;text-decoration:none">*</a></span>
-        <p>Les panneaux produisent en journée. La batterie garde le surplus pour le soir, au lieu de le laisser partir sur le réseau.</p>
+        <p>Les panneaux produisent en journée. La batterie garde le surplus pour le soir&nbsp;; ce qui reste est racheté par EDF.</p>
       </div>
       <div class="tile tile--0" style="--i:1"><span class="ic"><svg class="ico"><use href="#i-euro"/></svg></span><span class="big">0&nbsp;€</span><span class="lbl">d'apport à prévoir</span><p>L'installation est financée par un crédit, sous réserve d'acceptation du dossier.</p></div>
       <div class="tile tile--1j" style="--i:2"><span class="ic"><svg class="ico"><use href="#i-clock"/></svg></span><span class="big">1&nbsp;jour</span><span class="lbl">de chantier, en général</span><p>Les équipes arrivent le matin et repartent le soir.</p></div>
@@ -695,6 +696,7 @@ section{position:relative}
       <div class="tile tile--rge" style="--i:4"><span class="ic"><svg class="ico"><use href="#i-shield"/></svg></span><span class="big word">RGE</span><span class="lbl">Installateur certifié QualiPV</span></div>
       <div class="tile tile--consuel" style="--i:5"><span class="ic" style="background:var(--brume)"><svg class="ico"><use href="#i-check"/></svg></span><span class="big word">Consuel</span><span class="lbl">Conformité électrique validée avant la mise en service</span></div>
       <div class="tile tile--bat" style="--i:6"><span class="ic"><svg class="ico"><use href="#i-battery"/></svg></span><span class="big word">Batterie</span><span class="lbl">de stockage incluse</span><p>Ce que vos panneaux produisent à midi, vous l'utilisez pour le dîner.</p></div>
+      <div class="tile tile--appli" style="--i:7"><span class="ic"><svg class="ico"><use href="#i-phone"/></svg></span><span class="big word">Application</span><span class="lbl">de suivi en temps réel</span><p>Ce que votre toit produit, ce que vous consommez, heure par heure, depuis votre téléphone.</p></div>
     </div>
   </div>
 </section>
@@ -737,6 +739,8 @@ section{position:relative}
       <details><summary>Panneau solaire ou panneau photovoltaïque, c'est la même chose&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>Sur le toit d'une maison, quand on parle de panneaux solaires, il s'agit presque toujours de panneaux photovoltaïques&nbsp;: ils produisent de l'électricité à partir de la lumière du soleil. Les panneaux solaires thermiques, eux, servent à chauffer de l'eau.</p><p>Mon Bilan Solaire étudie les installations photovoltaïques avec batterie de stockage, pour produire votre propre électricité.</p></div></details>
       <details><summary>Je n'ai pas d'apport. C'est possible&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>Oui. L'installation est financée par un crédit que vous remboursez par une mensualité fixe. Vous n'avancez pas d'argent pour lancer le chantier.</p><p>Le dossier est étudié par l'organisme prêteur, qui donne sa réponse avant tout engagement de votre part.</p></div></details>
       <details><summary>Pourquoi «&nbsp;jusqu'à 90&nbsp;%&nbsp;» et pas 100&nbsp;%&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>Vos panneaux produisent le jour. La batterie stocke une partie de cette production pour le soir, mais en hiver ou après plusieurs jours gris, vous achetez encore un peu d'électricité au réseau. L'abonnement reste aussi à payer.</p><p>Le pourcentage réel dépend de votre consommation, de l'orientation du toit et de votre région. Il est calculé dans votre simulation.</p></div></details>
+      <details><summary>Que devient l'électricité que je ne consomme pas&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>La batterie en garde d'abord une partie pour le soir. Ce qui reste est injecté sur le réseau et racheté par EDF, dans le cadre d'un contrat d'obligation d'achat conclu pour <b>20 ans</b>, à un tarif fixé au moment du raccordement.</p><p>Ce revenu vient en plus de l'économie sur votre facture. Son montant dépend de ce que vous produisez et de ce que vous consommez vous-même&nbsp;: il figure dans votre simulation.</p></div></details>
+      <details><summary>Au bout de combien de temps l'installation est-elle rentabilisée&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>EKO HABITATIONS situe l'amortissement entre <b>8 et 12 ans</b>. Cette fourchette dépend de votre consommation, de l'orientation et de l'inclinaison du toit, de votre région et du tarif de rachat obtenu.</p><p>Passé le remboursement du crédit, ce que vos panneaux produisent ne vous coûte plus rien, et les panneaux restent garantis 30 ans.</p></div></details>
       <details><summary>La simulation m'engage à quelque chose&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>Non. Elle est gratuite et vous arrive par email. Un conseiller se déplace seulement si vous voulez aller plus loin après l'avoir lue.</p></div></details>
       <details><summary>Qui pose les panneaux&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>Un installateur certifié RGE QualiPV, qui travaille dans le photovoltaïque depuis plus de dix ans. La pose prend en général une journée.</p><p>Avant la mise en service, le Consuel, organisme indépendant, valide la conformité électrique de l'installation.</p></div></details>
       <details><summary>Je suis locataire. Je peux faire la demande&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>Les panneaux se posent sur le toit, donc l'accord du propriétaire est indispensable. Si vous êtes en train d'acheter une maison, vous pouvez déjà faire votre bilan pour savoir à quoi vous attendre.</p></div></details>
