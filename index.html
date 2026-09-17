@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mon Bilan Solaire | Une mensualité fixe à la place de votre facture d'électricité</title>
+<title>Quelles aides pour vos panneaux solaires ? | Mon Bilan Solaire</title>
 <meta name="description" content="Panneaux solaires de marque française et batterie de stockage, sans apport. Jusqu'à 90 % d'économie sur votre facture d'électricité. Simulation gratuite envoyée par email.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F6F4EC">
 <meta property="og:title" content="Mon Bilan Solaire">
-<meta property="og:description" content="Une mensualité fixe à la place de votre facture d'électricité. Simulation gratuite par email.">
+<meta property="og:description" content="On regarde quelles aides s'appliquent chez vous. Estimation gratuite par email, sans engagement.">
 <meta property="og:image" content="https://remivinel-netizen.github.io/lp-mon-bilan-solaire/img/og.jpg">
 <meta property="og:type" content="website">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
@@ -299,6 +299,11 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 /* ---------- sections ---------- */
 section{position:relative}
 .sec{padding:64px 0}
+.sec--blanc{background:#fff}
+.aides{display:grid;gap:12px;margin-top:34px}
+.tile--tva{background:var(--ble)}
+.tile--oa{background:var(--brume)}
+.tile--un{background:var(--beige)}
 .sec--brume{background:var(--brume)}
 .sec--lavande{background:var(--lavande)}
 .sec--beige{background:var(--beige)}
@@ -443,6 +448,7 @@ section{position:relative}
   .wrap{padding:0 28px}
   .proof ul{grid-template-columns:repeat(4,1fr)}
   .steps{grid-template-columns:1fr 1fr}
+  .aides{grid-template-columns:repeat(3,1fr)}
   .gal{margin:30px -28px 0;padding:0 28px 8px;scroll-padding:0 28px}
   .shot{flex-basis:44%}
   .final__box{padding:56px 48px}
@@ -556,8 +562,8 @@ section{position:relative}
   <div class="wrap hero__inner">
     <div class="hero__copy">
       <span class="eyebrow ent e1"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
-      <h1 class="ent e2">Une mensualité <em>fixe</em> à la place de votre facture d'électricité</h1>
-      <p class="hero__lead ent e3">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b>90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
+      <h1 class="ent e2">Quelles <em>aides</em> pour vos panneaux solaires&nbsp;?</h1>
+      <p class="hero__lead ent e3">On regarde ce qui s'applique chez vous, et ce que ça change sur votre facture. Panneaux de marque française et batterie, installés <b>sans apport</b>, avec une mensualité fixe à la place de votre facture d'électricité.</p>
       <div class="hero__notes ent e4">
         <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -678,6 +684,18 @@ section{position:relative}
       <li><span class="b c-ble"><svg class="ico"><use href="#i-clock"/></svg></span><div><strong>Pose en 1 jour</strong><span>contrôle Consuel</span></div></li>
       <li><span class="b c-ambre"><svg class="ico"><use href="#i-euro"/></svg></span><div><strong>Sans apport</strong><span>mensualité fixe</span></div></li>
     </ul>
+  </div>
+</section>
+
+<section class="sec sec--blanc" id="aides">
+  <div class="wrap">
+    <h2 class="h2">Ce que l'État prévoit encore pour le solaire en 2026</h2>
+    <p class="sub">Deux dispositifs restent en vigueur pour une installation en autoconsommation sur une maison individuelle. Nous les appliquons au chiffrage de votre toit.</p>
+    <div class="aides">
+      <div class="tile tile--tva"><span class="big">5,5&nbsp;%</span><span class="lbl">TVA réduite</span><p>Taux réduit sur la fourniture et la pose, pour les installations jusqu'à 9&nbsp;kWc en autoconsommation.</p></div>
+      <div class="tile tile--oa"><span class="big">20&nbsp;ans</span><span class="lbl">Surplus racheté</span><p>L'électricité que vous ne consommez pas est rachetée par EDF&nbsp;OA à un tarif garanti pendant 20&nbsp;ans.</p></div>
+      <div class="tile tile--un"><span class="big">1 seul</span><span class="lbl">Installateur RGE</span><p>Un seul professionnel certifié RGE de votre département vous rappelle.</p></div>
+    </div>
   </div>
 </section>
 
@@ -1362,7 +1380,7 @@ section{position:relative}
 
   /* ---------- la lumière suit le curseur sur les tuiles ---------- */
   if (matchMedia('(hover: hover)').matches){
-    document.querySelectorAll('.bento .tile').forEach(function(t){
+    document.querySelectorAll('.tile').forEach(function(t){
       t.addEventListener('pointermove', function(e){
         var r = t.getBoundingClientRect();
         t.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
