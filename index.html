@@ -752,6 +752,12 @@ section{position:relative}
 
   /* ---------- paramètres de campagne ---------- */
   var PKEYS = ['gclid','gbraid','wbraid','fbclid','utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+
+  /* Départements couverts. Le lead est routé vers une page de remerciement
+     distincte selon qu'il y figure ou non : deux URL, donc deux conversions
+     distinctes côté Google Ads. */
+  var ZONE = ['01','03','04','05','07','13','21','25','26','30','34','38','39','42','43','63','70','73','74','84','90'];
+  var MERCI_ZONE = 'merci.html', MERCI_HORS = 'merci-hors-zone.html';
   var params = {};
   try { params = JSON.parse(sessionStorage.getItem('mbs_params') || '{}'); } catch(e){ params = {}; }
   var qs = new URLSearchParams(location.search);
@@ -1002,6 +1008,7 @@ section{position:relative}
       code_postal: val('code_postal'),
       commune: state.commune,
       departement: state.departement,
+      zone: ZONE.indexOf(String(state.departement)) > -1 ? 'couverte' : 'hors zone',
       prenom: val('prenom'),
       nom: val('nom'),
       email: val('email').toLowerCase(),
@@ -1027,7 +1034,7 @@ section{position:relative}
     req.then(function(r){
       if (!r.ok) throw new Error('HTTP ' + r.status);
       if (demo && !spam) console.info('[Mon Bilan Solaire] webhook non configuré, envoi simulé :', data);
-      if (!spam) track('generate_lead', {form_name: 'bilan_solaire', priorite: data.priorite, statut: data.statut, facture: data.facture_mensuelle, delai: data.delai_projet, departement: data.departement, user_data: {email: data.email, phone_number: data.telephone_e164}});
+      if (!spam) track('generate_lead', {form_name: 'bilan_solaire', priorite: data.priorite, statut: data.statut, facture: data.facture_mensuelle, delai: data.delai_projet, departement: data.departement, zone: data.zone, user_data: {email: data.email, phone_number: data.telephone_e164}});
       finish(data);
     }).catch(function(){
       btn.disabled = false; btn.innerHTML = label;
@@ -1038,6 +1045,21 @@ section{position:relative}
 
   function finish(data){
     sent = true;
+    var dansZone = ZONE.indexOf(String(data.departement)) > -1;
+    /* les coordonnées passent par sessionStorage, jamais par l'URL */
+    try {
+      sessionStorage.setItem('mbs_lead', JSON.stringify({
+        prenom: data.prenom,
+        email: data.email,
+        telephone: data.telephone.replace(/(\d{2})(?=\d)/g, '$1 '),
+        departement: data.departement,
+        zone: dansZone ? 'couverte' : 'hors zone'
+      }));
+    } catch(e){}
+    /* court délai : laisse partir l'événement generate_lead avant de quitter la page */
+    setTimeout(function(){
+      location.href = dansZone ? MERCI_ZONE : MERCI_HORS;
+    }, 350);
     form.hidden = true; foot.hidden = true; document.querySelector('.quiz__bar').hidden = true;
     for (var i = 0; i < segs.length; i++) segs[i].classList.add('on');
     count.textContent = '';

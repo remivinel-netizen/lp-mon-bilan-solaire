@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Votre demande est enregistrée | Mon Bilan Solaire</title>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
+<!-- Google Tag Manager : remplacer GTM-XXXXXXX puis décommenter
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+-->
+<style>
+:root{
+  --lavande:#9DACDA; --brume:#DCECF8; --ble:#FCED90; --ambre:#EEAF51;
+  --corail:#E85D4C; --corail-sombre:#9B2F20; --beige:#DECDC1; --creme:#F6F4EC;
+  --ink:#262523; --ink-2:#57534C; --ink-3:#6F6A62; --line:rgba(38,37,35,.10);
+  --ease:cubic-bezier(.32,.72,0,1);
+  --font:'Satoshi',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--creme);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:0 20px}
+header{padding:26px 0}
+header img{height:36px;width:auto;display:block}
+main{padding:10px 0 64px}
+.carte{background:#fff;border-radius:28px;padding:30px 24px 32px;box-shadow:0 0 0 1px var(--line),0 26px 50px -34px rgba(38,37,35,.38)}
+.badge{width:62px;height:62px;border-radius:50%;background:var(--ble);display:grid;place-items:center;margin-bottom:22px}
+.badge svg{width:34px;height:34px;color:var(--corail)}
+h1{font-size:clamp(28px,6vw,40px);line-height:1.06;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
+.intro{color:var(--ink-2);font-size:17px;margin:0}
+ol{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:16px}
+ol li{display:grid;grid-template-columns:32px 1fr;gap:14px;align-items:start}
+.n{width:32px;height:32px;border-radius:50%;background:var(--creme);display:grid;place-items:center;font-weight:700;font-size:15px}
+ol b{display:block;font-size:17px}
+ol span{display:block;color:var(--ink-2);font-size:15.5px;line-height:1.45}
+.pro{display:flex;align-items:center;gap:14px;margin-top:28px;padding:16px;border-radius:20px;background:var(--creme);text-decoration:none;color:inherit}
+.pro__logo{width:46px;height:46px;border-radius:14px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;letter-spacing:-.02em;flex:0 0 auto}
+.pro__txt{flex:1;font-size:15px;line-height:1.35;color:var(--ink-2)}
+.pro__txt b{display:block;color:var(--ink);font-size:15.5px}
+.stars{display:inline-flex;gap:2px;margin-right:7px;vertical-align:-2px}
+.stars svg{width:14px;height:14px;color:var(--ambre);fill:currentColor}
+.pro .ico{width:20px;height:20px;color:var(--ink-3);flex:0 0 auto}
+.retour{display:inline-block;margin-top:26px;font-size:16px;color:var(--corail-sombre)}
+footer{padding:0 0 46px;font-size:15px;color:var(--ink-3)}
+footer a{color:var(--ink-2)}
+@media (min-width:640px){.carte{padding:38px 36px 40px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a href="index.html"><img src="img/logo.svg" alt="Mon Bilan Solaire" width="172" height="36"></a></header>
+
+  <main>
+    <div class="carte">
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+      </div>
+      <h1>C'est noté<span id="prenom"></span>.</h1>
+      <p class="intro">Votre demande est bien arrivée chez EKO HABITATIONS, l'installateur certifié RGE qui réalise les bilans Mon Bilan Solaire.</p>
+
+      <ol>
+        <li><span class="n">1</span><div><b>Un conseiller vous appelle</b><span id="etape-tel">pour vérifier deux ou trois points sur votre maison.</span></div></li>
+        <li><span class="n">2</span><div><b>Vous recevez votre simulation par email</b><span id="etape-mail">avec l'économie estimée et la mensualité.</span></div></li>
+        <li><span class="n">3</span><div><b>Vous décidez</b><span>Si les chiffres vous conviennent, on organise la visite technique.</span></div></li>
+      </ol>
+
+      <a class="pro" href="https://eko-habitations.fr/" target="_blank" rel="noopener">
+        <span class="pro__logo">EKO</span>
+        <span class="pro__txt"><b>EKO HABITATIONS, Lyon</b>
+          <span class="stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.8-5 4.7 1.3 6.8L12 17.3 5.9 20.6 7.2 13.8l-5-4.7 6.9-.8z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.8-5 4.7 1.3 6.8L12 17.3 5.9 20.6 7.2 13.8l-5-4.7 6.9-.8z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.8-5 4.7 1.3 6.8L12 17.3 5.9 20.6 7.2 13.8l-5-4.7 6.9-.8z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.8-5 4.7 1.3 6.8L12 17.3 5.9 20.6 7.2 13.8l-5-4.7 6.9-.8z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.8-5 4.7 1.3 6.8L12 17.3 5.9 20.6 7.2 13.8l-5-4.7 6.9-.8z"/></svg>
+          </span>4,8/5 sur Google, 126 avis</span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v4a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h4"/></svg>
+      </a>
+
+      <a class="retour" href="index.html">Revenir à l'accueil</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>Mon Bilan Solaire est un service proposé par EKO HABITATIONS, SAS — 33 quai Arloing, 69009 Lyon.
+      <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></p>
+  </footer>
+</div>
+
+<script>
+/* Les coordonnées du lead ne transitent jamais par l'URL : elles sont déposées
+   dans sessionStorage par le questionnaire, lues ici, puis effacées. */
+(function(){
+  var d = {};
+  try { d = JSON.parse(sessionStorage.getItem('mbs_lead') || '{}'); } catch(e){}
+  if (d.prenom) document.getElementById('prenom').textContent = ', ' + d.prenom;
+  if (d.telephone) document.getElementById('etape-tel').textContent =
+    'au ' + d.telephone + ' pour vérifier deux ou trois points sur votre maison.';
+  if (d.email) document.getElementById('etape-mail').textContent =
+    'à ' + d.email + ', avec l’économie estimée et la mensualité.';
+  try { sessionStorage.removeItem('mbs_lead'); } catch(e){}
+})();
+</script>
+</body>
+</html>
