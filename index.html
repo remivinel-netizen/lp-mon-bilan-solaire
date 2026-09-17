@@ -96,6 +96,38 @@ p{margin:0}
 }
 body > header, main, .foot, .sticky{position:relative;z-index:1}
 
+/* ---------- effets de lumière : tous issus de la même idée que le halo ---------- */
+
+/* 1. une ombre balaie lentement les boutons d'action.
+   Sombre et non clair, à dessein : un reflet clair sur du corail sous du texte
+   blanc ferait tomber le contraste à 2,26:1. Assombrir le fait monter de 3,44
+   à 4,16:1 — l'effet joue dans le bon sens. */
+.btn--corail{position:relative;overflow:hidden;isolation:isolate}
+.btn--corail::after{content:"";position:absolute;top:-60%;bottom:-60%;width:42%;left:-50%;z-index:-1;
+  background:linear-gradient(100deg,transparent,rgba(120,26,14,.34),transparent);
+  transform:skewX(-18deg);animation:reflet 5.2s var(--ease) infinite}
+@keyframes reflet{0%{left:-50%}52%{left:130%}100%{left:130%}}
+
+/* 2. la photo du hero recule doucement au défilement : de la profondeur, sans JavaScript */
+@supports (animation-timeline: view()){
+  .hero__media img{animation:recul linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
+  @keyframes recul{from{transform:scale(1.10) translateY(-1.2%)}to{transform:scale(1) translateY(2.4%)}}
+}
+
+/* 3. les tuiles s'éclairent sous le curseur : la lumière suit la main */
+@media (hover:hover){
+  .tile{--mx:50%;--my:50%}
+  .tile::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+    transition:opacity .35s var(--ease);
+    background:radial-gradient(240px circle at var(--mx) var(--my), rgba(255,255,255,.55), transparent 62%)}
+  .tile:hover::after{opacity:1}
+  .tile--30::after{background:radial-gradient(240px circle at var(--mx) var(--my), rgba(255,255,255,.22), transparent 62%)}
+}
+
+/* 4. l'option choisie s'allume : la confirmation se voit */
+.opt:has(input:checked) .opt__ico{box-shadow:0 0 0 4px rgba(238,175,81,.30)}
+.opt__ico{transition:box-shadow .3s var(--ease)}
+
 /* ---------- animations : une seule séquence d'entrée, puis du mouvement qui répond ---------- */
 .ent{opacity:0;transform:translateY(14px);animation:ent .8s var(--ease) forwards}
 @keyframes ent{to{opacity:1;transform:none}}
@@ -460,6 +492,8 @@ section{position:relative}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .btn--corail::after{display:none}
+  .hero__media img{transform:none!important}
 }
 </style>
 </head>
@@ -694,13 +728,13 @@ section{position:relative}
       <div class="tile tile--90" style="--i:0">
         <svg class="sun sunbg" aria-hidden="true"><use href="#i-sun"/></svg>
         <span class="pre">Jusqu'à</span>
-        <span class="big">90&nbsp;%</span>
+        <span class="big" data-vers="90" data-suf="&nbsp;%">90&nbsp;%</span>
         <span class="lbl">d'économie sur votre facture d'électricité<a href="#notes" style="color:inherit;text-decoration:none">*</a></span>
         <p>Les panneaux produisent en journée. La batterie garde le surplus pour le soir&nbsp;; ce qui reste est racheté par EDF.</p>
       </div>
-      <div class="tile tile--0" style="--i:1"><span class="ic"><svg class="ico"><use href="#i-euro"/></svg></span><span class="big">0&nbsp;€</span><span class="lbl">d'apport à prévoir</span><p>L'installation est financée par un crédit, sous réserve d'acceptation du dossier.</p></div>
-      <div class="tile tile--1j" style="--i:2"><span class="ic"><svg class="ico"><use href="#i-clock"/></svg></span><span class="big">1&nbsp;jour</span><span class="lbl">de chantier, en général</span><p>Les équipes arrivent le matin et repartent le soir.</p></div>
-      <div class="tile tile--30" style="background-image:url('img/panneaux-900.webp');--i:3"><span class="big">30&nbsp;ans</span><span class="lbl">de garantie sur les panneaux</span><p>Des panneaux de marque française. La garantie décennale de l'installateur couvre en plus les travaux.</p></div>
+      <div class="tile tile--0" style="--i:1"><span class="ic"><svg class="ico"><use href="#i-euro"/></svg></span><span class="big" data-vers="0" data-suf="&nbsp;€">0&nbsp;€</span><span class="lbl">d'apport à prévoir</span><p>L'installation est financée par un crédit, sous réserve d'acceptation du dossier.</p></div>
+      <div class="tile tile--1j" style="--i:2"><span class="ic"><svg class="ico"><use href="#i-clock"/></svg></span><span class="big" data-vers="1" data-suf="&nbsp;jour">1&nbsp;jour</span><span class="lbl">de chantier, en général</span><p>Les équipes arrivent le matin et repartent le soir.</p></div>
+      <div class="tile tile--30" style="background-image:url('img/panneaux-900.webp');--i:3"><span class="big" data-vers="30" data-suf="&nbsp;ans">30&nbsp;ans</span><span class="lbl">de garantie sur les panneaux</span><p>Des panneaux de marque française. La garantie décennale de l'installateur couvre en plus les travaux.</p></div>
       <div class="tile tile--rge" style="--i:4"><span class="ic"><svg class="ico"><use href="#i-shield"/></svg></span><span class="big word">RGE</span><span class="lbl">Installateur certifié QualiPV</span></div>
       <div class="tile tile--consuel" style="--i:5"><span class="ic" style="background:var(--brume)"><svg class="ico"><use href="#i-check"/></svg></span><span class="big word">Consuel</span><span class="lbl">Conformité électrique validée avant la mise en service</span></div>
       <div class="tile tile--bat" style="--i:6"><span class="ic"><svg class="ico"><use href="#i-battery"/></svg></span><span class="big word">Batterie</span><span class="lbl">de stockage incluse</span><p>Ce que vos panneaux produisent à midi, vous l'utilisez pour le dîner.</p></div>
@@ -1312,6 +1346,41 @@ section{position:relative}
   }
   draw();
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(draw, 120); });
+
+  /* ---------- la lumière suit le curseur sur les tuiles ---------- */
+  if (matchMedia('(hover: hover)').matches){
+    document.querySelectorAll('.bento .tile').forEach(function(t){
+      t.addEventListener('pointermove', function(e){
+        var r = t.getBoundingClientRect();
+        t.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        t.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      }, {passive: true});
+    });
+  }
+
+  /* ---------- les chiffres montent à leur valeur, une seule fois ---------- */
+  (function(){
+    var doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.big[data-vers]').forEach(function(n){
+      var fin = parseInt(n.getAttribute('data-vers'), 10);
+      var suf = n.getAttribute('data-suf') || '';
+      if (doux || !('IntersectionObserver' in window)) return;   /* la valeur finale est déjà dans le HTML */
+      var vu = false;
+      new IntersectionObserver(function(es, o){
+        if (!es[0].isIntersecting || vu) return;
+        vu = true; o.disconnect();
+        var dur = 1000, dep = null;
+        function trame(now){
+          if (dep === null) dep = now;
+          var t = Math.min(1, (now - dep) / dur);
+          var e = 1 - Math.pow(1 - t, 3);
+          n.innerHTML = Math.round(fin * e) + suf;
+          if (t < 1) requestAnimationFrame(trame);
+        }
+        requestAnimationFrame(trame);
+      }, {threshold: .6}).observe(n);
+    });
+  })();
 
   /* ---------- déclencheurs d'animation ---------- */
   var doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
