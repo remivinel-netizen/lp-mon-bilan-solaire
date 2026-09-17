@@ -176,15 +176,6 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .hero h1 em{font-style:normal;color:var(--ble)}
 .hero__lead{font-size:16.5px;line-height:1.5;color:rgba(255,255,255,.94);max-width:34em;text-shadow:0 1px 14px rgba(0,0,0,.3)}
 .hero__lead b{color:#fff;font-weight:700}
-.feats{list-style:none;min-width:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;margin:20px -16px 0;padding:0 16px;scroll-padding:0 16px}
-.feats::-webkit-scrollbar{display:none}
-.feats li{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 15px 8px 8px;border-radius:999px;background:rgba(255,255,255,.14);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset;scroll-snap-align:start}
-@supports (backdrop-filter:blur(10px)){.feats li{background:rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}}
-.feats .fi{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;color:var(--ink)}
-.feats .fi .ico{width:17px;height:17px}
-.feats .ft{line-height:1.2;white-space:nowrap}
-.feats b{display:block;font-size:16px;font-weight:700}
-.feats small{display:block;font-size:15px;font-weight:500;color:rgba(255,255,255,.74)}
 .hero__notes{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 0}
 .hand{display:flex;align-items:flex-start;gap:8px;margin:0;color:var(--ble);font-family:'Caveat',var(--font);font-weight:600;font-size:clamp(20px,5vw,26px);line-height:1.15;transform:rotate(-1.5deg);transform-origin:left center;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .hand svg{width:34px;height:34px;flex:0 0 auto;color:var(--ambre);margin-top:-2px}
@@ -472,8 +463,6 @@ section{position:relative}
   .hero__media::after{background:linear-gradient(95deg,rgba(24,22,20,.8) 0%,rgba(24,22,20,.62) 45%,rgba(24,22,20,.12) 78%)}
   .hero__inner{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:56px;align-items:center;padding:64px 40px 64px 56px;min-height:680px}
   .hero__lead{font-size:20px}
-  .feats{flex-direction:column;align-items:flex-start;overflow:visible;gap:9px;margin:26px 0 0;padding:0}
-  .feats li{padding:9px 18px 9px 9px}
   .sticker{width:118px;height:118px}
   .sticker b{font-size:26px}
   .quiz{padding:22px 24px 18px;max-width:480px;justify-self:end;width:100%}
@@ -568,17 +557,11 @@ section{position:relative}
       <span class="eyebrow ent e1"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
       <h1 class="ent e2">Une mensualité <em>fixe</em> à la place de votre facture d'électricité</h1>
       <p class="hero__lead ent e3">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b>90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
-      <ul class="feats ent e4">
-        <li><span class="fi c-ambre"><svg class="ico"><use href="#i-euro"/></svg></span><span class="ft"><b>Sans apport</b><small>ni avance de fonds</small></span></li>
-        <li><span class="fi c-brume"><svg class="ico"><use href="#i-mail"/></svg></span><span class="ft"><b>Simulation par email</b><small>avant tout rendez-vous</small></span></li>
-        <li><span class="fi c-lavande"><svg class="ico"><use href="#i-shield"/></svg></span><span class="ft"><b>Installateur certifié RGE</b><small>pose en une journée</small></span></li>
-        <li><span class="fi c-ble"><svg class="ico"><use href="#i-panel"/></svg></span><span class="ft"><b>Panneaux garantis 30 ans</b><small>validés par le Consuel</small></span></li>
-      </ul>
-      <div class="hero__notes ent e5">
+      <div class="hero__notes ent e4">
         <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </p>
-        <span class="sticker" aria-hidden="true"><b>100&nbsp;%</b><i>gratuit<br>en 2 min</i></span>
+        <span class="sticker" aria-hidden="true"><b>100&nbsp;%</b><i>estimation<br>gratuite</i></span>
       </div>
     </div>
 
@@ -681,7 +664,7 @@ section{position:relative}
         </a>
       </div>
 
-      <p class="quiz__foot trust" id="q-foot"><span><svg class="ico"><use href="#i-lock"/></svg>100&nbsp;% gratuit</span><span><svg class="ico"><use href="#i-check"/></svg>Sans engagement</span><span><svg class="ico"><use href="#i-mail"/></svg>Simulation par email</span></p>
+      <p class="quiz__foot trust" id="q-foot"><span><svg class="ico"><use href="#i-lock"/></svg>Estimation 100&nbsp;% gratuite</span><span><svg class="ico"><use href="#i-check"/></svg>Sans engagement</span><span><svg class="ico"><use href="#i-mail"/></svg>Simulation par email</span></p>
     </div>
   </div>
 </section>
@@ -1267,7 +1250,6 @@ section{position:relative}
   }
 
   autoDefile(gal, 3400, [].slice.call(document.querySelectorAll('[data-gal]')));
-  autoDefile(document.querySelector('.feats'), 2800);
 
   /* ---------- graphique prix du kWh ---------- */
   var DATA = [
