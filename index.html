@@ -105,7 +105,6 @@ p{margin:0}
 .hero h1 em{font-style:normal;color:var(--ble)}
 .hero__lead{font-size:16.5px;line-height:1.5;color:rgba(255,255,255,.94);max-width:34em;text-shadow:0 1px 14px rgba(0,0,0,.3)}
 .hero__lead b{color:#fff;font-weight:700}
-.hero__lead b.hl{color:var(--ambre)}
 .feats{list-style:none;min-width:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;margin:20px -16px 0;padding:0 16px;scroll-padding:0 16px}
 .feats::-webkit-scrollbar{display:none}
 .feats li{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 15px 8px 8px;border-radius:999px;background:rgba(255,255,255,.14);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset;scroll-snap-align:start}
@@ -239,20 +238,14 @@ section{position:relative}
 .sec--lavande{background:var(--lavande)}
 .sec--beige{background:var(--beige)}
 /* sur fond coloré, le corail du kicker et le gris du chapô ne tiennent plus le contraste */
-.sec--brume .kicker,.sec--lavande .kicker,.sec--beige .kicker{color:var(--ink)}
-.sec--brume .kicker svg,.sec--lavande .kicker svg,.sec--beige .kicker svg{color:var(--corail)}
 .sec--lavande .sub,.sec--beige .sub{color:var(--ink)}
-.sec--brume .h2 em,.sec--lavande .h2 em,.sec--beige .h2 em{color:var(--corail-sombre)}
-.kicker{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--corail-sombre);margin-bottom:12px}
-.kicker svg{width:16px;height:16px}
-.h2{font-size:clamp(29px,6.4vw,46px);text-wrap:balance}
-.h2 em{font-style:normal;color:var(--corail)}
+.h2{font-size:clamp(29px,6.4vw,46px);text-wrap:balance;max-width:26em}
 .sub{font-size:18px;color:var(--ink-2);margin-top:14px;max-width:40em}
 
 /* proof strip */
 .proof{padding:10px 0 34px}
 .proof ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.proof li{display:flex;gap:12px;align-items:center;background:#fff;border-radius:20px;padding:14px;box-shadow:0 0 0 1px var(--line),0 12px 24px -18px rgba(38,37,35,.35)}
+.proof li{display:flex;gap:12px;align-items:center;background:#fff;border-radius:20px;padding:14px;box-shadow:0 0 0 1px var(--line)}
 .proof .b{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto}
 .proof .b{color:var(--ink)}
 .proof .b .ico{width:21px;height:21px}
@@ -262,7 +255,7 @@ section{position:relative}
 
 /* price section */
 .price{display:grid;gap:14px;margin-top:34px}
-.card{background:#fff;border-radius:var(--r-md);box-shadow:0 0 0 1px var(--line),0 24px 44px -32px rgba(38,37,35,.40)}
+.card{background:#fff;border-radius:var(--r-md);box-shadow:0 0 0 1px var(--line),0 26px 50px -34px rgba(38,37,35,.38)}
 .chart{padding:20px 18px 14px}
 .chart__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .chart__title{font-size:16px;font-weight:700}
@@ -285,7 +278,7 @@ section{position:relative}
 
 /* steps */
 .steps{list-style:none;margin:34px 0 0;padding:0;display:grid;gap:12px;counter-reset:s}
-.steps li{position:relative;background:#fff;border-radius:var(--r-md);padding:20px 20px 22px;box-shadow:0 0 0 1px var(--line),0 16px 30px -24px rgba(38,37,35,.40);transition:background-color .22s ease,box-shadow .22s ease}
+.steps li{position:relative;background:#fff;border-radius:var(--r-md);padding:20px 20px 22px;box-shadow:0 0 0 1px var(--line);transition:background-color .22s ease,box-shadow .22s ease}
 /* survol : teinte seule, sans effet de soulèvement — ces cartes ne sont pas cliquables */
 @media (hover:hover){
   .steps li:hover{background:var(--brume);box-shadow:0 0 0 1px var(--line-2)}
@@ -344,7 +337,7 @@ section{position:relative}
 
 /* faq */
 .faq{margin-top:30px;display:grid;gap:10px}
-.faq details{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 14px 28px -22px rgba(38,37,35,.35);transition:box-shadow .3s var(--ease)}
+.faq details{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px var(--line);transition:box-shadow .3s var(--ease)}
 .faq details[open]{box-shadow:0 0 0 1px var(--line-2),0 22px 40px -26px rgba(38,37,35,.45)}
 .faq summary .pm{background:var(--creme)!important}
 .faq summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 18px 18px 20px;font-weight:700;font-size:17px;line-height:1.3;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -484,7 +477,7 @@ section{position:relative}
     <div class="hero__copy">
       <span class="eyebrow ent e1"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
       <h1 class="ent e2">Une mensualité <em>fixe</em> à la place de votre facture d'électricité</h1>
-      <p class="hero__lead ent e3">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b class="hl">90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
+      <p class="hero__lead ent e3">Panneaux solaires de marque française et batterie de stockage, installés <b>sans apport</b>. L'objectif&nbsp;: jusqu'à <b>90&nbsp;% d'économie</b> sur votre facture<a href="#notes" style="color:inherit;text-decoration:none">*</a>.</p>
       <ul class="feats ent e4">
         <li><span class="fi c-ambre"><svg class="ico"><use href="#i-euro"/></svg></span><span class="ft"><b>Sans apport</b><small>ni avance de fonds</small></span></li>
         <li><span class="fi c-brume"><svg class="ico"><use href="#i-mail"/></svg></span><span class="ft"><b>Simulation par email</b><small>avant tout rendez-vous</small></span></li>
@@ -616,8 +609,7 @@ section{position:relative}
 
 <section class="sec sec--brume" id="prix">
   <div class="wrap">
-    <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Le prix de l'électricité</span>
-    <h2 class="h2">Le kWh coûte <em>29&nbsp;% de plus</em> qu'en 2020</h2>
+    <h2 class="h2">Le kWh coûte 29&nbsp;% de plus qu'en 2020</h2>
     <p class="sub">Au tarif réglementé, il est passé de 0,1546&nbsp;€ en février 2020 à 0,2001&nbsp;€ au 1<sup>er</sup> août 2026. Votre facture suit ces décisions sans que vous ayez votre mot à dire.</p>
 
     <div class="price">
@@ -641,7 +633,6 @@ section{position:relative}
 
 <section class="sec sec--lavande" id="etapes">
   <div class="wrap">
-    <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Votre bilan, étape par étape</span>
     <h2 class="h2">Vos chiffres d'abord. Votre décision ensuite.</h2>
     <p class="sub">Beaucoup d'entreprises cherchent d'abord à décrocher un rendez-vous. Ici, la simulation arrive par email&nbsp;: vous la lisez chez vous, tranquillement, avant tout déplacement.</p>
     <ol class="steps">
@@ -651,7 +642,7 @@ section{position:relative}
       <li><div class="num"><span>4</span><svg class="ico"><use href="#i-home"/></svg></div><h3>On vient si elle vous convient</h3><p>Visite technique, puis pose en une journée. Le Consuel valide l'installation avant la mise en service.</p></li>
     </ol>
     <div class="sec-cta">
-      <a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan<svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan</a>
       <span class="sec-cta__note">Une minute, sans engagement</span>
     </div>
   </div>
@@ -659,7 +650,6 @@ section{position:relative}
 
 <section class="sec" id="inclus">
   <div class="wrap">
-    <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Ce qui est compris</span>
     <h2 class="h2">Une installation complète, zéro euro à sortir.</h2>
     <div class="bento">
       <div class="tile tile--90" style="--i:0">
@@ -683,8 +673,7 @@ section{position:relative}
   <div class="wrap">
     <div class="gal-head">
       <div>
-        <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Réalisations</span>
-        <h2 class="h2">Des maisons comme la vôtre, <em>déjà équipées</em></h2>
+        <h2 class="h2">Des maisons comme la vôtre, déjà équipées</h2>
       </div>
       <div class="gal-nav">
         <button type="button" data-gal="-1" aria-label="Photos précédentes"><svg class="ico"><use href="#i-chev-l"/></svg></button>
@@ -712,7 +701,6 @@ section{position:relative}
   <div class="wrap">
     <div class="faq-wrap">
     <div>
-      <span class="kicker"><svg class="sun"><use href="#i-sun"/></svg>Questions fréquentes</span>
       <h2 class="h2">Ce qu'on nous demande le plus souvent</h2>
     </div>
     <div class="faq">
@@ -734,7 +722,7 @@ section{position:relative}
       <svg class="sun sunbg" aria-hidden="true"><use href="#i-sun"/></svg>
       <h2>Et chez vous, ça donnerait quoi&nbsp;?</h2>
       <p>6 questions, une minute. Votre simulation arrive par email et vous la lisez chez vous.</p>
-      <a class="btn btn--white" href="#bilan" data-go>Faire mon bilan solaire<svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn--white" href="#bilan" data-go>Faire mon bilan solaire</a>
     </div>
   </div>
 </section>
@@ -753,7 +741,7 @@ section{position:relative}
   </div>
 </footer>
 
-<div class="sticky" id="sticky"><a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan solaire<svg class="ico"><use href="#i-arrow"/></svg></a></div>
+<div class="sticky" id="sticky"><a class="btn btn--corail" href="#bilan" data-go>Faire mon bilan solaire</a></div>
 <script>
 (function(){
   'use strict';
