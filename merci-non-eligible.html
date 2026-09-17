@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Installation non possible | Mon Bilan Solaire</title>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
+<!-- Google Tag Manager : remplacer GTM-XXXXXXX puis décommenter
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+-->
+<style>
+:root{
+  --lavande:#9DACDA; --brume:#DCECF8; --ble:#FCED90; --ambre:#EEAF51;
+  --corail:#E85D4C; --corail-sombre:#9B2F20; --beige:#DECDC1; --creme:#F6F4EC;
+  --ink:#262523; --ink-2:#57534C; --ink-3:#6F6A62; --line:rgba(38,37,35,.10);
+  --font:'Satoshi',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--creme);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:0 20px}
+header{padding:26px 0}
+header img{height:36px;width:auto;display:block}
+main{padding:10px 0 64px}
+.carte{background:#fff;border-radius:28px;padding:30px 24px 32px;box-shadow:0 0 0 1px var(--line),0 26px 50px -34px rgba(38,37,35,.38)}
+.badge{width:62px;height:62px;border-radius:50%;background:var(--beige);display:grid;place-items:center;margin-bottom:22px}
+.badge svg{width:34px;height:34px;color:var(--ink)}
+h1{font-size:clamp(28px,6vw,40px);line-height:1.06;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
+.intro{color:var(--ink-2);font-size:17px;margin:0}
+.info{margin:26px 0 0;padding:20px;border-radius:20px;background:var(--creme)}
+.info p{margin:0 0 10px;font-size:15.5px;color:var(--ink-2);line-height:1.5}
+.info p:last-child{margin-bottom:0}
+.info b{color:var(--ink);font-size:16px}
+.retour{display:inline-block;margin-top:26px;font-size:16px;color:var(--corail-sombre)}
+footer{padding:0 0 46px;font-size:15px;color:var(--ink-3)}
+footer a{color:var(--ink-2)}
+@media (min-width:640px){.carte{padding:38px 36px 40px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a href="index.html"><img src="img/logo.svg" alt="Mon Bilan Solaire" width="172" height="36"></a></header>
+
+  <main>
+    <div class="carte">
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 4l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M7.5 7.5l9 9"/></svg>
+      </div>
+      <h1>Nous ne pouvons pas étudier votre projet.</h1>
+      <p class="intro" id="pourquoi">Une installation en autoconsommation suppose de décider seul de sa toiture. Ce n'est pas le cas ici, nous préférons vous le dire tout de suite.</p>
+
+      <div class="info">
+        <p><b>Aucune coordonnée n'a été enregistrée</b></p>
+        <p>Le questionnaire s'est arrêté avant de vous demander votre nom, votre email ou votre numéro. Rien n'a été transmis, et personne ne vous appellera.</p>
+      </div>
+
+      <div class="info" id="suite">
+        <p><b>Ce que vous pouvez faire</b></p>
+        <p id="suite-txt"></p>
+      </div>
+
+      <a class="retour" href="index.html">Revenir à l'accueil</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>Mon Bilan Solaire est un service proposé par EKO HABITATIONS, SAS — 33 quai Arloing, 69009 Lyon.
+      <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></p>
+  </footer>
+</div>
+
+<script>
+/* Le questionnaire dépose la raison de l'arrêt, jamais de coordonnées : il
+   s'interrompt avant de les demander. On adapte le texte, puis on efface. */
+(function(){
+  var r = '';
+  try { r = sessionStorage.getItem('mbs_non_eligible') || ''; } catch(e){}
+  var T = {
+    locataire: {
+      pourquoi: 'Les panneaux se posent sur la toiture, et cette décision revient au propriétaire du logement. En tant que locataire, vous ne pouvez pas engager ces travaux.',
+      suite: 'Parlez-en à votre propriétaire : c’est lui qui peut faire le bilan, en deux minutes, depuis cette même page. Les aides et l’estimation seront alors calculées à son nom.'
+    },
+    appartement: {
+      pourquoi: 'En appartement, la toiture est une partie commune. L’installation relève d’une décision de copropriété, pas d’un propriétaire seul, et nous n’intervenons pas sur ce type de projet.',
+      suite: 'Vous pouvez inscrire la question à l’ordre du jour de votre prochaine assemblée générale. Une installation en toiture décidée par la copropriété reste possible, mais elle passe par un autre type de dossier que le nôtre.'
+    }
+  };
+  var t = T[r];
+  if (t){
+    document.getElementById('pourquoi').textContent = t.pourquoi;
+    document.getElementById('suite-txt').textContent = t.suite;
+  } else {
+    /* raison perdue (onglet rouvert, stockage bloqué) : on masque le bloc
+       de conseils plutôt que d'afficher un cadre vide */
+    document.getElementById('suite').hidden = true;
+  }
+  try { sessionStorage.removeItem('mbs_non_eligible'); } catch(e){}
+})();
+</script>
+</body>
+</html>

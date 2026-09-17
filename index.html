@@ -549,7 +549,7 @@ section{position:relative}
     <div class="quiz ent e6" id="bilan">
       <div class="quiz__bar">
         <button type="button" class="qbtn" id="q-back" aria-label="Question précédente" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
-        <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <span class="quiz__count" id="q-count" aria-live="polite">1/6</span>
       </div>
 
@@ -560,9 +560,18 @@ section{position:relative}
             <legend class="step__q" tabindex="-1">Vous êtes&hellip;</legend>
             <p class="step__hint">Les panneaux se posent sur le toit, c'est donc la première chose qu'on vérifie.</p>
             <div class="opts">
-              <label class="opt"><input type="radio" name="statut" value="Propriétaire"><span class="opt__ico c-ble"><svg class="ico"><use href="#i-home"/></svg></span><span class="opt__txt">Propriétaire<small>de ma maison</small></span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="opt"><input type="radio" name="statut" value="Propriétaire"><span class="opt__ico c-ble"><svg class="ico"><use href="#i-home"/></svg></span><span class="opt__txt">Propriétaire<small>de mon logement</small></span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
               <label class="opt"><input type="radio" name="statut" value="Bientôt propriétaire"><span class="opt__ico c-brume"><svg class="ico"><use href="#i-key"/></svg></span><span class="opt__txt">Bientôt propriétaire<small>achat en cours</small></span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
               <label class="opt"><input type="radio" name="statut" value="Locataire"><span class="opt__ico c-beige"><svg class="ico"><use href="#i-building"/></svg></span><span class="opt__txt">Locataire</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="step" data-step="logement">
+            <legend class="step__q" tabindex="-1">Vous habitez&hellip;</legend>
+            <p class="step__hint">Les panneaux se posent sur votre toiture. En appartement, elle appartient à la copropriété.</p>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="logement" value="Maison"><span class="opt__ico c-ble"><svg class="ico"><use href="#i-home"/></svg></span><span class="opt__txt">Une maison<small>individuelle ou mitoyenne</small></span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="opt"><input type="radio" name="logement" value="Appartement"><span class="opt__ico c-beige"><svg class="ico"><use href="#i-building"/></svg></span><span class="opt__txt">Un appartement</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
             </div>
           </fieldset>
 
@@ -829,7 +838,7 @@ section{position:relative}
      distincte selon qu'il y figure ou non : deux URL, donc deux conversions
      distinctes côté Google Ads. */
   var ZONE = ['01','03','04','05','07','13','21','25','26','30','34','38','39','42','43','63','70','73','74','84','90'];
-  var MERCI_ZONE = 'merci.html', MERCI_HORS = 'merci-hors-zone.html';
+  var MERCI_ZONE = 'merci.html', MERCI_HORS = 'merci-hors-zone.html', MERCI_NON = 'merci-non-eligible.html';
   var params = {};
   try { params = JSON.parse(sessionStorage.getItem('mbs_params') || '{}'); } catch(e){ params = {}; }
   var qs = new URLSearchParams(location.search);
@@ -911,7 +920,7 @@ section{position:relative}
 
   function validate(){
     var key = steps[cur].getAttribute('data-step');
-    if (key === 'statut' || key === 'facture' || key === 'delai') return !!checked(key);
+    if (key === 'statut' || key === 'logement' || key === 'facture' || key === 'delai') return !!checked(key);
     if (key === 'code_postal'){
       var cp = val('code_postal');
       if (!/^\d{5}$/.test(cp)) { bad(form.elements.code_postal, true); note('q-cp-note', 'Indiquez les 5 chiffres de votre code postal.', true); return false; }
@@ -940,9 +949,28 @@ section{position:relative}
     return true;
   }
 
+  /* Deux réponses ferment le parcours : un locataire ne décide pas de la
+     toiture, et en appartement elle appartient à la copropriété. Autant le
+     dire tout de suite que de faire remplir six questions pour rien. Aucune
+     coordonnée n'a encore été saisie à ce stade, donc rien n'est envoyé. */
+  function bloquant(){
+    var key = steps[cur].getAttribute('data-step');
+    if (key === 'statut' && checked('statut') === 'Locataire') return 'locataire';
+    if (key === 'logement' && checked('logement') === 'Appartement') return 'appartement';
+    return '';
+  }
+  function quitte(raison){
+    sent = true;
+    track('quiz_non_eligible', {raison: raison, statut: checked('statut')});
+    try { sessionStorage.setItem('mbs_non_eligible', raison); } catch(e){}
+    setTimeout(function(){ location.href = MERCI_NON; }, 300);
+  }
+
   function next(){
     clearTimeout(timer);
     if (!validate()) { setHeight(); return; }
+    var stop = bloquant();
+    if (stop) { quitte(stop); return; }
     if (cur < total - 1) go(cur + 1, 1); else submit();
   }
 
@@ -1078,6 +1106,7 @@ section{position:relative}
     var data = {
       source: 'LP Mon Bilan Solaire',
       statut: checked('statut'),
+      logement: checked('logement'),
       facture_mensuelle: checked('facture'),
       delai_projet: checked('delai'),
       priorite: priorite(),
