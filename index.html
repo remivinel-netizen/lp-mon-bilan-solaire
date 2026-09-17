@@ -868,10 +868,31 @@ section{position:relative}
   }
   window.addEventListener('resize', function(){ if (!sent) setHeight(); });
 
+  /* Toutes les étapes ne concernent pas tout le monde : un futur propriétaire
+     n'a pas encore de facture d'électricité pour le logement qu'il achète, on
+     ne lui pose donc pas la question. Le parcours fait alors six étapes au
+     lieu de sept, et la barre d'avancement le reflète. */
+  function actif(i){
+    var key = steps[i].getAttribute('data-step');
+    if (key === 'facture') return checked('statut') !== 'Bientôt propriétaire';
+    return true;
+  }
+  function actifs(){
+    var a = [];
+    for (var i = 0; i < steps.length; i++) if (actif(i)) a.push(i);
+    return a;
+  }
+  function suivant(i){ for (var j = i + 1; j < steps.length; j++) if (actif(j)) return j; return -1; }
+  function precedent(i){ for (var j = i - 1; j >= 0; j--) if (actif(j)) return j; return -1; }
+
   function paint(){
-    for (var i = 0; i < segs.length; i++) segs[i].classList.toggle('on', i <= cur);
-    count.textContent = (cur + 1) + '/' + total;
-    back.hidden = cur === 0;
+    var a = actifs(), rang = a.indexOf(cur) + 1;
+    for (var i = 0; i < segs.length; i++){
+      segs[i].hidden = i >= a.length;
+      segs[i].classList.toggle('on', i < rang);
+    }
+    count.textContent = rang + '/' + a.length;
+    back.hidden = precedent(cur) < 0;
   }
 
   function go(i, dir){
@@ -971,7 +992,8 @@ section{position:relative}
     if (!validate()) { setHeight(); return; }
     var stop = bloquant();
     if (stop) { quitte(stop); return; }
-    if (cur < total - 1) go(cur + 1, 1); else submit();
+    var n = suivant(cur);
+    if (n > -1) go(n, 1); else submit();
   }
 
   /* choix : avance automatique */
@@ -991,6 +1013,12 @@ section{position:relative}
   function choose(input){
     var name = input.name;
     if (!started) { started = true; track('quiz_start', {first_answer: input.value}); }
+    /* Retour à la première étape puis changement de statut : la facture déjà
+       cochée porterait sur une question qu'on ne pose plus. */
+    if (name === 'statut' && input.value === 'Bientôt propriétaire'){
+      var f = form.querySelector('input[name="facture"]:checked');
+      if (f) f.checked = false;
+    }
     if (name === 'facture'){
       var an = input.getAttribute('data-an');
       $('#q-annual').innerHTML = 'Cela représente <b>' + an + '</b>. Dites-nous à quel horizon vous vous projetez.';
@@ -1003,7 +1031,7 @@ section{position:relative}
     if (t.matches && t.matches('.opt input[type="radio"]')) { if (!arrowNav) choose(t); return; }
     if (t.closest && t.closest('[data-next]')) { next(); }
   });
-  back.addEventListener('click', function(){ clearTimeout(timer); go(cur - 1, -1); });
+  back.addEventListener('click', function(){ clearTimeout(timer); go(precedent(cur), -1); });
 
   form.addEventListener('submit', function(e){ e.preventDefault(); next(); });
 
@@ -1107,7 +1135,7 @@ section{position:relative}
       source: 'LP Mon Bilan Solaire',
       statut: checked('statut'),
       logement: checked('logement'),
-      facture_mensuelle: checked('facture'),
+      facture_mensuelle: checked('facture') || 'non demandée (achat en cours)',
       delai_projet: checked('delai'),
       priorite: priorite(),
       code_postal: val('code_postal'),
