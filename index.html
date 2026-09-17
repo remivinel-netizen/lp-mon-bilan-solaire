@@ -376,7 +376,7 @@ section{position:relative}
 .tile--rge{background:#D5DCF0}
 .tile--consuel{background:#fff;box-shadow:0 0 0 1px var(--line)}
 .tile .ic{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.6);display:grid;place-items:center;margin-bottom:auto}
-.tile .ic + .big{padding-top:16px}
+.tile .ic + .big,.tile .ic + .tile__t{padding-top:16px}
 .tile .big.word{font-size:32px;letter-spacing:-.03em}
 .tile .ic .ico{width:19px;height:19px}
 .foot-note{font-size:15px;color:var(--ink-3);margin-top:14px}
@@ -443,6 +443,7 @@ section{position:relative}
   .tile--appli{flex-direction:row;align-items:center;justify-content:flex-start;gap:26px}
   .tile--appli .ic{margin-bottom:0}
   .tile--appli .tile__t{flex:0 0 auto}
+  .tile--appli .ic + .tile__t{padding-top:0}
   .tile--appli p{margin-top:0;max-width:46ch}
 }
 @media (min-width:1024px){
