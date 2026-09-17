@@ -342,7 +342,7 @@ section{position:relative}
 .fixed p{color:rgba(255,255,255,.82);font-size:16px}
 .legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:15px;color:var(--ink-2)}
 .legend__i{width:18px;height:3px;border-radius:2px;flex:0 0 auto;margin-right:-10px}
-.legend__i--fac{background:var(--corail)}
+.legend__i--fac{height:9px;background:var(--corail)}
 .legend__i--men{background:var(--ambre)}
 .fixed .fine{font-size:15px;color:rgba(255,255,255,.55)}
 
@@ -1302,6 +1302,10 @@ section{position:relative}
     function X(t){ return P.l + (t - t0) / (t1 - t0) * (W - P.l - P.r); }
     function Y(v){ return P.t + (1 - (v - v0) / (v1 - v0)) * (H - P.t - P.b); }
     var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Pour une même consommation, la facture d\'électricité est passée de 116 € par mois en février 2020 à 150 € en août 2026, avec un pic à 189 € en février 2024. La mensualité Mon Bilan Solaire, elle, ne varie pas.'});
+    /* Inséré tout de suite, et pas en fin de tracé : sur un noeud détaché,
+       getBBox() d'un texte renvoie une boîte vide, et le placement des
+       libellés ne verrait jamais la flèche. */
+    box.insertBefore(svg, tip);
     var defs = el('defs', {}, svg);
     var grad = el('linearGradient', {id: 'g-area', x1: 0, y1: 0, x2: 0, y2: 1}, defs);
     el('stop', {offset: '0', 'stop-color': '#E85D4C', 'stop-opacity': '.18'}, grad);
@@ -1323,44 +1327,86 @@ section{position:relative}
     for (var i = 1; i < pts.length; i++) d += ' L' + X(pts[i].t) + ' ' + Y(pts[i].m);
     d += ' H' + X(now);
     el('path', {d: d + ' V' + (H - P.b) + ' H' + X(pts[0].t) + ' Z', fill: 'url(#g-area)'}, svg);
-    var pCout = el('path', {d: d, fill: 'none', stroke: '#E85D4C', 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', class: 'draw'}, svg);
 
-    function marker(p, text, anchor, dx, dy){
-      var g = el('text', {class: 'fadein', x: X(p.t) + dx, y: Y(p.m) + dy, 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
-      g.textContent = text;
-    }
     var last = pts[pts.length - 1], peak = pts[7];
 
-    /* Une flèche courbe part de 2020 et vise la valeur d'aujourd'hui. Elle passe
-       au-dessus de la courbe, donc elle doit s'en distinguer : rouge plus sombre,
-       et doublée d'un liseré blanc pour se détacher du tracé qu'elle croise. */
-    var ax0 = X(pts[0].t) + 16, ay0 = Y(pts[0].m) - 18;
-    var ax1 = X(last.t) - 4,    ay1 = Y(last.m) - 30;
-    var sommet = Y(v1) + 6;
+    /* La flèche est devenue le sujet du graphique : elle part de 2020, monte
+       vers la droite et se termine pointe en haut. Le liseré blanc la garde
+       nette là où elle traverse les repères et l'aplat de la facture. */
+    var ax0 = X(pts[0].t) + 14, ay0 = Y(pts[0].m) - (narrow ? 22 : 10);
+    var ax1 = W - P.r - (narrow ? 14 : 22), ay1 = Y(v1) + (narrow ? 12 : 16);
+    var dx = ax1 - ax0, dy = ay0 - ay1;
     var courbe = 'M' + ax0 + ' ' + ay0 +
-       ' C' + (ax0 + (ax1 - ax0) * .3) + ' ' + sommet +
-       ' ' + (ax1 - (ax1 - ax0) * .2) + ' ' + sommet +
+       ' C' + (ax0 + dx * .58) + ' ' + (ay0 - dy * .06) +
+       ' ' + ax1 + ' ' + (ay1 + dy * .62) +
        ' ' + ax1 + ' ' + ay1;
-    var pointe = 'M' + (ax1 - 14) + ' ' + (ay1 - 10) + ' L' + ax1 + ' ' + ay1 + ' L' + (ax1 - 15) + ' ' + (ay1 + 6);
+    var b = narrow ? 8 : 11;
+    var pointe = 'M' + (ax1 - b) + ' ' + (ay1 + b * 1.3) +
+       ' L' + ax1 + ' ' + ay1 + ' L' + (ax1 + b) + ' ' + (ay1 + b * 1.3);
     /* liseré */
-    el('path', {class: 'draw draw--halo', fill: 'none', stroke: '#fff', 'stroke-width': 8,
+    el('path', {class: 'draw draw--halo', fill: 'none', stroke: '#fff', 'stroke-width': 7,
       'stroke-linecap': 'round', d: courbe}, svg);
-    el('path', {class: 'fadein', fill: 'none', stroke: '#fff', 'stroke-width': 8,
+    el('path', {class: 'fadein', fill: 'none', stroke: '#fff', 'stroke-width': 7,
       'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: pointe}, svg);
     /* flèche */
-    el('path', {class: 'draw draw--fleche', fill: 'none', stroke: '#9B2F20', 'stroke-width': 3.5,
+    var fleche = el('path', {class: 'draw draw--fleche', fill: 'none', stroke: '#E85D4C', 'stroke-width': 3.5,
       'stroke-linecap': 'round', d: courbe}, svg);
-    el('path', {class: 'fadein', fill: 'none', stroke: '#9B2F20', 'stroke-width': 3.5,
+    var tete = el('path', {class: 'fadein', fill: 'none', stroke: '#E85D4C', 'stroke-width': 3.5,
       'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: pointe}, svg);
 
-    marker(pts[0], eurMois(pts[0].m), 'start', -4, 18);
-    marker(peak, 'Pic ' + eurMois(peak.m), 'middle', 0, 22);
-    marker(last, eurMois(last.m), 'end', 4, 20);
+    /* Le graphique est fluide : à 300 px de large comme à 700, on ne peut pas
+       savoir d'avance où la flèche passe. Les libellés sont donc placés après
+       elle — on échantillonne le tracé, puis on garde pour chaque montant la
+       première position proposée qui ne le touche pas. */
+    var trace = [];
+    [fleche, tete].forEach(function(p){
+      var L = p.getTotalLength();
+      for (var i = 0; i <= 220; i++) trace.push(p.getPointAtLength(L * i / 220));
+    });
+    /* Les graduations sont déjà posées, et chaque montant placé devient à son
+       tour un obstacle : sinon deux libellés se retrouvent l'un sur l'autre
+       dans le coin droit, là où le cadre est le plus étroit. */
+    var occupe = [];
+    [].forEach.call(svg.querySelectorAll('text'), function(t){ occupe.push(t.getBBox()); });
+    function libre(node){
+      var r = node.getBBox(), m = 8;
+      for (var i = 0; i < trace.length; i++){
+        var q = trace[i];
+        if (q.x > r.x - m && q.x < r.x + r.width + m &&
+            q.y > r.y - m && q.y < r.y + r.height + m) return false;
+      }
+      for (var j = 0; j < occupe.length; j++){
+        var o = occupe[j];
+        if (!(r.x + r.width + 6 < o.x || o.x + o.width + 6 < r.x ||
+              r.y + r.height + 2 < o.y || o.y + o.height + 2 < r.y)) return false;
+      }
+      return true;
+    }
+    function placer(node, essais){
+      for (var i = 0; i < essais.length; i++){
+        node.setAttribute('x', essais[i][0]);
+        node.setAttribute('y', essais[i][1]);
+        if (libre(node) || i === essais.length - 1) break;
+      }
+      occupe.push(node.getBBox());
+    }
+    function marker(p, text, anchor, essais){
+      var g = el('text', {class: 'fadein', 'text-anchor': anchor, 'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
+      g.textContent = text;
+      placer(g, essais.map(function(e){ return [X(p.t) + e[0], Y(p.m) + e[1]]; }));
+    }
+    marker(pts[0], eurMois(pts[0].m), 'start', [[-4, 18], [-4, -12], [-4, 32]]);
+    marker(peak, 'Pic ' + eurMois(peak.m), 'middle', [[0, 22], [0, -12], [0, 38], [-26, 22]]);
+    marker(last, eurMois(last.m), 'end', [[4, 20], [4, -12], [-34, 20], [4, 42], [-34, 42]]);
 
     /* seconde série : la mensualité, plate par construction */
     var pMens = el('line', {x1: P.l, x2: W - P.r, y1: Y(MENS), y2: Y(MENS), stroke: '#EEAF51', 'stroke-width': 2.5, 'stroke-linecap': 'round', class: 'draw draw--mens'}, svg);
-    var ml = el('text', {class: 'fadein', x: W - P.r - 2, y: Y(MENS) - 9, 'text-anchor': 'end', 'font-size': 15, 'font-weight': 700, fill: '#8A6520'}, svg);
-    ml.textContent = 'Votre mensualité, fixe';
+    var ml = el('text', {class: 'fadein', 'text-anchor': 'end', 'font-size': 15, 'font-weight': 700, fill: '#8A6520'}, svg);
+    /* Sous 460 px, la phrase longue couvre toute la largeur du cadre et vient
+       buter sur la flèche ; on la raccourcit plutôt que de la descendre sur
+       les années de l'axe. */
+    ml.textContent = narrow ? 'Mensualité fixe' : 'Votre mensualité, fixe';
+    placer(ml, [[W - P.r - 2, Y(MENS) - 9], [W - P.r - 2, Y(MENS) - 31]]);
 
     var cross = el('line', {y1: P.t - 6, y2: H - P.b, stroke: '#262523', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0}, svg);
     var dot = el('circle', {r: 6, fill: '#262523', stroke: '#fff', 'stroke-width': 2, opacity: 0}, svg);
@@ -1385,10 +1431,13 @@ section{position:relative}
     hit.addEventListener('pointermove', move);
     hit.addEventListener('pointerdown', move);
     hit.addEventListener('pointerleave', leave);
-    box.insertBefore(svg, tip);
   }
   draw();
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(draw, 120); });
+  /* Au premier tracé, Satoshi n'est pas forcément arrivée : les libellés sont
+     alors mesurés dans la police de secours, plus étroite, et le placement les
+     croit dégagés. On redessine une fois la vraie police disponible. */
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ draw(); });
 
   /* ---------- le survol des boutons part du point d'entrée du curseur ---------- */
   if (matchMedia('(hover: hover)').matches){
