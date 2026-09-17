@@ -1320,16 +1320,23 @@ section{position:relative}
     /* La flèche est devenue le sujet du graphique : elle part de 2020, monte
        vers la droite et se termine pointe en haut. Le liseré blanc la garde
        nette là où elle traverse les repères et l'aplat de la facture. */
+    var ep = narrow ? 5 : 6.5;                 /* épaisseur du fût */
+    var hl = narrow ? 16 : 21, hw = narrow ? 9.5 : 12.5;   /* longueur et demi-largeur de la pointe */
     var ax0 = X(pts[0].t) + 14, ay0 = Y(pts[0].m) - (narrow ? 22 : 10);
-    var ax1 = W - P.r - (narrow ? 14 : 22), ay1 = Y(v1) + (narrow ? 12 : 16);
+    var ax1 = W - P.r - (narrow ? 14 : 22);
+    var ayT = Y(v1) + (narrow ? 8 : 10);       /* le sommet de la pointe */
+    var ay1 = ayT + hl * .5;                   /* le fût s'arrête dans la pointe */
     var dx = ax1 - ax0, dy = ay0 - ay1;
     var courbe = 'M' + ax0 + ' ' + ay0 +
        ' C' + (ax0 + dx * .58) + ' ' + (ay0 - dy * .06) +
        ' ' + ax1 + ' ' + (ay1 + dy * .62) +
        ' ' + ax1 + ' ' + ay1;
-    var b = narrow ? 8 : 11;
-    var pointe = 'M' + (ax1 - b) + ' ' + (ay1 + b * 1.3) +
-       ' L' + ax1 + ' ' + ay1 + ' L' + (ax1 + b) + ' ' + (ay1 + b * 1.3);
+    /* Pointe pleine, et non plus deux traits ouverts : c'est ce qui donne à la
+       flèche son aplomb. Elle recouvre la fin du fût, d'où l'absence de jointure
+       à traiter. */
+    var pointe = 'M' + ax1 + ' ' + ayT +
+       ' L' + (ax1 + hw) + ' ' + (ayT + hl) +
+       ' L' + (ax1 - hw) + ' ' + (ayT + hl) + ' Z';
     /* L'aplat reprend la forme de la flèche : on referme sa courbe sur le sol
        du cadre. Le dégradé est relatif à la boîte du tracé, donc il s'adapte
        de lui-même à la hauteur du graphique. */
@@ -1337,18 +1344,24 @@ section{position:relative}
     var grad = el('linearGradient', {id: 'g-area', x1: 0, y1: 0, x2: 0, y2: 1}, defs);
     el('stop', {offset: '0', 'stop-color': '#E85D4C', 'stop-opacity': '.18'}, grad);
     el('stop', {offset: '1', 'stop-color': '#E85D4C', 'stop-opacity': '0'}, grad);
+    /* La flèche s'assombrit en montant : le corail de la marque au départ, le
+       rouge sombre à la pointe. La montée se voit dans la couleur autant que
+       dans la pente, et la pointe gagne en contraste. */
+    var gf = el('linearGradient', {id: 'g-fleche', gradientUnits: 'userSpaceOnUse',
+      x1: ax0, y1: ay0, x2: ax1, y2: ayT}, defs);
+    el('stop', {offset: '0', 'stop-color': '#E85D4C'}, gf);
+    el('stop', {offset: '1', 'stop-color': '#9B2F20'}, gf);
     el('path', {class: 'fadein', fill: 'url(#g-area)',
       d: courbe + ' V' + (H - P.b) + ' H' + ax0 + ' Z'}, svg);
     /* liseré */
-    el('path', {class: 'draw draw--halo', fill: 'none', stroke: '#fff', 'stroke-width': 7,
+    el('path', {class: 'draw draw--halo', fill: 'none', stroke: '#fff', 'stroke-width': ep + 5,
       'stroke-linecap': 'round', d: courbe}, svg);
-    el('path', {class: 'fadein', fill: 'none', stroke: '#fff', 'stroke-width': 7,
-      'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: pointe}, svg);
+    el('path', {class: 'fadein', fill: '#fff', stroke: '#fff', 'stroke-width': 5,
+      'stroke-linejoin': 'round', d: pointe}, svg);
     /* flèche */
-    var fleche = el('path', {class: 'draw draw--fleche', fill: 'none', stroke: '#E85D4C', 'stroke-width': 3.5,
-      'stroke-linecap': 'round', d: courbe}, svg);
-    var tete = el('path', {class: 'fadein', fill: 'none', stroke: '#E85D4C', 'stroke-width': 3.5,
-      'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: pointe}, svg);
+    var fleche = el('path', {class: 'draw draw--fleche', fill: 'none', stroke: 'url(#g-fleche)',
+      'stroke-width': ep, 'stroke-linecap': 'round', d: courbe}, svg);
+    var tete = el('path', {class: 'fadein', fill: '#9B2F20', stroke: 'none', d: pointe}, svg);
 
     /* Le graphique est fluide : à 300 px de large comme à 700, on ne peut pas
        savoir d'avance où la flèche passe. Les libellés sont donc placés après
@@ -1365,7 +1378,7 @@ section{position:relative}
     var occupe = [];
     [].forEach.call(svg.querySelectorAll('text'), function(t){ occupe.push(t.getBBox()); });
     function libre(node){
-      var r = node.getBBox(), m = 8;
+      var r = node.getBBox(), m = ep / 2 + 9;
       for (var i = 0; i < trace.length; i++){
         var q = trace[i];
         if (q.x > r.x - m && q.x < r.x + r.width + m &&
@@ -1391,7 +1404,7 @@ section{position:relative}
        grand texte au seuil de 3:1 (il est à 3,44:1 sur blanc). */
     var mi = fleche.getPointAtLength(fleche.getTotalLength() * .52);
     var pc = el('text', {class: 'fadein', 'text-anchor': 'end',
-      'font-size': narrow ? 19 : 22, 'font-weight': 800, fill: '#E85D4C'}, svg);
+      'font-size': narrow ? 21 : 26, 'font-weight': 900, fill: '#9B2F20'}, svg);
     pc.textContent = '+29' + NB + '%';
     placer(pc, [[mi.x - 12, mi.y - 14], [mi.x - 12, mi.y - 38],
                 [mi.x - 46, mi.y - 14], [mi.x + 34, mi.y + 26]]);
