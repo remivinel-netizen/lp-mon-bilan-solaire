@@ -246,7 +246,12 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .note{font-size:15px;color:var(--ink-2);margin-top:10px;min-height:0}
 .note.is-err{color:var(--err);font-weight:500}
 .suggest{border:0;background:none;padding:0;color:var(--ink);font-weight:700;text-decoration:underline;cursor:pointer;font-size:15px}
-.consent{display:flex;gap:14px;align-items:flex-start;margin-top:14px;padding:14px 14px 14px 16px;border-radius:18px;background:var(--creme);cursor:pointer}
+.rgpd-intro{font-size:15px;line-height:1.45;color:var(--ink-3);margin-top:14px}
+.rgpd-intro b{color:var(--ink-2)}
+.rgpd-intro a,.consent a{color:var(--ink);text-decoration:underline}
+.rgpd-droits{font-size:15px;line-height:1.45;color:var(--ink-3);margin-top:12px}
+.consent + .consent{margin-top:10px}
+.consent{display:flex;gap:14px;align-items:flex-start;margin-top:12px;padding:14px 14px 14px 16px;border-radius:18px;background:var(--creme);cursor:pointer}
 .consent p{font-size:15px;line-height:1.45;color:var(--ink-2)}
 .consent p b{color:var(--ink)}
 .consent a{color:var(--ink)}
@@ -634,12 +639,18 @@ section{position:relative}
             <div class="group">
               <div class="field"><label for="f-tel">Téléphone</label><div class="tel"><span class="cc">+33</span><input id="f-tel" name="telephone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="06 12 34 56 78" maxlength="14"></div></div>
             </div>
+            <p class="rgpd-intro">Vos données sont traitées par <b>EKO HABITATIONS</b> (33 quai Arloing, 69009 Lyon), responsable de traitement, pour étudier votre projet, en application de sa <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
             <label class="consent" id="q-consent-box">
               <span class="switch"><input type="checkbox" id="f-consent" name="consentement" value="oui"><span></span></span>
-              <p id="q-consent-text">J'accepte d'être contacté(e) par téléphone, SMS et email par <b>EKO HABITATIONS</b> (33 quai Arloing, 69009 Lyon), qui réalise les bilans Mon Bilan Solaire, au sujet de ma demande de simulation. Mes données ne sont ni vendues ni cédées. Je peux retirer mon accord à tout moment. <a href="confidentialite.html" target="_blank" rel="noopener">Confidentialité</a></p>
+              <p id="q-consent-text">J'ai pris connaissance de la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a> et j'accepte que mes données soient collectées et traitées par <b>EKO HABITATIONS</b> aux fins d'étude de mon projet solaire.</p>
+            </label>
+            <label class="consent" id="q-consent-tel-box">
+              <span class="switch"><input type="checkbox" id="f-consent-tel" name="consentement_appel" value="oui"><span></span></span>
+              <p id="q-consent-tel-text">Je demande à être rappelé(e) par téléphone par <b>EKO HABITATIONS</b>, sous 48&nbsp;heures, au sujet de ma demande d'estimation. <b>Mes coordonnées ne sont transmises à personne d'autre</b>&nbsp;: ni revendues, ni cédées à un réseau de partenaires. Ce consentement est révocable à tout moment, par email à <a href="mailto:contact@eko-habitations.fr">contact@eko-habitations.fr</a>. Je peux demander la preuve de mon consentement sur support durable.</p>
             </label>
             <p class="note" id="q-tel-note" aria-live="polite"></p>
             <div class="step__actions"><button type="submit" class="btn btn--corail" id="q-send">Recevoir ma simulation</button></div>
+            <p class="rgpd-droits">Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données.</p>
           </fieldset>
 
         </div>
@@ -946,7 +957,8 @@ section{position:relative}
     if (key === 'telephone'){
       var d = phoneDigits(val('telephone'));
       if (!phoneOk(d)) { bad(form.elements.telephone, true); note('q-tel-note', 'Ce numéro ne semble pas valide. Il doit compter 10 chiffres.', true); return false; }
-      if (!form.elements.consentement.checked) { $('#q-consent-box').classList.add('is-bad'); note('q-tel-note', 'Activez l’autorisation de contact pour qu’on puisse vous envoyer votre simulation.', true); return false; }
+      if (!form.elements.consentement.checked) { $('#q-consent-box').classList.add('is-bad'); note('q-tel-note', 'Acceptez le traitement de vos données pour qu’on puisse étudier votre projet.', true); return false; }
+      if (!form.elements.consentement_appel.checked) { $('#q-consent-tel-box').classList.add('is-bad'); note('q-tel-note', 'Autorisez le rappel téléphonique pour qu’on puisse vous joindre.', true); return false; }
       return true;
     }
     return true;
@@ -1007,10 +1019,14 @@ section{position:relative}
     if (t.name === 'prenom' || t.name === 'nom' || t.name === 'email'){ bad(t, false); note('q-id-note', ''); }
     if (t.name === 'email') suggestMail(t.value);
   });
-  form.elements.consentement.addEventListener('change', function(){
-    $('#q-consent-box').classList.remove('is-bad');
-    state.consentAt = this.checked ? new Date().toISOString() : '';
-    if (this.checked) note('q-tel-note', '');
+  ['consentement', 'consentement_appel'].forEach(function(nom){
+    form.elements[nom].addEventListener('change', function(){
+      var boite = nom === 'consentement' ? '#q-consent-box' : '#q-consent-tel-box';
+      $(boite).classList.remove('is-bad');
+      note('q-tel-note', '');
+      /* horodatage posé au premier accord donné, jamais réécrit ensuite */
+      if (this.checked && !state.consentAt) state.consentAt = new Date().toISOString();
+    });
   });
 
   /* suggestion d'email (fautes de frappe courantes) */
@@ -1098,6 +1114,10 @@ section{position:relative}
       email: val('email').toLowerCase(),
       telephone: tel,
       telephone_e164: '+33' + tel.slice(1),
+      consentement_donnees: 'oui',
+      consentement_donnees_texte: document.getElementById('q-consent-text').textContent.replace(/\s+/g, ' ').trim(),
+      consentement_appel: 'oui',
+      consentement_appel_texte: document.getElementById('q-consent-tel-text').textContent.replace(/\s+/g, ' ').trim(),
       consentement_contact: 'oui',
       consentement_texte: document.getElementById('q-consent-text').textContent.replace(/\s+/g, ' ').replace(' Confidentialité', '').trim(),
       consentement_horodatage: state.consentAt || now,
