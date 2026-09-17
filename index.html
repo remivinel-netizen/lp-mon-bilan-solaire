@@ -36,10 +36,12 @@
   --ease:cubic-bezier(.32,.72,0,1);
   --shadow-card:0 1px 0 rgba(255,255,255,.6) inset, 0 40px 80px -30px rgba(38,37,35,.45), 0 0 0 1px rgba(38,37,35,.05);
   --font:'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --chiffres:tabular-nums;
 }
 *,*::before,*::after{box-sizing:border-box}
+::selection{background:var(--ble);color:var(--ink)}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:12px}
-body{margin:0;background:var(--creme);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+body{margin:0;background:var(--creme);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55;text-wrap:pretty;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
 img{max-width:100%;display:block}
 sup{line-height:0}
 .quiz__foot[hidden],form[hidden],.quiz__bar[hidden]{display:none!important}
@@ -73,6 +75,27 @@ p{margin:0}
 .btn--sm{min-height:42px;padding:0 18px;font-size:15px}
 .top .btn{display:none}
 
+/* ---------- la lumière : une source unique qui traverse la page au scroll,
+     comme le soleil sur un toit du matin au soir. Déplacée par transform seul,
+     donc composée par le GPU : aucun recalcul de mise en page au défilement. ---------- */
+.jour{position:fixed;left:50%;top:0;width:150vmax;height:150vmax;margin:-75vmax 0 0 -75vmax;
+  border-radius:50%;pointer-events:none;z-index:0;
+  /* .09 au plus fort : à .16 le gris --ink-3 sur crème tombait à 4,46:1 */
+  background:radial-gradient(circle at 50% 50%, rgba(238,175,81,.09) 0%, rgba(238,175,81,.045) 30%, rgba(232,93,76,.02) 52%, transparent 68%);
+  transform:translate3d(-14vw, -34vh, 0)}
+/* Trajectoire liée au défilement, sans écouteur JavaScript : le navigateur
+   l'anime sur le compositeur. Là où ce n'est pas encore pris en charge, la
+   lumière reste à sa position de repos — un halo chaud, immobile. */
+@supports (animation-timeline: scroll()){
+  .jour{will-change:transform;animation:course 1s linear both;animation-timeline:scroll(root block)}
+  @keyframes course{
+    from{transform:translate3d(-32vw,-44vh,0)}
+    50% {transform:translate3d(  0vw,-20vh,0)}
+    to  {transform:translate3d( 32vw,-44vh,0)}
+  }
+}
+body > header, main, .foot, .sticky{position:relative;z-index:1}
+
 /* ---------- animations : une seule séquence d'entrée, puis du mouvement qui répond ---------- */
 .ent{opacity:0;transform:translateY(14px);animation:ent .8s var(--ease) forwards}
 @keyframes ent{to{opacity:1;transform:none}}
@@ -101,7 +124,7 @@ p{margin:0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 7px;border-radius:999px;background:rgba(255,255,255,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:15px;font-weight:500;box-shadow:0 0 0 1px rgba(255,255,255,.22) inset}
 .eyebrow .sunbadge{width:22px;height:22px;border-radius:50%;background:var(--ambre);display:grid;place-items:center}
 .eyebrow .sunbadge svg{width:15px;height:15px;color:#fff}
-.hero h1{font-size:clamp(31px,8.2vw,62px);margin:14px 0 12px;text-wrap:balance}
+.hero h1{font-size:clamp(31px,8.2vw,62px);margin:14px 0 12px;text-wrap:balance;letter-spacing:-.028em}
 .hero h1 em{font-style:normal;color:var(--ble)}
 .hero__lead{font-size:16.5px;line-height:1.5;color:rgba(255,255,255,.94);max-width:34em;text-shadow:0 1px 14px rgba(0,0,0,.3)}
 .hero__lead b{color:#fff;font-weight:700}
@@ -242,7 +265,7 @@ section{position:relative}
 .sec--beige{background:var(--beige)}
 /* sur fond coloré, le corail du kicker et le gris du chapô ne tiennent plus le contraste */
 .sec--lavande .sub,.sec--beige .sub{color:var(--ink)}
-.h2{font-size:clamp(29px,6.4vw,46px);text-wrap:balance;max-width:26em}
+.h2{font-size:clamp(29px,6.4vw,46px);text-wrap:balance;max-width:26em;letter-spacing:-.022em}
 .sub{font-size:18px;color:var(--ink-2);margin-top:14px;max-width:40em}
 
 /* proof strip */
@@ -270,7 +293,7 @@ section{position:relative}
 .chart__src{font-size:15px;color:var(--ink-3);margin-top:8px}
 .fixed{padding:22px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;background:var(--ink)!important;color:#fff}
 .fixed__label{font-size:15px;font-weight:700;color:var(--ambre);letter-spacing:.06em;text-transform:uppercase}
-.fixed__big{font-size:64px;font-weight:900;letter-spacing:-.04em;line-height:1}
+.fixed__big{font-size:64px;font-weight:900;letter-spacing:-.04em;line-height:1;font-variant-numeric:var(--chiffres)}
 .fixed__big small{font-size:20px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.7)}
 .fixed p{color:rgba(255,255,255,.82);font-size:16px}
 .legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:15px;color:var(--ink-2)}
@@ -301,7 +324,7 @@ section{position:relative}
 /* bento */
 .bento{display:grid;gap:12px;margin-top:34px;grid-template-columns:1fr 1fr}
 .tile{position:relative;border-radius:var(--r-md);padding:18px;overflow:hidden;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}
-.tile .big{font-size:40px;font-weight:900;letter-spacing:-.04em;line-height:1}
+.tile .big{font-size:40px;font-weight:900;letter-spacing:-.04em;line-height:1;font-variant-numeric:var(--chiffres)}
 .tile .lbl{font-weight:700;font-size:15.5px;margin-top:6px;line-height:1.25}
 .tile p{font-size:15px;color:var(--ink-2);margin-top:8px;line-height:1.4}
 .tile--wide,.tile--90,.tile--30,.tile--bat{grid-column:1 / -1}
@@ -472,6 +495,8 @@ section{position:relative}
     </div>
   </div>
 </header>
+
+<div class="jour" id="jour" aria-hidden="true"></div>
 
 <main>
 <section class="hero">
