@@ -1097,36 +1097,41 @@ section{position:relative}
     });
   });
 
-  /* défilement automatique, mobile seulement : le desktop a ses flèches.
-     S'arrête définitivement dès que le visiteur touche le carrousel — WCAG 2.2.2
+  /* défilement automatique, mobile seulement : le desktop n'en a pas besoin.
+     S'arrête définitivement dès que le visiteur touche la bande — WCAG 2.2.2
      demande qu'un mouvement automatique puisse être interrompu. */
-  (function(){
-    if (!gal) return;
+  function autoDefile(el, delai, boutons){
+    if (!el) return;
     var mqDoux = matchMedia('(prefers-reduced-motion: reduce)');
     var mqMob  = matchMedia('(max-width: 1023px)');
     var minuteur = null, visible = false, stoppe = false;
 
+    /* index suivi explicitement : les largeurs varient, et se fier à la position
+       courante laisse scroll-snap ramener au point de départ */
+    var rang = 0;
+    function offset(i){
+      var e = el.children[i];
+      return e.getBoundingClientRect().left - el.getBoundingClientRect().left + el.scrollLeft;
+    }
     function pas(){
-      var card = gal.querySelector('.shot');
-      if (!card) return;
-      var largeur = card.getBoundingClientRect().width + 12;
-      var fin = gal.scrollWidth - gal.clientWidth - 4;
-      var cible = gal.scrollLeft >= fin ? 0 : gal.scrollLeft + largeur;
-      gal.scrollTo({left: cible, behavior: 'smooth'});
+      var n = el.children.length;
+      if (!n || el.scrollWidth <= el.clientWidth) return;
+      var marge = parseFloat(getComputedStyle(el).scrollPaddingLeft) || 0;
+      rang++;
+      if (rang >= n || el.scrollLeft >= el.scrollWidth - el.clientWidth - 4) rang = 0;
+      el.scrollTo({left: Math.max(0, offset(rang) - marge), behavior: 'smooth'});
     }
     function demarre(){
       if (stoppe || minuteur || mqDoux.matches || !mqMob.matches || !visible) return;
-      minuteur = setInterval(pas, 3400);
+      minuteur = setInterval(pas, delai);
     }
     function suspend(){ clearInterval(minuteur); minuteur = null; }
     function arrete(){ stoppe = true; suspend(); }
 
     ['pointerdown','touchstart','wheel','keydown'].forEach(function(ev){
-      gal.addEventListener(ev, arrete, {passive: true, once: true});
+      el.addEventListener(ev, arrete, {passive: true, once: true});
     });
-    document.querySelectorAll('[data-gal]').forEach(function(b){
-      b.addEventListener('click', arrete, {once: true});
-    });
+    (boutons || []).forEach(function(b){ b.addEventListener('click', arrete, {once: true}); });
     document.addEventListener('visibilitychange', function(){
       if (document.hidden) suspend(); else demarre();
     });
@@ -1136,9 +1141,12 @@ section{position:relative}
       new IntersectionObserver(function(es){
         visible = es[0].isIntersecting;
         visible ? demarre() : suspend();
-      }, {threshold: .4}).observe(gal);
+      }, {threshold: .4}).observe(el);
     } else { visible = true; demarre(); }
-  })();
+  }
+
+  autoDefile(gal, 3400, [].slice.call(document.querySelectorAll('[data-gal]')));
+  autoDefile(document.querySelector('.feats'), 2800);
 
   /* ---------- graphique prix du kWh ---------- */
   var DATA = [
