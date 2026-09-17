@@ -231,9 +231,8 @@ p{margin:0}
 .stars svg{width:14px;height:14px;fill:var(--ambre)}
 .pro .ico{color:var(--ink-3)}
 .avis{padding:0 0 10px}
-.pro--lg{background:#fff;padding:18px;border-radius:var(--r-lg);box-shadow:0 0 0 1px var(--line);transition:box-shadow .25s var(--ease)}
+.pro--lg{background:#fff;padding:18px;border-radius:var(--r-lg);box-shadow:0 0 0 1px var(--line)}
 .pro--lg small{display:block;margin-top:5px;font-size:15px;color:var(--ink-3);line-height:1.4}
-@media (hover:hover){.pro--lg:hover{box-shadow:0 0 0 1px var(--line-2),0 18px 34px -26px rgba(38,37,35,.45)}}
 
 /* ---------- sections ---------- */
 section{position:relative}
@@ -724,11 +723,10 @@ section{position:relative}
 
 <section class="avis">
   <div class="wrap">
-    <a class="pro pro--lg" href="https://eko-habitations.fr/" target="_blank" rel="noopener">
+    <div class="pro pro--lg">
       <span class="pro__logo">EKO</span>
       <span class="pro__txt"><b>EKO HABITATIONS, Lyon</b><span class="stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>4,8/5 sur Google, 126 avis<small>L'installateur certifié RGE qui réalise les bilans Mon Bilan Solaire.</small></span>
-      <svg class="ico"><use href="#i-ext"/></svg>
-    </a>
+    </div>
   </div>
 </section>
 
