@@ -405,6 +405,12 @@ section{position:relative}
   .gal{margin:30px -28px 0;padding:0 28px 8px;scroll-padding:0 28px}
   .shot{flex-basis:44%}
   .final__box{padding:56px 48px}
+  /* la tuile occupe toute la largeur : son contenu se déploie en ligne,
+     sinon la moitié droite reste vide */
+  .tile--appli{flex-direction:row;align-items:center;justify-content:flex-start;gap:26px}
+  .tile--appli .ic{margin-bottom:0}
+  .tile--appli .tile__t{flex:0 0 auto}
+  .tile--appli p{margin-top:0;max-width:46ch}
 }
 @media (min-width:1024px){
   body{font-size:17.5px}
@@ -433,7 +439,8 @@ section{position:relative}
   .tile--90{grid-column:span 2;grid-row:span 2}
   .tile--90 .big{font-size:120px}
   .tile--90 .sunbg{width:320px;height:320px;right:-60px;top:-60px}
-  .tile--30,.tile--bat,.tile--appli{grid-column:span 2}
+  .tile--30,.tile--bat{grid-column:span 2}
+  .tile--appli .big.word{font-size:34px}
   .gal-nav{display:flex}
   .gal{margin:40px 0 0;padding:0 0 8px;scroll-padding:0}
   .shot{flex-basis:calc((100% - 36px)/4)}
@@ -696,7 +703,7 @@ section{position:relative}
       <div class="tile tile--rge" style="--i:4"><span class="ic"><svg class="ico"><use href="#i-shield"/></svg></span><span class="big word">RGE</span><span class="lbl">Installateur certifié QualiPV</span></div>
       <div class="tile tile--consuel" style="--i:5"><span class="ic" style="background:var(--brume)"><svg class="ico"><use href="#i-check"/></svg></span><span class="big word">Consuel</span><span class="lbl">Conformité électrique validée avant la mise en service</span></div>
       <div class="tile tile--bat" style="--i:6"><span class="ic"><svg class="ico"><use href="#i-battery"/></svg></span><span class="big word">Batterie</span><span class="lbl">de stockage incluse</span><p>Ce que vos panneaux produisent à midi, vous l'utilisez pour le dîner.</p></div>
-      <div class="tile tile--appli" style="--i:7"><span class="ic"><svg class="ico"><use href="#i-phone"/></svg></span><span class="big word">Application</span><span class="lbl">de suivi en temps réel</span><p>Ce que votre toit produit, ce que vous consommez, heure par heure, depuis votre téléphone.</p></div>
+      <div class="tile tile--appli" style="--i:7"><span class="ic"><svg class="ico"><use href="#i-phone"/></svg></span><span class="tile__t"><span class="big word">Application</span><span class="lbl">de suivi en temps réel</span></span><p>Ce que votre toit produit, ce que vous consommez, heure par heure, depuis votre téléphone.</p></div>
     </div>
   </div>
 </section>
