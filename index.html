@@ -832,18 +832,43 @@ section{position:relative}
   var coarse = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
 
   /* ---------- paramètres de campagne ---------- */
-  var PKEYS = ['gclid','gbraid','wbraid','fbclid','utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  /* gclid, gbraid et wbraid sont les trois identifiants que Google Ads accepte
+     pour l'import de conversions hors ligne : gbraid et wbraid remplacent le
+     gclid quand le consentement iOS manque, il faut donc les trois. */
+  var PKEYS = ['gclid','gbraid','wbraid','gclsrc','gad_source','gad_campaignid',
+               'fbclid','msclkid','ttclid','li_fat_id',
+               'utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id'];
 
   /* Départements couverts. Le lead est routé vers une page de remerciement
      distincte selon qu'il y figure ou non : deux URL, donc deux conversions
      distinctes côté Google Ads. */
   var ZONE = ['01','03','04','05','07','13','21','25','26','30','34','38','39','42','43','63','70','73','74','84','90'];
   var MERCI_ZONE = 'merci.html', MERCI_HORS = 'merci-hors-zone.html', MERCI_NON = 'merci-non-eligible.html';
-  var params = {};
-  try { params = JSON.parse(sessionStorage.getItem('mbs_params') || '{}'); } catch(e){ params = {}; }
+  /* Ordre de priorité : l'URL courante, puis la mémoire de l'onglet, puis celle
+     du navigateur. Beaucoup de visiteurs abandonnent le questionnaire et
+     reviennent plus tard, souvent dans un autre onglet : sans la seconde
+     mémoire, leur clic payant est perdu et la conversion part en direct.
+     La fenêtre de 90 jours est celle que Google applique à ses propres
+     cookies de clic. */
+  var FENETRE = 90 * 24 * 3600 * 1000;
+  var params = {}, premiereVisite = '';
+  function paramsGardes(store){
+    try {
+      var b = JSON.parse(store.getItem('mbs_params') || 'null');
+      if (!b || !b.vu || Date.now() - new Date(b.vu).getTime() > FENETRE) return null;
+      return b;
+    } catch(e){ return null; }
+  }
+  var memo = paramsGardes(sessionStorage) || paramsGardes(localStorage);
+  if (memo) { params = memo.p || {}; premiereVisite = memo.vu; }
   var qs = new URLSearchParams(location.search);
-  PKEYS.forEach(function(k){ if (qs.get(k)) params[k] = qs.get(k); });
-  try { sessionStorage.setItem('mbs_params', JSON.stringify(params)); } catch(e){}
+  PKEYS.forEach(function(k){ var v = qs.get(k); if (v) params[k] = v; });
+  if (Object.keys(params).length){
+    if (!premiereVisite) premiereVisite = new Date().toISOString();
+    var paquet = JSON.stringify({p: params, vu: premiereVisite});
+    try { sessionStorage.setItem('mbs_params', paquet); } catch(e){}
+    try { localStorage.setItem('mbs_params', paquet); } catch(e){}
+  }
 
   /* ---------- questionnaire ---------- */
   var quiz = document.getElementById('bilan');
@@ -1160,6 +1185,7 @@ section{position:relative}
       user_agent: navigator.userAgent
     };
     PKEYS.forEach(function(k){ data[k] = params[k] || ''; });
+    data.premiere_visite = premiereVisite;
 
     var endpoint = form.getAttribute('data-endpoint') || '';
     var spam = !!document.getElementById('f-hp').value;
