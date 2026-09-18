@@ -27,14 +27,18 @@
 <script>document.documentElement.className+=' js';</script>
 <style>
 :root{
-  --lavande:#A9B7EA; --brume:#D9EDFC; --ble:#FFE95C; --ambre:#FFB524;
+  --lavande:#C3CDF5; --brume:#D9EDFC; --ble:#FFE95C; --ambre:#FFB524;
   --corail:#F04E23; --corail-fonce:#D8410F; --corail-sombre:#9B2F20; --beige:#F7DAC2; --creme:#FFF8EE;
   /* Orange franc, demandé plus vif que la charte. #F25C05 est le plus clair
      qui tienne encore le 3:1 exigé d'un aplat ou d'un trait porteur
      d'information, sur blanc (3,33) comme sur crème (3,16) — mesuré.
      --orange-fonce sert dès que l'orange devient du texte.
      --ambre reste décoratif : à 1,77 sur blanc il ne porte aucune donnée. */
-  --orange:#F25C05; --orange-fonce:#B23C00;
+  /* Accent des titres. Aucun orange vif ne tient comme texte sur les fonds
+     teintés : mesuré, #F25C05 tombe à 2,77 sur la brume, 2,50 sur le beige et
+     1,69 sur la lavande. #B23C00 est le plus vif qui reste lisible partout,
+     de 3,78 sur lavande à 5,93 sur blanc. */
+  --orange:#F25C05; --orange-fonce:#B23C00; --accent-titre:#B23C00;
   --ink:#262523; --ink-2:#57534C; --ink-3:#6F6A62;
   --line:rgba(38,37,35,.10); --line-2:rgba(38,37,35,.16);
   --white:#fff; --err:#C8412F;
@@ -155,7 +159,7 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 @keyframes pousse{to{transform:scaleY(1)}}
 .js .chart__svg .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
 .chart__svg.is-vu .draw{animation:draw 1.5s var(--ease) forwards}
-.chart__svg.is-vu .draw{animation-delay:.5s}
+.chart__svg.is-vu .draw{animation-delay:.55s}
 @keyframes draw{to{stroke-dashoffset:0}}
 .js .chart__svg .fadein{opacity:0}
 .chart__svg.is-vu .fadein{animation:ent .6s var(--ease) 1.25s forwards}
@@ -312,6 +316,7 @@ section{position:relative}
 /* sur fond coloré, le corail du kicker et le gris du chapô ne tiennent plus le contraste */
 .sec--lavande .sub,.sec--beige .sub{color:var(--ink)}
 .h2{font-size:clamp(29px,6.4vw,46px);text-wrap:balance;max-width:26em;letter-spacing:-.022em}
+.h2 em{font-style:normal;color:var(--accent-titre)}
 .sub{font-size:18px;color:var(--ink-2);margin-top:14px;max-width:40em}
 
 /* proof strip */
@@ -693,19 +698,23 @@ section{position:relative}
 
 <section class="sec sec--blanc" id="aides">
   <div class="wrap">
-    <h2 class="h2">Ce que l'État prévoit encore pour le solaire en 2026</h2>
+    <h2 class="h2">Ce que l'<em>État</em> prévoit encore pour le solaire en 2026</h2>
     <p class="sub">Deux dispositifs restent en vigueur pour une installation en autoconsommation sur une maison individuelle. Nous les appliquons au chiffrage de votre toit.</p>
     <div class="aides">
-      <div class="tile tile--tva"><span class="big">5,5&nbsp;%</span><span class="lbl">TVA réduite</span><p>Taux réduit sur la fourniture et la pose, pour les installations en autoconsommation jusqu'à 9&nbsp;kWc — la taille courante d'une maison.</p></div>
-      <div class="tile tile--oa"><span class="big">20&nbsp;ans</span><span class="lbl">Surplus racheté</span><p>L'électricité que vous ne consommez pas est rachetée par EDF&nbsp;OA à un tarif garanti pendant 20&nbsp;ans.</p></div>
-      <div class="tile tile--un"><span class="big">1 seul</span><span class="lbl">Installateur RGE</span><p>Un seul professionnel certifié RGE de votre département vous rappelle.</p></div>
+      <div class="tile tile--tva"><span class="ic"><svg class="ico"><use href="#i-euro"/></svg></span><span class="big">5,5&nbsp;%</span><span class="lbl">TVA réduite</span><p>Taux réduit sur la fourniture et la pose, pour les installations en autoconsommation jusqu'à 9&nbsp;kWc — la taille courante d'une maison.</p></div>
+      <div class="tile tile--oa"><span class="ic"><svg class="ico"><use href="#i-bolt"/></svg></span><span class="big">20&nbsp;ans</span><span class="lbl">Surplus racheté</span><p>L'électricité que vous ne consommez pas est rachetée par EDF&nbsp;OA à un tarif garanti pendant 20&nbsp;ans.</p></div>
+      <div class="tile tile--un"><span class="ic"><svg class="ico"><use href="#i-shield"/></svg></span><span class="big">1 seul</span><span class="lbl">Installateur RGE</span><p>Un seul professionnel certifié RGE de votre département vous rappelle.</p></div>
+    </div>
+    <div class="sec-cta">
+      <a class="btn btn--corail" href="#bilan" data-go>Vérifier mes aides</a>
+      <span class="sec-cta__note">Voir lesquelles s'appliquent chez vous</span>
     </div>
   </div>
 </section>
 
 <section class="sec sec--brume" id="prix">
   <div class="wrap">
-    <h2 class="h2">L'électricité coûte 29&nbsp;% de plus qu'en 2020</h2>
+    <h2 class="h2">L'électricité coûte <em>29&nbsp;% de plus</em> qu'en 2020</h2>
     <p class="sub">Une facture de 116&nbsp;€ par mois en 2020, c'est 150&nbsp;€ aujourd'hui pour la même consommation. Ces hausses sont décidées sans vous.</p>
 
     <div class="price">
@@ -725,12 +734,16 @@ section{position:relative}
         </div>
       </div>
     </div>
+    <div class="sec-cta">
+      <a class="btn btn--corail" href="#bilan" data-go>Vérifier mes aides</a>
+      <span class="sec-cta__note">Et ce que ça change sur votre facture</span>
+    </div>
   </div>
 </section>
 
 <section class="sec sec--lavande" id="etapes">
   <div class="wrap">
-    <h2 class="h2">On commence par calculer vos aides</h2>
+    <h2 class="h2">On commence par calculer <em>vos aides</em></h2>
     <p class="sub">Beaucoup d'entreprises cherchent d'abord à décrocher un rendez-vous. Ici, le calcul arrive par email et vous le lisez chez vous, tranquillement, avant tout déplacement.</p>
     <ol class="steps">
       <li><div class="num"><span>1</span><svg class="ico"><use href="#i-doc"/></svg></div><h3>Vous répondez à 6 questions</h3><p>Votre statut, votre facture, votre code postal. Ça prend une minute.</p></li>
@@ -747,7 +760,7 @@ section{position:relative}
 
 <section class="sec" id="inclus">
   <div class="wrap">
-    <h2 class="h2">Une installation complète, zéro euro à sortir.</h2>
+    <h2 class="h2">Une installation complète, <em>zéro euro à sortir</em>.</h2>
     <div class="bento">
       <div class="tile tile--90" style="--i:0">
         <svg class="sun sunbg" aria-hidden="true"><use href="#i-sun"/></svg>
@@ -763,6 +776,10 @@ section{position:relative}
       <div class="tile tile--consuel" style="--i:5"><span class="ic" style="background:var(--brume)"><svg class="ico"><use href="#i-check"/></svg></span><span class="big word">Consuel</span><span class="lbl">Conformité électrique validée avant la mise en service</span></div>
       <div class="tile tile--bat" style="--i:6"><span class="ic"><svg class="ico"><use href="#i-battery"/></svg></span><span class="big word">Batterie</span><span class="lbl">de stockage incluse</span><p>Ce que vos panneaux produisent à midi, vous l'utilisez pour le dîner.</p></div>
     </div>
+    <div class="sec-cta">
+      <a class="btn btn--corail" href="#bilan" data-go>Vérifier mes aides</a>
+      <span class="sec-cta__note">Votre toit, votre facture, vos aides</span>
+    </div>
   </div>
 </section>
 
@@ -770,7 +787,7 @@ section{position:relative}
   <div class="wrap">
     <div class="gal-head">
       <div>
-        <h2 class="h2">Des maisons comme la vôtre, déjà équipées</h2>
+        <h2 class="h2">Des maisons comme la vôtre, <em>déjà équipées</em></h2>
       </div>
       <div class="gal-nav">
         <button type="button" data-gal="-1" aria-label="Photos précédentes"><svg class="ico"><use href="#i-chev-l"/></svg></button>
@@ -798,7 +815,7 @@ section{position:relative}
   <div class="wrap">
     <div class="faq-wrap">
     <div>
-      <h2 class="h2">Ce qu'on nous demande le plus souvent</h2>
+      <h2 class="h2">Ce qu'on nous demande <em>le plus souvent</em></h2>
     </div>
     <div class="faq">
       <details><summary>Panneau solaire ou panneau photovoltaïque, c'est la même chose&nbsp;?<span class="pm"><svg class="ico"><use href="#i-plus"/></svg></span></summary><div class="ans"><p>Sur le toit d'une maison, quand on parle de panneaux solaires, il s'agit presque toujours de panneaux photovoltaïques&nbsp;: ils produisent de l'électricité à partir de la lumière du soleil. Les panneaux solaires thermiques, eux, servent à chauffer de l'eau.</p><p>Mon Bilan Solaire étudie les installations photovoltaïques avec batterie de stockage, pour produire votre propre électricité.</p></div></details>
@@ -1452,22 +1469,40 @@ section{position:relative}
       }
     });
 
-    /* La flèche traverse le couloir du haut et sort par le coin, comme sur le
-       modèle. Les colonnes montent désormais sans redescendre, donc une flèche
-       ascendante ne trahit plus les données. */
-    var fx0 = cx(0) - barre * .2, fy0 = P.t - (narrow ? 34 : 42);
-    var fx1 = W - (narrow ? 10 : 14), fy1 = narrow ? 12 : 16;
-    var ep = narrow ? 6 : 9, tl = narrow ? 17 : 23, tw = narrow ? 10 : 13;
-    var courbe = 'M' + fx0 + ' ' + fy0 +
-      ' C' + (fx0 + (fx1 - fx0) * .48) + ' ' + (fy0 - 2) +
-      ' ' + (fx1 - (fx1 - fx0) * .18) + ' ' + (fy1 + (fy0 - fy1) * .52) +
-      ' ' + (fx1 - tl * .62) + ' ' + (fy1 + tl * .62);
-    el('path', {class: 'draw', fill: 'none', stroke: '#EA5A0B', 'stroke-width': ep,
-      'stroke-linecap': 'round', d: courbe}, svg);
-    el('path', {class: 'fadein', fill: '#EA5A0B', 'stroke-linejoin': 'round',
-      d: 'M' + fx1 + ' ' + fy1 +
-         ' L' + (fx1 - tl) + ' ' + (fy1 + tw * .5) +
-         ' L' + (fx1 - tw * .5) + ' ' + (fy1 + tl) + ' Z'}, svg);
+    /* La flèche passe DANS les quatre colonnes, un peu sous leur sommet, et
+       ressort à la pointe de la dernière. Elle croise les aplats orange, donc
+       elle est doublée d'un liseré blanc : sans lui, orange sur orange, elle
+       disparaît. Elle reste sous les montants, qui sont au-dessus des
+       colonnes — d'où la profondeur `dec`. */
+    var dec = narrow ? 18 : 24;
+    var jal = cols.map(function(c, i){ return {x: cx(i), y: sol - haut(c.m) + dec}; });
+    var dern = jal[jal.length - 1];
+    jal.push({x: cx(3) + barre / 2 + (narrow ? 13 : 18), y: sol - haut(cols[3].m) + (narrow ? 8 : 12)});
+
+    /* lissage : chaque jalon devient le point de contrôle d'une quadratique
+       dont les extrémités sont les milieux de segments */
+    var d = 'M' + jal[0].x + ' ' + jal[0].y;
+    for (var k = 1; k < jal.length - 1; k++){
+      d += ' Q' + jal[k].x + ' ' + jal[k].y + ' '
+        + ((jal[k].x + jal[k + 1].x) / 2) + ' ' + ((jal[k].y + jal[k + 1].y) / 2);
+    }
+    d += ' T' + jal[jal.length - 1].x + ' ' + jal[jal.length - 1].y;
+
+    var ep = narrow ? 7 : 11;
+    el('path', {class: 'draw draw--halo', fill: 'none', stroke: '#fff',
+      'stroke-width': ep + 7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: d}, svg);
+    el('path', {class: 'draw draw--fleche', fill: 'none', stroke: '#EA5A0B',
+      'stroke-width': ep, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: d}, svg);
+
+    /* La pointe, orientée sur la tangente finale. */
+    var pn = jal[jal.length - 1], av = jal[jal.length - 2];
+    var ang = Math.atan2(pn.y - av.y, pn.x - av.x);
+    var tl = narrow ? 20 : 27, tw = narrow ? 13 : 17;
+    function pt(r, a){ return (pn.x + Math.cos(ang + a) * r) + ' ' + (pn.y + Math.sin(ang + a) * r); }
+    var tete = 'M' + pn.x + ' ' + pn.y + ' L' + pt(tl, 2.55) + ' L' + pt(tl, -2.55) + ' Z';
+    el('path', {class: 'fadein', fill: '#fff', stroke: '#fff', 'stroke-width': 6,
+      'stroke-linejoin': 'round', d: tete}, svg);
+    el('path', {class: 'fadein', fill: '#EA5A0B', 'stroke-linejoin': 'round', d: tete}, svg);
   }
   draw();
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(draw, 120); });
