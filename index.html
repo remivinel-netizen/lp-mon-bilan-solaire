@@ -471,6 +471,12 @@ section{position:relative}
   .top .wrap{height:84px}
   .brand img{height:42px}
   .hero{padding:0 16px 34px}
+  /* Le logo doit tomber sur la verticale du titre. Le héros décale son contenu
+     deux fois : 16 px sur .hero, puis 56 px sur .hero__inner. L'en-tête doit
+     reproduire les deux, sinon l'écart change avec la largeur — 44 px à
+     1024 px, 28 px au-delà de 1200. */
+  .top{padding:0 16px}
+  .top .wrap{padding-left:56px}
   .hero__media{height:auto;bottom:34px;left:16px;right:16px;border-radius:var(--r-lg)}
   .hero__media::after{background:linear-gradient(95deg,rgba(24,22,20,.8) 0%,rgba(24,22,20,.62) 45%,rgba(24,22,20,.12) 78%)}
   .hero__inner{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:56px;align-items:center;padding:64px 40px 64px 56px;min-height:680px}
