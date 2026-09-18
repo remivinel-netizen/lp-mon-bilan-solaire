@@ -913,15 +913,42 @@ section{position:relative}
       return b;
     } catch(e){ return null; }
   }
+  /* Cette mémoire est du stockage à finalité publicitaire : elle n'est déposée
+     qu'une fois la catégorie « publicité » acceptée dans le bandeau. Tant que
+     rien n'est accepté, les paramètres de l'URL courante restent disponibles
+     en mémoire — le lead en cours garde donc son gclid — mais rien n'est écrit
+     sur le poste du visiteur. */
+  function pubAcceptee(){
+    try {
+      if (window.IwlCmp && window.IwlCmp.getConsent) return !!window.IwlCmp.getConsent().ads;
+      var m = document.cookie.match(/iwl_consent=([^;]*)/);
+      return m ? !!JSON.parse(decodeURIComponent(m[1])).cat.ads : false;
+    } catch(e){ return false; }
+  }
+  /* Appelle cb dès que la publicité est acceptée : tout de suite pour un
+     visiteur qui a déjà choisi, plus tard s'il accepte dans le bandeau. */
+  function quandPubAcceptee(cb){
+    if (pubAcceptee()) { cb(); return; }
+    var essais = 0, fait = false;
+    var t = setInterval(function(){
+      if (window.IwlCmp && window.IwlCmp.on){
+        clearInterval(t);
+        window.IwlCmp.on('consent', function(){ if (!fait && pubAcceptee()) { fait = true; cb(); } });
+        if (!fait && pubAcceptee()) { fait = true; cb(); }
+      } else if (++essais > 40) clearInterval(t); /* 10 s : le bandeau ne répond pas */
+    }, 250);
+  }
   var memo = paramsGardes(sessionStorage) || paramsGardes(localStorage);
   if (memo) { params = memo.p || {}; premiereVisite = memo.vu; }
   var qs = new URLSearchParams(location.search);
   PKEYS.forEach(function(k){ var v = qs.get(k); if (v) params[k] = v; });
   if (Object.keys(params).length){
     if (!premiereVisite) premiereVisite = new Date().toISOString();
-    var paquet = JSON.stringify({p: params, vu: premiereVisite});
-    try { sessionStorage.setItem('mbs_params', paquet); } catch(e){}
-    try { localStorage.setItem('mbs_params', paquet); } catch(e){}
+    quandPubAcceptee(function(){
+      var paquet = JSON.stringify({p: params, vu: premiereVisite});
+      try { sessionStorage.setItem('mbs_params', paquet); } catch(e){}
+      try { localStorage.setItem('mbs_params', paquet); } catch(e){}
+    });
   }
 
   /* ---------- questionnaire ---------- */
