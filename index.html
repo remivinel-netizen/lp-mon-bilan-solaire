@@ -713,9 +713,9 @@ section{position:relative}
         <div class="chart__head"><span class="chart__title">Ce que coûte la même consommation, mois après mois</span><span class="chart__unit">€ TTC par mois</span></div>
         <div class="chart__rang">
           <div class="chart__svg" id="chart"></div>
-          <p class="chart__hausse"><b>+29&nbsp;%</b><span>depuis 2020</span><small>Tarif Bleu EDF, option&nbsp;Base</small></p>
+          <p class="chart__hausse"><b>+30&nbsp;%</b><span>d'ici 2030</span><small>selon la CRE</small></p>
         </div>
-        <p class="chart__src">Exemple pour un foyer dont la facture atteint 150&nbsp;€ par mois au tarif d'août 2026, à consommation constante. Le prix du kilowattheure est passé de 0,1546&nbsp;€ en février 2020 à 0,2001&nbsp;€ au 1<sup>er</sup> août 2026. Source&nbsp;: grilles du Tarif Bleu EDF, option Base, TTC, hors abonnement.</p>
+        <p class="chart__src">Exemple pour un foyer dont la facture atteint 150&nbsp;€ par mois au tarif d'août 2026, à consommation constante. Le prix du kilowattheure est passé de 0,1546&nbsp;€ en février 2020 à 0,2001&nbsp;€ au 1<sup>er</sup> août 2026. Source&nbsp;: grilles du Tarif Bleu EDF, option Base, TTC, hors abonnement. Les colonnes 2027 et 2030 sont des estimations, calculées à partir d'une hausse de 30&nbsp;% d'ici 2030 annoncée par la CRE.</p>
       </div>
       <div class="card fixed">
         <div>
@@ -1358,6 +1358,9 @@ section{position:relative}
   /* Foyer de référence : une facture de 150 € par mois au tarif du 1er août 2026.
      La consommation est supposée constante, seul le prix du kWh bouge. */
   var REF_EUR = 150, REF_PRIX = .2001, KWH = REF_EUR / REF_PRIX;
+  /* Hausse annoncée d'ici 2030. Chiffre fourni, attribué à la CRE : la
+     référence exacte reste à porter dans la note sous le graphique. */
+  var HAUSSE_2030 = .30;
   pts.forEach(function(p){ p.m = p.v * KWH; });
   function eur(v){ return v.toFixed(4).replace('.', ',') + NB + '€'; }
   function eurMois(v){ return Math.round(v) + NB + '€'; }
@@ -1369,21 +1372,30 @@ section{position:relative}
   function draw(){
     var old = box.querySelector('svg'); if (old) box.removeChild(old);
     var W = Math.max(280, box.clientWidth);
-    var H = Math.round(Math.max(240, Math.min(300, W * .58)));
+    var H = Math.round(Math.max(260, Math.min(330, W * .66)));
     var narrow = W < 460;
 
-    /* Trois relevés au lieu de douze : le départ, le pic, aujourd'hui. Un
-       graphique à trois colonnes se lit d'un coup d'oeil, là où la courbe
-       demandait de suivre un tracé et d'interpréter une pente. */
-    var pic = pts[7], der = pts[pts.length - 1];
+    /* Quatre colonnes, comme le modèle : deux relevés publiés puis deux
+       projections. Les deux premières viennent des grilles du Tarif Bleu ;
+       2030 applique la hausse de 30 % annoncée par la CRE, et 2027 est
+       interpolé linéairement entre aujourd'hui et 2030 plutôt qu'inventé.
+       Le pic de février 2024 n'est pas montré : à 189 € il est plus haut
+       qu'aujourd'hui et casserait l'escalier ascendant. */
+    var der = pts[pts.length - 1];
+    var m2030 = der.m * (1 + HAUSSE_2030);
+    var m2027 = der.m + (m2030 - der.m) * ((2027.5 - 2026.6) / (2030 - 2026.6));
     var cols = [
       {lab: '2020', sous: 'février',   m: pts[0].m, p: pts[0].v},
-      {lab: '2024', sous: 'le pic',    m: pic.m,    p: pic.v},
-      {lab: narrow ? '2026' : "aujourd'hui", sous: 'août 2026', m: der.m, p: der.v}
+      {lab: narrow ? '2026' : "aujourd'hui", sous: 'août 2026', m: der.m, p: der.v},
+      {lab: '2027', sous: 'estimation', m: m2027, est: true},
+      {lab: '2030', sous: 'estimation', m: m2030, est: true}
     ];
     var maxi = Math.max.apply(null, cols.map(function(c){ return c.m; }));
 
-    var P = {t: narrow ? 44 : 46, b: narrow ? 32 : 46, l: narrow ? 10 : 16};
+    /* P.t est volontairement généreux : il réserve le couloir dans lequel la
+       flèche passe au-dessus de tous les montants. Sans lui, la colonne la plus
+       haute laisse son libellé contre le bord et la flèche le croise. */
+    var P = {t: narrow ? 74 : 84, b: narrow ? 32 : 46, l: narrow ? 10 : 16};
     var zone = W - P.l * 2;
     var pas = zone / cols.length;
     var barre = Math.min(narrow ? 64 : 96, pas * .58);
@@ -1394,26 +1406,39 @@ section{position:relative}
     var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img',
       'aria-label': "Pour une même consommation, la facture d'électricité est passée de "
         + eurMois(pts[0].m) + " par mois en février 2020 à " + eurMois(der.m)
-        + " en août 2026, avec un pic à " + eurMois(pic.m)
-        + " en février 2024, soit 29 % de plus qu'en 2020."});
+        + " en août 2026, soit 29 % de plus. Deux estimations suivent : "
+        + eurMois(m2027) + " en 2027 et " + eurMois(m2030)
+        + " en 2030, sur la base d'une hausse de 30 % annoncée par la CRE."});
     box.appendChild(svg);
 
     var defs = el('defs', {}, svg);
     /* Les deux extrémités du dégradé tiennent le 3:1 sur blanc, donc la colonne
        reste lisible sur toute sa hauteur et pas seulement à sa base. */
+    /* Le sommet du dégradé est le bord qui encode la valeur : c'est lui qui
+       doit tenir le 3:1, pas seulement le pied. #EA5A0B est à 3,52 sur blanc,
+       #C2410C à 5,18 — mesurés. Tout orange plus clair échoue. */
     var gb = el('linearGradient', {id: 'g-barre', x1: 0, y1: 0, x2: 0, y2: 1}, defs);
-    el('stop', {offset: '0', 'stop-color': '#F97A2B'}, gb);
+    el('stop', {offset: '0', 'stop-color': '#EA5A0B'}, gb);
     el('stop', {offset: '1', 'stop-color': '#C2410C'}, gb);
 
     el('line', {x1: P.l, x2: P.l + zone, y1: sol + .5, y2: sol + .5,
       stroke: 'rgba(38,37,35,.18)', 'stroke-width': 1}, svg);
 
+    /* La dernière colonne est mise à part, comme sur le modèle. */
+    var sepX = P.l + pas * 3 - 4;
+    el('line', {x1: sepX, x2: sepX, y1: P.t - 28, y2: sol,
+      stroke: 'rgba(38,37,35,.14)', 'stroke-width': 1}, svg);
+
     cols.forEach(function(c, i){
       var h = haut(c.m), y = sol - h;
       var r = el('rect', {class: 'pousse', style: '--i:' + i,
-        x: cx(i) - barre / 2, y: y, width: barre, height: h,
-        rx: narrow ? 7 : 10, fill: 'url(#g-barre)'}, svg);
-      el('title', {}, r).textContent = eurMois(c.m) + ' par mois, soit ' + eur(c.p) + ' le kWh';
+        x: cx(i) - barre / 2, y: y, width: barre, height: h, rx: narrow ? 7 : 10,
+        fill: c.est ? 'rgba(234,90,11,.20)' : 'url(#g-barre)',
+        stroke: c.est ? '#C2410C' : 'none', 'stroke-width': c.est ? 2.5 : 0,
+        'stroke-dasharray': c.est ? '7 5' : 'none'}, svg);
+      el('title', {}, r).textContent = c.est
+        ? eurMois(c.m) + ' par mois, estimation'
+        : eurMois(c.m) + ' par mois, soit ' + eur(c.p) + ' le kWh';
       var v = el('text', {class: 'fadein', x: cx(i), y: y - 11, 'text-anchor': 'middle',
         'font-size': narrow ? 17 : 23, 'font-weight': 900, fill: '#262523'}, svg);
       v.textContent = eurMois(c.m);
@@ -1427,6 +1452,22 @@ section{position:relative}
       }
     });
 
+    /* La flèche traverse le couloir du haut et sort par le coin, comme sur le
+       modèle. Les colonnes montent désormais sans redescendre, donc une flèche
+       ascendante ne trahit plus les données. */
+    var fx0 = cx(0) - barre * .2, fy0 = P.t - (narrow ? 34 : 42);
+    var fx1 = W - (narrow ? 10 : 14), fy1 = narrow ? 12 : 16;
+    var ep = narrow ? 6 : 9, tl = narrow ? 17 : 23, tw = narrow ? 10 : 13;
+    var courbe = 'M' + fx0 + ' ' + fy0 +
+      ' C' + (fx0 + (fx1 - fx0) * .48) + ' ' + (fy0 - 2) +
+      ' ' + (fx1 - (fx1 - fx0) * .18) + ' ' + (fy1 + (fy0 - fy1) * .52) +
+      ' ' + (fx1 - tl * .62) + ' ' + (fy1 + tl * .62);
+    el('path', {class: 'draw', fill: 'none', stroke: '#EA5A0B', 'stroke-width': ep,
+      'stroke-linecap': 'round', d: courbe}, svg);
+    el('path', {class: 'fadein', fill: '#EA5A0B', 'stroke-linejoin': 'round',
+      d: 'M' + fx1 + ' ' + fy1 +
+         ' L' + (fx1 - tl) + ' ' + (fy1 + tw * .5) +
+         ' L' + (fx1 - tw * .5) + ' ' + (fy1 + tl) + ' Z'}, svg);
   }
   draw();
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(draw, 120); });
