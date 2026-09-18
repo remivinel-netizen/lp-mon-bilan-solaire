@@ -27,8 +27,14 @@
 <script>document.documentElement.className+=' js';</script>
 <style>
 :root{
-  --lavande:#9DACDA; --brume:#DCECF8; --ble:#FCED90; --ambre:#EEAF51;
-  --corail:#E85D4C; --corail-fonce:#D14B3B; --corail-sombre:#9B2F20; --beige:#DECDC1; --creme:#F6F4EC;
+  --lavande:#A9B7EA; --brume:#D9EDFC; --ble:#FFE95C; --ambre:#FFB524;
+  --corail:#F04E23; --corail-fonce:#D8410F; --corail-sombre:#9B2F20; --beige:#F7DAC2; --creme:#FFF8EE;
+  /* Orange franc, demandé plus vif que la charte. #F25C05 est le plus clair
+     qui tienne encore le 3:1 exigé d'un aplat ou d'un trait porteur
+     d'information, sur blanc (3,33) comme sur crème (3,16) — mesuré.
+     --orange-fonce sert dès que l'orange devient du texte.
+     --ambre reste décoratif : à 1,77 sur blanc il ne porte aucune donnée. */
+  --orange:#F25C05; --orange-fonce:#B23C00;
   --ink:#262523; --ink-2:#57534C; --ink-3:#6F6A62;
   --line:rgba(38,37,35,.10); --line-2:rgba(38,37,35,.16);
   --white:#fff; --err:#C8412F;
@@ -144,10 +150,12 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .e4{animation-delay:.31s}.e5{animation-delay:.40s}.e6{animation-delay:.16s}
 
 /* le tracé du graphique se construit : c'est l'écart qui se creuse sous les yeux */
+.js .chart__svg .pousse{transform:scaleY(0);transform-box:fill-box;transform-origin:50% 100%}
+.chart__svg.is-vu .pousse{animation:pousse .8s var(--ease) forwards;animation-delay:calc(var(--i) * .12s)}
+@keyframes pousse{to{transform:scaleY(1)}}
 .js .chart__svg .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
 .chart__svg.is-vu .draw{animation:draw 1.5s var(--ease) forwards}
-.chart__svg.is-vu .draw--mens{animation-delay:.45s}
-.chart__svg.is-vu .draw--fleche,.chart__svg.is-vu .draw--halo{animation-delay:.9s}
+.chart__svg.is-vu .draw{animation-delay:.5s}
 @keyframes draw{to{stroke-dashoffset:0}}
 .js .chart__svg .fadein{opacity:0}
 .chart__svg.is-vu .fadein{animation:ent .6s var(--ease) 1.25s forwards}
@@ -168,6 +176,7 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .eyebrow .sunbadge svg{width:15px;height:15px;color:#fff}
 .hero h1{font-size:clamp(31px,8.2vw,62px);margin:14px 0 12px;text-wrap:balance;letter-spacing:-.028em}
 .hero h1 em{font-style:normal;color:var(--ble)}
+.ast{color:inherit;text-decoration:none}
 .hero__lead{font-size:16.5px;line-height:1.5;color:rgba(255,255,255,.94);max-width:34em;text-shadow:0 1px 14px rgba(0,0,0,.3)}
 .hero__lead b{color:#fff;font-weight:700}
 .hero__notes{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 0}
@@ -180,6 +189,8 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 /* ---------- quiz card (iOS feel) ---------- */
 .quiz{position:relative;background:rgba(255,255,255,.97);border-radius:30px;box-shadow:var(--shadow-card);padding:18px 18px 16px;scroll-margin-top:12px}
 @supports (backdrop-filter:blur(20px)){.quiz{background:rgba(255,255,255,.9);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4)}}
+.quiz__titre{margin:2px 0 16px;font-size:clamp(21px,4.6vw,25px);line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+.quiz__titre em{font-style:normal;color:var(--orange-fonce)}
 .quiz__bar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .qbtn{width:38px;height:38px;border-radius:50%;border:0;background:var(--creme);display:grid;place-items:center;cursor:pointer;flex:0 0 auto;transition:opacity .2s ease,transform .2s var(--ease)}
 .qbtn:active{transform:scale(.92)}
@@ -322,9 +333,17 @@ section{position:relative}
 .chart__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .chart__title{font-size:16px;font-weight:700}
 .chart__unit{font-size:15px;color:var(--ink-3)}
-.chart__svg{position:relative;margin-top:10px}
+.chart__rang{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.chart__svg{position:relative;flex:1 1 auto;min-width:0}
+.chart__hausse{flex:0 0 auto;margin:0;padding:14px 16px;border-radius:var(--r-sm);background:var(--creme);text-align:center}
+.chart__hausse b{display:block;font-size:clamp(34px,8vw,44px);font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--orange-fonce)}
+.chart__hausse span{display:block;margin-top:4px;font-size:16px;font-weight:700}
+.chart__hausse small{display:block;margin-top:2px;font-size:15px;color:var(--ink-2)}
+@media (min-width:560px){
+  .chart__rang{flex-direction:row;align-items:center;gap:16px}
+  .chart__hausse{width:164px;padding:18px 14px}
+}
 .chart__svg svg{width:100%;height:auto;display:block;overflow:visible;touch-action:pan-y}
-.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:10px;padding:6px 10px;font-size:15px;line-height:1.3;white-space:nowrap;transform:translate(-50%,-120%);opacity:0;transition:opacity .15s ease}
 .tip b{font-size:15px}
 .chart__src{font-size:15px;color:var(--ink-3);margin-top:8px}
 .fixed{padding:22px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;background:var(--ink)!important;color:#fff}
@@ -333,10 +352,6 @@ section{position:relative}
 .fixed__big--mot{font-size:38px;letter-spacing:-.03em;line-height:1.05}
 .fixed__big small{font-size:20px;font-weight:500;letter-spacing:0;color:rgba(255,255,255,.7)}
 .fixed p{color:rgba(255,255,255,.82);font-size:16px}
-.legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:15px;color:var(--ink-2)}
-.legend__i{width:18px;height:3px;border-radius:2px;flex:0 0 auto;margin-right:-10px}
-.legend__i--fac{background:var(--corail)}
-.legend__i--men{background:var(--ambre)}
 
 /* steps */
 .steps{list-style:none;margin:34px 0 0;padding:0;display:grid;gap:12px;counter-reset:s}
@@ -536,7 +551,7 @@ section{position:relative}
   <div class="wrap hero__inner">
     <div class="hero__copy">
       <span class="eyebrow ent e1"><span class="sunbadge"><svg class="sun"><use href="#i-sun"/></svg></span>Bilan gratuit en 2 minutes, pour les propriétaires</span>
-      <h1 class="ent e2">Quelles <em>aides</em> pour vos panneaux solaires&nbsp;?</h1>
+      <h1 class="ent e2">Jusqu'à <em>90&nbsp;%</em> d'économie sur votre facture d'électricité<a class="ast" href="#notes">*</a></h1>
       <p class="hero__lead ent e3">On calcule les aides qui s'appliquent chez vous, et ce qu'elles changent sur votre facture. L'installation comprend des panneaux de marque française. Elle est financée <b>sans apport</b>, par une mensualité fixe.</p>
       <div class="hero__notes ent e4">
         <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
@@ -547,6 +562,7 @@ section{position:relative}
     </div>
 
     <div class="quiz ent e6" id="bilan">
+      <h2 class="quiz__titre">Quelles <em>aides</em> pour vos panneaux solaires&nbsp;?</h2>
       <div class="quiz__bar">
         <button type="button" class="qbtn" id="q-back" aria-label="Question précédente" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
         <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -695,8 +711,10 @@ section{position:relative}
     <div class="price">
       <div class="card chart">
         <div class="chart__head"><span class="chart__title">Ce que coûte la même consommation, mois après mois</span><span class="chart__unit">€ TTC par mois</span></div>
-        <p class="legend"><span class="legend__i legend__i--fac"></span>Facture d'électricité<span class="legend__i legend__i--men"></span>Votre mensualité</p>
-        <div class="chart__svg" id="chart"><div class="tip" id="chart-tip"></div></div>
+        <div class="chart__rang">
+          <div class="chart__svg" id="chart"></div>
+          <p class="chart__hausse"><b>+29&nbsp;%</b><span>depuis 2020</span><small>Tarif Bleu EDF, option&nbsp;Base</small></p>
+        </div>
         <p class="chart__src">Exemple pour un foyer dont la facture atteint 150&nbsp;€ par mois au tarif d'août 2026, à consommation constante. Le prix du kilowattheure est passé de 0,1546&nbsp;€ en février 2020 à 0,2001&nbsp;€ au 1<sup>er</sup> août 2026. Source&nbsp;: grilles du Tarif Bleu EDF, option Base, TTC, hors abonnement.</p>
       </div>
       <div class="card fixed">
@@ -735,7 +753,7 @@ section{position:relative}
         <svg class="sun sunbg" aria-hidden="true"><use href="#i-sun"/></svg>
         <span class="pre">Jusqu'à</span>
         <span class="big" data-vers="90" data-suf="&nbsp;%">90&nbsp;%</span>
-        <span class="lbl">d'économie sur votre facture d'électricité<a href="#notes" style="color:inherit;text-decoration:none">*</a></span>
+        <span class="lbl">d'économie sur votre facture d'électricité<a class="ast" href="#notes">*</a></span>
         <p>Les panneaux produisent en journée. La batterie garde le surplus pour le soir&nbsp;; ce qui reste est racheté par EDF.</p>
       </div>
       <div class="tile tile--0" style="--i:1"><span class="ic"><svg class="ico"><use href="#i-euro"/></svg></span><span class="big" data-vers="0" data-suf="&nbsp;€">0&nbsp;€</span><span class="lbl">d'apport à prévoir</span><p>L'installation est financée par un crédit, sous réserve d'acceptation du dossier.</p></div>
@@ -1339,167 +1357,76 @@ section{position:relative}
   var pts = DATA.map(function(d){ return {t: new Date(d[0] + 'T00:00:00').getTime(), v: d[1], d: d[0]}; });
   /* Foyer de référence : une facture de 150 € par mois au tarif du 1er août 2026.
      La consommation est supposée constante, seul le prix du kWh bouge. */
-  var REF_EUR = 150, REF_PRIX = .2001, KWH = REF_EUR / REF_PRIX, MENS = 110;
+  var REF_EUR = 150, REF_PRIX = .2001, KWH = REF_EUR / REF_PRIX;
   pts.forEach(function(p){ p.m = p.v * KWH; });
   function eur(v){ return v.toFixed(4).replace('.', ',') + NB + '€'; }
   function eurMois(v){ return Math.round(v) + NB + '€'; }
-  function moisAn(ts){ var d = new Date(ts); return MOIS[d.getMonth()] + ' ' + d.getFullYear(); }
 
   var box = document.getElementById('chart');
-  var tip = document.getElementById('chart-tip');
   var SVGNS = 'http://www.w3.org/2000/svg';
   function el(name, attrs, parent){ var n = document.createElementNS(SVGNS, name); for (var k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
 
   function draw(){
     var old = box.querySelector('svg'); if (old) box.removeChild(old);
-    var W = Math.max(280, box.clientWidth), H = Math.round(Math.max(220, Math.min(310, W * .5)));
+    var W = Math.max(280, box.clientWidth);
+    var H = Math.round(Math.max(240, Math.min(300, W * .58)));
     var narrow = W < 460;
-    var P = {l: 52, r: narrow ? 12 : 18, t: 34, b: 28};
-    var t0 = new Date('2020-01-01T00:00:00').getTime(), t1 = new Date('2026-10-01T00:00:00').getTime();
-    var v0 = 100, v1 = 200;
-    function X(t){ return P.l + (t - t0) / (t1 - t0) * (W - P.l - P.r); }
-    function Y(v){ return P.t + (1 - (v - v0) / (v1 - v0)) * (H - P.t - P.b); }
-    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Pour une même consommation, la facture d\'électricité est passée de 116 € par mois en février 2020 à 150 € en août 2026, soit 29 % de plus, avec un pic à 189 € en février 2024. La mensualité Mon Bilan Solaire, elle, ne varie pas.'});
-    /* Inséré tout de suite, et pas en fin de tracé : sur un noeud détaché,
-       getBBox() d'un texte renvoie une boîte vide, et le placement des
-       libellés ne verrait jamais la flèche. */
-    box.insertBefore(svg, tip);
-    [120, 150, 180].forEach(function(v){
-      el('line', {x1: P.l, x2: W - P.r, y1: Y(v), y2: Y(v), stroke: 'rgba(38,37,35,.10)', 'stroke-width': 1}, svg);
-      var tx = el('text', {x: P.l - 8, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': 15, fill: '#6F6A62'}, svg); tx.textContent = v + NB + '€';
-    });
-    for (var y = 2020; y <= 2026; y++){
-      if (narrow && y % 2) continue;
-      var tx = new Date(y + '-01-01T00:00:00').getTime();
-      var lab = el('text', {x: X(tx), y: H - 8, 'text-anchor': 'middle', 'font-size': 15, fill: '#6F6A62'}, svg); lab.textContent = y;
-    }
-    var now = Math.min(Date.now(), t1);
 
-    /* La flèche est devenue le sujet du graphique : elle part de 2020, monte
-       vers la droite et se termine pointe en haut. Le liseré blanc la garde
-       nette là où elle traverse les repères et l'aplat de la facture. */
-    var ep = narrow ? 5 : 6.5;                 /* épaisseur du fût */
-    var hl = narrow ? 16 : 21, hw = narrow ? 9.5 : 12.5;   /* longueur et demi-largeur de la pointe */
-    var ax0 = X(pts[0].t) + 14, ay0 = Y(pts[0].m) - (narrow ? 22 : 10);
-    var ax1 = W - P.r - (narrow ? 14 : 22);
-    var ayT = Y(v1) + (narrow ? 8 : 10);       /* le sommet de la pointe */
-    var ay1 = ayT + hl * .5;                   /* le fût s'arrête dans la pointe */
-    var dx = ax1 - ax0, dy = ay0 - ay1;
-    var courbe = 'M' + ax0 + ' ' + ay0 +
-       ' C' + (ax0 + dx * .58) + ' ' + (ay0 - dy * .06) +
-       ' ' + ax1 + ' ' + (ay1 + dy * .62) +
-       ' ' + ax1 + ' ' + ay1;
-    /* Pointe pleine, et non plus deux traits ouverts : c'est ce qui donne à la
-       flèche son aplomb. Elle recouvre la fin du fût, d'où l'absence de jointure
-       à traiter. */
-    var pointe = 'M' + ax1 + ' ' + ayT +
-       ' L' + (ax1 + hw) + ' ' + (ayT + hl) +
-       ' L' + (ax1 - hw) + ' ' + (ayT + hl) + ' Z';
-    /* L'aplat reprend la forme de la flèche : on referme sa courbe sur le sol
-       du cadre. Le dégradé est relatif à la boîte du tracé, donc il s'adapte
-       de lui-même à la hauteur du graphique. */
+    /* Trois relevés au lieu de douze : le départ, le pic, aujourd'hui. Un
+       graphique à trois colonnes se lit d'un coup d'oeil, là où la courbe
+       demandait de suivre un tracé et d'interpréter une pente. */
+    var pic = pts[7], der = pts[pts.length - 1];
+    var cols = [
+      {lab: '2020', sous: 'février',   m: pts[0].m, p: pts[0].v},
+      {lab: '2024', sous: 'le pic',    m: pic.m,    p: pic.v},
+      {lab: narrow ? '2026' : "aujourd'hui", sous: 'août 2026', m: der.m, p: der.v}
+    ];
+    var maxi = Math.max.apply(null, cols.map(function(c){ return c.m; }));
+
+    var P = {t: narrow ? 44 : 46, b: narrow ? 32 : 46, l: narrow ? 10 : 16};
+    var zone = W - P.l * 2;
+    var pas = zone / cols.length;
+    var barre = Math.min(narrow ? 64 : 96, pas * .58);
+    var sol = H - P.b;
+    function haut(m){ return (m / maxi) * (sol - P.t); }
+    function cx(i){ return P.l + pas * i + pas / 2; }
+
+    var svg = el('svg', {viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img',
+      'aria-label': "Pour une même consommation, la facture d'électricité est passée de "
+        + eurMois(pts[0].m) + " par mois en février 2020 à " + eurMois(der.m)
+        + " en août 2026, avec un pic à " + eurMois(pic.m)
+        + " en février 2024, soit 29 % de plus qu'en 2020."});
+    box.appendChild(svg);
+
     var defs = el('defs', {}, svg);
-    var grad = el('linearGradient', {id: 'g-area', x1: 0, y1: 0, x2: 0, y2: 1}, defs);
-    el('stop', {offset: '0', 'stop-color': '#E85D4C', 'stop-opacity': '.18'}, grad);
-    el('stop', {offset: '1', 'stop-color': '#E85D4C', 'stop-opacity': '0'}, grad);
-    /* La flèche s'assombrit en montant : le corail de la marque au départ, le
-       rouge sombre à la pointe. La montée se voit dans la couleur autant que
-       dans la pente, et la pointe gagne en contraste. */
-    var gf = el('linearGradient', {id: 'g-fleche', gradientUnits: 'userSpaceOnUse',
-      x1: ax0, y1: ay0, x2: ax1, y2: ayT}, defs);
-    el('stop', {offset: '0', 'stop-color': '#E85D4C'}, gf);
-    el('stop', {offset: '1', 'stop-color': '#9B2F20'}, gf);
-    el('path', {class: 'fadein', fill: 'url(#g-area)',
-      d: courbe + ' V' + (H - P.b) + ' H' + ax0 + ' Z'}, svg);
-    /* liseré */
-    el('path', {class: 'draw draw--halo', fill: 'none', stroke: '#fff', 'stroke-width': ep + 5,
-      'stroke-linecap': 'round', d: courbe}, svg);
-    el('path', {class: 'fadein', fill: '#fff', stroke: '#fff', 'stroke-width': 5,
-      'stroke-linejoin': 'round', d: pointe}, svg);
-    /* flèche */
-    var fleche = el('path', {class: 'draw draw--fleche', fill: 'none', stroke: 'url(#g-fleche)',
-      'stroke-width': ep, 'stroke-linecap': 'round', d: courbe}, svg);
-    var tete = el('path', {class: 'fadein', fill: '#9B2F20', stroke: 'none', d: pointe}, svg);
+    /* Les deux extrémités du dégradé tiennent le 3:1 sur blanc, donc la colonne
+       reste lisible sur toute sa hauteur et pas seulement à sa base. */
+    var gb = el('linearGradient', {id: 'g-barre', x1: 0, y1: 0, x2: 0, y2: 1}, defs);
+    el('stop', {offset: '0', 'stop-color': '#F97A2B'}, gb);
+    el('stop', {offset: '1', 'stop-color': '#C2410C'}, gb);
 
-    /* Le graphique est fluide : à 300 px de large comme à 700, on ne peut pas
-       savoir d'avance où la flèche passe. Les libellés sont donc placés après
-       elle — on échantillonne le tracé, puis on garde pour chaque montant la
-       première position proposée qui ne le touche pas. */
-    var trace = [];
-    [fleche, tete].forEach(function(p){
-      var L = p.getTotalLength();
-      for (var i = 0; i <= 220; i++) trace.push(p.getPointAtLength(L * i / 220));
+    el('line', {x1: P.l, x2: P.l + zone, y1: sol + .5, y2: sol + .5,
+      stroke: 'rgba(38,37,35,.18)', 'stroke-width': 1}, svg);
+
+    cols.forEach(function(c, i){
+      var h = haut(c.m), y = sol - h;
+      var r = el('rect', {class: 'pousse', style: '--i:' + i,
+        x: cx(i) - barre / 2, y: y, width: barre, height: h,
+        rx: narrow ? 7 : 10, fill: 'url(#g-barre)'}, svg);
+      el('title', {}, r).textContent = eurMois(c.m) + ' par mois, soit ' + eur(c.p) + ' le kWh';
+      var v = el('text', {class: 'fadein', x: cx(i), y: y - 11, 'text-anchor': 'middle',
+        'font-size': narrow ? 17 : 23, 'font-weight': 900, fill: '#262523'}, svg);
+      v.textContent = eurMois(c.m);
+      var a = el('text', {class: 'fadein', x: cx(i), y: sol + 21, 'text-anchor': 'middle',
+        'font-size': 15, 'font-weight': 700, fill: '#262523'}, svg);
+      a.textContent = c.lab;
+      if (!narrow){
+        var d2 = el('text', {class: 'fadein', x: cx(i), y: sol + 38, 'text-anchor': 'middle',
+          'font-size': 15, fill: '#57534C'}, svg);
+        d2.textContent = c.sous;
+      }
     });
-    /* Les graduations sont déjà posées, et chaque montant placé devient à son
-       tour un obstacle : sinon deux libellés se retrouvent l'un sur l'autre
-       dans le coin droit, là où le cadre est le plus étroit. */
-    var occupe = [];
-    [].forEach.call(svg.querySelectorAll('text'), function(t){ occupe.push(t.getBBox()); });
-    function libre(node){
-      var r = node.getBBox(), m = ep / 2 + 9;
-      for (var i = 0; i < trace.length; i++){
-        var q = trace[i];
-        if (q.x > r.x - m && q.x < r.x + r.width + m &&
-            q.y > r.y - m && q.y < r.y + r.height + m) return false;
-      }
-      for (var j = 0; j < occupe.length; j++){
-        var o = occupe[j];
-        if (!(r.x + r.width + 6 < o.x || o.x + o.width + 6 < r.x ||
-              r.y + r.height + 2 < o.y || o.y + o.height + 2 < r.y)) return false;
-      }
-      return true;
-    }
-    function placer(node, essais){
-      for (var i = 0; i < essais.length; i++){
-        node.setAttribute('x', essais[i][0]);
-        node.setAttribute('y', essais[i][1]);
-        if (libre(node) || i === essais.length - 1) break;
-      }
-      occupe.push(node.getBBox());
-    }
-    /* La hausse elle-même, posée sur la flèche : c'est le chiffre du titre de
-       section. Corail en gras à 19 px minimum, ce qui le fait passer comme
-       grand texte au seuil de 3:1 (il est à 3,44:1 sur blanc). */
-    var mi = fleche.getPointAtLength(fleche.getTotalLength() * .52);
-    var pc = el('text', {class: 'fadein', 'text-anchor': 'end',
-      'font-size': narrow ? 21 : 26, 'font-weight': 900, fill: '#9B2F20'}, svg);
-    pc.textContent = '+29' + NB + '%';
-    placer(pc, [[mi.x - 12, mi.y - 14], [mi.x - 12, mi.y - 38],
-                [mi.x - 46, mi.y - 14], [mi.x + 34, mi.y + 26]]);
 
-    /* seconde série : la mensualité, plate par construction */
-    /* Même départ et même fin que la flèche : les deux séries se comparent
-       d'autant mieux qu'elles couvrent la même largeur. */
-    el('line', {x1: ax0, x2: ax1, y1: Y(MENS), y2: Y(MENS), stroke: '#EEAF51', 'stroke-width': 2.5, 'stroke-linecap': 'round', class: 'draw draw--mens'}, svg);
-    var ml = el('text', {class: 'fadein', 'text-anchor': 'end', 'font-size': 15, 'font-weight': 700, fill: '#8A6520'}, svg);
-    /* Sous 460 px, la phrase longue couvre toute la largeur du cadre et vient
-       buter sur la flèche ; on la raccourcit plutôt que de la descendre sur
-       les années de l'axe. */
-    ml.textContent = narrow ? 'Mensualité fixe' : 'Votre mensualité, fixe';
-    var mlx = ax1 - (narrow ? 16 : 30);
-    placer(ml, [[mlx, Y(MENS) - 9], [mlx, Y(MENS) - 31]]);
-
-    var cross = el('line', {y1: P.t - 6, y2: H - P.b, stroke: '#262523', 'stroke-width': 1, 'stroke-dasharray': '3 3', opacity: 0}, svg);
-    var hit = el('rect', {x: P.l, y: 0, width: W - P.l - P.r, height: H, fill: 'transparent'}, svg);
-    function move(ev){
-      var r = svg.getBoundingClientRect();
-      var x = (ev.clientX - r.left) * (W / r.width);
-      var t = t0 + (x - P.l) / (W - P.l - P.r) * (t1 - t0);
-      t = Math.max(pts[0].t, Math.min(now, t));
-      var p = pts[0];
-      for (var i = 0; i < pts.length; i++) if (pts[i].t <= t) p = pts[i];
-      var cx = X(t), cy = Y(p.m);
-      cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('opacity', 1);
-      tip.innerHTML = '<b>' + eurMois(p.m) + ' / mois</b><br>' + eur(p.v) + ' le kWh, depuis ' + moisAn(p.t);
-      var left = cx * (r.width / W);
-      left = Math.max(60, Math.min(r.width - 60, left));
-      tip.style.left = left + 'px'; tip.style.top = (cy * (r.height / H)) + 'px';
-      tip.style.opacity = 1;
-    }
-    function leave(){ cross.setAttribute('opacity', 0); tip.style.opacity = 0; }
-    hit.addEventListener('pointermove', move);
-    hit.addEventListener('pointerdown', move);
-    hit.addEventListener('pointerleave', leave);
   }
   draw();
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(draw, 120); });
