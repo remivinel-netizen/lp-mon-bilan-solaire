@@ -106,6 +106,24 @@ footer a{color:var(--ink-2)}
     'au ' + d.telephone + ' pour vérifier deux ou trois points sur votre maison.';
   if (d.email) document.getElementById('etape-mail').textContent =
     'à ' + d.email + ', avec les aides qui s’appliquent, l’économie estimée et la mensualité.';
+
+  /* Conversion Google Ads. L'événement ne part que si le questionnaire vient
+     réellement d'être validé : sessionStorage est vidé juste après, donc un
+     rechargement de la page ou une visite directe de l'URL ne déclenche rien.
+     lead_id sert d'identifiant de transaction côté Google Ads, et user_data
+     alimente les conversions améliorées. */
+  if (d.id) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'lead_confirme',
+      lead_id: d.id,
+      zone: d.zone,
+      departement: d.departement,
+      priorite: d.priorite,
+      user_data: { email: d.email, phone_number: d.telephone_e164 }
+    });
+  }
+
   try { sessionStorage.removeItem('mbs_lead'); } catch(e){}
 })();
 </script>

@@ -1255,14 +1255,21 @@ section{position:relative}
     sent = true;
     dernier = data;
     var dansZone = ZONE.indexOf(String(data.departement)) > -1;
+    /* Identifiant unique du lead. Il sert d'identifiant de transaction à la
+       balise de conversion Google Ads : deux visites de la page de
+       remerciement avec le même identifiant ne comptent qu'une conversion. */
+    var leadId = 'MBS-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
     /* les coordonnées passent par sessionStorage, jamais par l'URL */
     try {
       sessionStorage.setItem('mbs_lead', JSON.stringify({
+        id: leadId,
         prenom: data.prenom,
         email: data.email,
         telephone: data.telephone.replace(/(\d{2})(?=\d)/g, '$1 '),
+        telephone_e164: data.telephone_e164,
         departement: data.departement,
-        zone: dansZone ? 'couverte' : 'hors zone'
+        zone: dansZone ? 'couverte' : 'hors zone',
+        priorite: data.priorite
       }));
     } catch(e){}
     /* court délai : laisse partir l'événement generate_lead avant de quitter la page */
