@@ -7,9 +7,11 @@
 <title>Secteur non couvert | Mon Bilan Solaire</title>
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
+<!-- Polices auto-hebergees : deux feuilles de style tierces bloquaient
+     l'affichage pendant 1,7 s a elles seules. Seules les deux graisses du
+     premier ecran sont prechargees, les autres arrivent par swap. -->
+<link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-700.woff2" crossorigin>
 <!-- IwlCMP : consent defaults (NE PAS deplacer, doit preceder GTM) -->
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
@@ -24,6 +26,11 @@ gtag('set','url_passthrough',true);gtag('set','ads_data_redaction',true);
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KTD645RC');</script>
 <!-- End Google Tag Manager -->
 <style>
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-900.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap}
+@font-face{font-family:'Caveat';src:url('/fonts/caveat-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
 :root{
   --lavande:#9DACDA; --brume:#DCECF8; --ble:#FCED90; --ambre:#EEAF51;
   --corail:#E85D4C; --corail-sombre:#9B2F20; --beige:#DECDC1; --creme:#F6F4EC;

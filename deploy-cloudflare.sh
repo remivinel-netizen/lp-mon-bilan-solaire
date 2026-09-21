@@ -13,6 +13,7 @@ PAGES=(index.html merci.html merci-hors-zone.html merci-non-eligible.html
 rm -rf dist && mkdir -p dist
 for p in "${PAGES[@]}"; do cp "$p" dist/; done
 cp -R img dist/img
+cp -R fonts dist/fonts
 cp _headers dist/_headers
 
 echo "dist/ : $(find dist -type f | wc -l | tr -d ' ') fichiers, $(du -sh dist | cut -f1)"

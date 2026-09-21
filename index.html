@@ -13,12 +13,14 @@
 <meta property="og:type" content="website">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap">
-<link rel="preload" as="image" href="img/hero-900.jpg" imagesrcset="img/hero-900.jpg 900w, img/hero-1600.webp 1600w" imagesizes="100vw">
+<!-- Polices auto-hebergees : deux feuilles de style tierces bloquaient
+     l'affichage pendant 1,7 s a elles seules. Seules les deux graisses du
+     premier ecran sont prechargees, les autres arrivent par swap. -->
+<link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-700.woff2" crossorigin>
+<link rel="preload" as="image" href="img/hero-900.webp" fetchpriority="high"
+      imagesrcset="img/hero-640.webp 640w, img/hero-900.webp 900w, img/hero-1280.webp 1280w, img/hero-1600.webp 1600w"
+      imagesizes="100vw" type="image/webp">
 
 <!-- IwlCMP : consent defaults (NE PAS deplacer, doit preceder GTM) -->
 <script>
@@ -36,6 +38,11 @@ gtag('set','url_passthrough',true);gtag('set','ads_data_redaction',true);
 
 <script>document.documentElement.className+=' js';</script>
 <style>
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Satoshi';src:url('/fonts/satoshi-900.woff2') format('woff2');font-weight:900;font-style:normal;font-display:swap}
+@font-face{font-family:'Caveat';src:url('/fonts/caveat-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
 :root{
   --lavande:#C3CDF5; --brume:#D9EDFC; --ble:#FFE95C; --ambre:#FFB524;
   --corail:#F04E23; --corail-fonce:#D8410F; --corail-sombre:#9B2F20; --beige:#F7DAC2; --creme:#FFF8EE;
@@ -181,6 +188,7 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 /* ---------- hero ---------- */
 .hero{position:relative;padding-bottom:28px}
 .hero__media{position:absolute;left:0;right:0;top:0;height:520px;overflow:hidden;border-radius:0 0 var(--r-lg) var(--r-lg)}
+.hero__media picture{display:contents}
 .hero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 60%}
 .hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,22,20,.66) 0%,rgba(24,22,20,.56) 55%,rgba(24,22,20,.3) 100%)}
 .hero__inner{position:relative;display:grid;gap:22px;padding-top:26px}
@@ -571,7 +579,11 @@ section{position:relative}
 <main>
 <section class="hero">
   <div class="hero__media">
-    <img src="img/hero-900.jpg" srcset="img/hero-900.jpg 900w, img/hero-1600.webp 1600w" sizes="100vw" alt="Panneaux solaires noirs posés sur une toiture en tuiles canal, avec vue sur le jardin, la piscine et la campagne" fetchpriority="high" width="1600" height="1200">
+    <picture>
+      <source type="image/webp" sizes="100vw"
+              srcset="img/hero-640.webp 640w, img/hero-900.webp 900w, img/hero-1280.webp 1280w, img/hero-1600.webp 1600w">
+      <img src="img/hero-900.jpg" alt="Panneaux solaires noirs posés sur une toiture en tuiles canal, avec vue sur le jardin, la piscine et la campagne" fetchpriority="high" width="1600" height="1200">
+    </picture>
   </div>
   <div class="wrap hero__inner">
     <div class="hero__copy">
