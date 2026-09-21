@@ -18,9 +18,9 @@
      premier ecran sont prechargees, les autres arrivent par swap. -->
 <link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-400.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-700.woff2" crossorigin>
-<link rel="preload" as="image" href="img/hero-900.webp" fetchpriority="high"
-      imagesrcset="img/hero-640.webp 640w, img/hero-900.webp 900w, img/hero-1280.webp 1280w, img/hero-1600.webp 1600w"
-      imagesizes="100vw" type="image/webp">
+<link rel="preload" as="image" href="img/hero-900.avif" fetchpriority="high"
+      imagesrcset="img/hero-640.avif 640w, img/hero-900.avif 900w, img/hero-1280.avif 1280w, img/hero-1600.avif 1600w"
+      imagesizes="100vw" type="image/avif">
 
 <!-- IwlCMP : consent defaults (NE PAS deplacer, doit preceder GTM) -->
 <script>
@@ -580,6 +580,8 @@ section{position:relative}
 <section class="hero">
   <div class="hero__media">
     <picture>
+      <source type="image/avif" sizes="100vw"
+              srcset="img/hero-640.avif 640w, img/hero-900.avif 900w, img/hero-1280.avif 1280w, img/hero-1600.avif 1600w">
       <source type="image/webp" sizes="100vw"
               srcset="img/hero-640.webp 640w, img/hero-900.webp 900w, img/hero-1280.webp 1280w, img/hero-1600.webp 1600w">
       <img src="img/hero-900.jpg" alt="Panneaux solaires noirs posés sur une toiture en tuiles canal, avec vue sur le jardin, la piscine et la campagne" fetchpriority="high" width="1600" height="1200">
