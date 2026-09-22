@@ -682,11 +682,7 @@ section{position:relative}
             <div class="group">
               <div class="field"><label for="f-tel">Téléphone</label><div class="tel"><span class="cc">+33</span><input id="f-tel" name="telephone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="06 12 34 56 78" maxlength="14"></div></div>
             </div>
-            <p class="rgpd-intro">Vos données sont recueillies par <b>LK12 INVEST</b> (254 rue Vendôme, 69003 Lyon), responsable de traitement, et transmises à <b>EKO HABITATIONS</b>, seul installateur destinataire, qui étudie votre projet. Détail dans la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
-            <label class="consent" id="q-consent-box">
-              <span class="switch"><input type="checkbox" id="f-consent" name="consentement" value="oui"><span></span></span>
-              <p id="q-consent-text">J'ai pris connaissance de la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a> et j'accepte que mes données soient recueillies par LK12 INVEST et transmises à EKO HABITATIONS, seul destinataire, aux fins d'étude de mon projet solaire.</p>
-            </label>
+            <p class="rgpd-intro" id="q-mention-text">Vos données sont recueillies par <b>LK12 INVEST</b> (254 rue Vendôme, 69003 Lyon), responsable de traitement, et transmises à <b>EKO HABITATIONS</b>, seul installateur destinataire, qui étudie votre projet — c'est l'objet de votre demande. Elles ne sont ni revendues ni cédées à un réseau de partenaires. Détail dans la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
             <label class="consent" id="q-consent-tel-box">
               <span class="switch"><input type="checkbox" id="f-consent-tel" name="consentement_appel" value="oui"><span></span></span>
               <p id="q-consent-tel-text">Je demande à être rappelé(e) par téléphone par EKO HABITATIONS, sous 48&nbsp;heures, au sujet de ma demande d'estimation. Mes coordonnées ne sont transmises à personne d'autre&nbsp;: ni revendues, ni cédées à un réseau de partenaires. Ce consentement est révocable à tout moment, par email à <a href="mailto:lk12invest@gmail.com">lk12invest@gmail.com</a>. Je peux demander la preuve de mon consentement sur support durable.</p>
@@ -1085,7 +1081,6 @@ section{position:relative}
     if (key === 'telephone'){
       var d = phoneDigits(val('telephone'));
       if (!phoneOk(d)) { bad(form.elements.telephone, true); note('q-tel-note', 'Ce numéro ne semble pas valide. Il doit compter 10 chiffres.', true); return false; }
-      if (!form.elements.consentement.checked) { $('#q-consent-box').classList.add('is-bad'); note('q-tel-note', 'Acceptez le traitement de vos données pour qu’on puisse étudier votre projet.', true); return false; }
       if (!form.elements.consentement_appel.checked) { $('#q-consent-tel-box').classList.add('is-bad'); note('q-tel-note', 'Autorisez le rappel téléphonique pour qu’on puisse vous joindre.', true); return false; }
       return true;
     }
@@ -1173,14 +1168,11 @@ section{position:relative}
     if (t.name === 'prenom' || t.name === 'nom' || t.name === 'email'){ bad(t, false); note('q-id-note', ''); }
     if (t.name === 'email') suggestMail(t.value);
   });
-  ['consentement', 'consentement_appel'].forEach(function(nom){
-    form.elements[nom].addEventListener('change', function(){
-      var boite = nom === 'consentement' ? '#q-consent-box' : '#q-consent-tel-box';
-      $(boite).classList.remove('is-bad');
-      note('q-tel-note', '');
-      /* horodatage posé au premier accord donné, jamais réécrit ensuite */
-      if (this.checked && !state.consentAt) state.consentAt = new Date().toISOString();
-    });
+  form.elements.consentement_appel.addEventListener('change', function(){
+    $('#q-consent-tel-box').classList.remove('is-bad');
+    note('q-tel-note', '');
+    /* horodatage posé à l'accord, jamais réécrit ensuite */
+    if (this.checked && !state.consentAt) state.consentAt = new Date().toISOString();
   });
 
   /* suggestion d'email (fautes de frappe courantes) */
@@ -1269,13 +1261,14 @@ section{position:relative}
       email: val('email').toLowerCase(),
       telephone: tel,
       telephone_e164: '+33' + tel.slice(1),
-      consentement_donnees: 'oui',
-      consentement_donnees_texte: document.getElementById('q-consent-text').textContent.replace(/\s+/g, ' ').trim(),
+      /* Un seul consentement est recueilli par case : celui de l'appel, exigé par
+         le décret du 11 août 2026. L'étude du projet repose sur la demande même
+         du prospect, pas sur un consentement : on archive donc la mention qui
+         lui a été affichée, pas un accord qu'on ne lui a pas demandé. */
       consentement_appel: 'oui',
       consentement_appel_texte: document.getElementById('q-consent-tel-text').textContent.replace(/\s+/g, ' ').trim(),
-      consentement_contact: 'oui',
-      consentement_texte: document.getElementById('q-consent-text').textContent.replace(/\s+/g, ' ').replace(' Confidentialité', '').trim(),
       consentement_horodatage: state.consentAt || now,
+      mention_donnees_texte: document.getElementById('q-mention-text').textContent.replace(/\s+/g, ' ').trim(),
       date_envoi: now,
       page_url: location.href,
       referrer: document.referrer,
