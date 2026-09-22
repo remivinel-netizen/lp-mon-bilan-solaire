@@ -5,10 +5,11 @@
   "account_id": "b2ac01a9207feba10a24902f854a4a94",
   "compatibility_date": "2026-09-17",
   // Un Worker minimal est passé devant les fichiers statiques, uniquement pour
-  // /api/sms : l'envoi du SMS de confirmation doit se faire côté serveur, sinon
-  // la clé ClickSend serait lisible dans le JS de la page. Tout le reste est
-  // délégué au moteur d'assets via env.ASSETS, donc le comportement décrit
-  // ci-dessous est inchangé.
+  // /api/sms/* : la validation du numéro par code SMS doit se faire côté
+  // serveur, sinon la clé ClickSend et le code à 6 chiffres seraient tous deux
+  // lisibles dans le JS de la page. Tout le reste est délégué au moteur
+  // d'assets via env.ASSETS, donc le comportement décrit ci-dessous est
+  // inchangé.
   "main": "src/worker.js",
   //
   // html_handling reste au défaut "auto-trailing-slash". Mesuré en local :
@@ -29,6 +30,11 @@
     // not_found_handling continue de s'appliquer comme avant.
     "run_worker_first": ["/api/*"]
   },
+  // Les codes SMS vivent ici, avec une expiration de 10 minutes posée à
+  // l'écriture. Rien d'autre n'y est stocké : ni lead, ni coordonnée.
+  "kv_namespaces": [
+    { "binding": "CODES", "id": "e645323e26364bf8ab171784cbd5e653" }
+  ],
   "routes": [
     { "pattern": "mon-bilan-solaire.fr", "custom_domain": true },
     { "pattern": "www.mon-bilan-solaire.fr", "custom_domain": true }

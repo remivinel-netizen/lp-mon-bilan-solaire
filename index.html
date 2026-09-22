@@ -265,6 +265,10 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .field input::placeholder{color:#BDB8AE;font-weight:400}
 .field.is-bad{box-shadow:0 0 0 2px var(--err) inset;background:#fff}
 .cp input{font-size:30px;letter-spacing:.14em;font-weight:700;font-variant-numeric:tabular-nums;padding:4px 0}
+.code input{font-size:30px;letter-spacing:.22em;font-weight:700;font-variant-numeric:tabular-nums;padding:4px 0}
+.codebox .liens{display:flex;flex-wrap:wrap;gap:20px;margin-top:12px}
+.codebox .lien{border:0;background:none;padding:0;font:inherit;font-size:15px;font-weight:700;color:var(--ink);text-decoration:underline;cursor:pointer}
+.codebox .lien[disabled]{opacity:.45;cursor:not-allowed}
 .tel{display:flex;align-items:center;gap:10px}
 .tel .cc{font-size:18px;font-weight:700;color:var(--ink-2);padding:3px 9px;border-radius:9px;background:rgba(38,37,35,.07)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
@@ -679,8 +683,22 @@ section{position:relative}
           <fieldset class="step" data-step="telephone">
             <legend class="step__q" tabindex="-1">Votre numéro, pour préparer la simulation avec vous</legend>
             <p class="step__hint">Un appel de quelques minutes pour vérifier votre consommation et votre toit, avant de faire les calculs.</p>
-            <div class="group">
+            <div class="group" id="q-tel-group">
               <div class="field"><label for="f-tel">Téléphone</label><div class="tel"><span class="cc">+33</span><input id="f-tel" name="telephone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="06 12 34 56 78" maxlength="14"></div></div>
+            </div>
+            <!-- Validation du numéro par code SMS. Révélée seulement dans les
+                 départements concernés, et seulement pour un mobile : on ne
+                 peut pas envoyer de SMS à un fixe. -->
+            <div class="codebox" id="q-code-box" hidden>
+              <p class="step__hint" id="q-code-intro"></p>
+              <div class="group">
+                <div class="field code"><label for="f-code">Code reçu par SMS</label><input id="f-code" name="code_sms" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" pattern="[0-9]{6}"></div>
+              </div>
+              <p class="note" id="q-code-note" aria-live="polite"></p>
+              <div class="liens">
+                <button type="button" class="lien" id="q-code-renvoi">Renvoyer le code</button>
+                <button type="button" class="lien" id="q-code-modifier">Modifier le numéro</button>
+              </div>
             </div>
             <p class="rgpd-intro" id="q-mention-text">Vos données sont recueillies par <b>LK12 INVEST</b> (254 rue Vendôme, 69003 Lyon), responsable de traitement, et transmises à <b>EKO HABITATIONS</b>, seul installateur destinataire, qui étudie votre projet — c'est l'objet de votre demande. Elles ne sont ni revendues ni cédées à un réseau de partenaires. Détail dans la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
             <label class="consent" id="q-consent-tel-box">
@@ -973,7 +991,7 @@ section{position:relative}
   var back = document.getElementById('q-back');
   var done = document.getElementById('q-done');
   var total = steps.length, cur = 0, timer = null, arrowNav = false, started = false, sent = false;
-  var state = {commune: '', departement: '', cpStatus: 'idle', consentAt: ''};
+  var state = {commune: '', departement: '', cpStatus: 'idle', consentAt: '', codeEnvoye: false};
 
   function $(sel, root){ return (root || document).querySelector(sel); }
   function val(name){ var el = form.elements[name]; return el ? (el.value || '').trim() : ''; }
@@ -1079,6 +1097,13 @@ section{position:relative}
       return ok;
     }
     if (key === 'telephone'){
+      /* Une fois le code envoyé, la seule chose à valider est le code : le
+         numéro et le consentement l'ont déjà été avant l'envoi. */
+      if (state.codeEnvoye){
+        var saisi = (val('code_sms') || '').replace(/\D/g, '');
+        if (saisi.length !== 6) { bad(form.elements.code_sms, true); note('q-code-note', 'Saisissez les 6 chiffres reçus par SMS.', true); return false; }
+        return true;
+      }
       var d = phoneDigits(val('telephone'));
       if (!phoneOk(d)) { bad(form.elements.telephone, true); note('q-tel-note', 'Ce numéro ne semble pas valide. Il doit compter 10 chiffres.', true); return false; }
       if (!form.elements.consentement_appel.checked) { $('#q-consent-tel-box').classList.add('is-bad'); note('q-tel-note', 'Autorisez le rappel téléphonique pour qu’on puisse vous joindre.', true); return false; }
@@ -1110,7 +1135,10 @@ section{position:relative}
     var stop = bloquant();
     if (stop) { quitte(stop); return; }
     var n = suivant(cur);
-    if (n > -1) go(n, 1); else submit();
+    if (n > -1) { go(n, 1); return; }
+    if (state.codeEnvoye) { verifieCode(); return; }
+    if (codeRequis()) { demandeCode(false); return; }
+    submit();
   }
 
   /* choix : avance automatique */
@@ -1155,6 +1183,11 @@ section{position:relative}
   /* champs : nettoyage à la saisie */
   form.addEventListener('input', function(e){
     var t = e.target;
+    if (t.name === 'code_sms'){
+      t.value = t.value.replace(/\D/g, '').slice(0, 6);
+      bad(t, false); note('q-code-note', '');
+      return;
+    }
     if (t.name === 'code_postal'){
       t.value = t.value.replace(/\D/g, '').slice(0, 5);
       bad(t, false);
@@ -1288,7 +1321,6 @@ section{position:relative}
       if (!r.ok) throw new Error('HTTP ' + r.status);
       if (demo && !spam) console.info('[Mon Bilan Solaire] webhook non configuré, envoi simulé :', data);
       if (!spam) track('generate_lead', {form_name: 'bilan_solaire', priorite: data.priorite, statut: data.statut, facture: data.facture_mensuelle, delai: data.delai_projet, departement: data.departement, zone: data.zone, user_data: {email: data.email, phone_number: data.telephone_e164}});
-      if (!spam && !demo) smsConfirmation(data);
       finish(data);
     }).catch(function(){
       btn.disabled = false; btn.innerHTML = label;
@@ -1297,31 +1329,120 @@ section{position:relative}
     });
   }
 
-  /* ---------- confirmation par SMS ---------- */
-  /* Départements où un SMS de confirmation part. La même liste existe côté
-     Worker, qui recalcule le département depuis le code postal : c'est lui qui
-     décide, la page ne fait que demander. */
+  /* ---------- validation du numéro par code SMS ---------- */
+  /* Départements concernés. La liste est répétée dans le Worker, qui recalcule
+     le département depuis le code postal : c'est lui qui décide, la page ne
+     fait que demander. */
   var SMS_DEPTS = ['01', '38', '42', '69'];
+  var LIBELLE_ENVOI = null;
 
-  function smsConfirmation(data){
-    if (SMS_DEPTS.indexOf(String(data.departement)) === -1) return;
-    /* keepalive : la requête survit à la redirection vers /merci, qui part
-       350 ms plus tard. Le corps ne contient aucun secret : la clé du
-       fournisseur reste dans le Worker, elle n'apparaît jamais ici. Et un SMS
-       qui échoue ne doit surtout pas bloquer le lead : tout est silencieux. */
-    try {
-      fetch('/api/sms', {
-        method: 'POST',
-        keepalive: true,
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          code_postal: data.code_postal,
-          telephone_e164: data.telephone_e164,
-          prenom: data.prenom
-        })
-      }).catch(function(){});
-    } catch(e){}
+  /* Un fixe ne reçoit pas de SMS : dans ce cas le lead part directement, comme
+     avant. Le trou est assumé — mieux vaut un numéro fixe non validé qu'un
+     prospect bloqué devant un code qui ne peut pas arriver. */
+  function codeRequis(){
+    return SMS_DEPTS.indexOf(String(state.departement)) > -1
+        && /^0[67]/.test(phoneDigits(val('telephone')));
   }
+
+  function telE164(){ return '+33' + phoneDigits(val('telephone')).slice(1); }
+
+  function montreCode(on){
+    state.codeEnvoye = on;
+    document.getElementById('q-code-box').hidden = !on;
+    document.getElementById('q-tel-group').hidden = on;
+    document.getElementById('q-mention-text').hidden = on;
+    document.getElementById('q-consent-tel-box').hidden = on;
+
+    var btn = document.getElementById('q-send');
+    if (LIBELLE_ENVOI === null) LIBELLE_ENVOI = btn.innerHTML;
+    btn.innerHTML = on ? 'Valider et envoyer' : LIBELLE_ENVOI;
+
+    if (on){
+      document.getElementById('q-code-intro').innerHTML =
+        'Un code à 6 chiffres vient de partir au <b>'
+        + phoneDigits(val('telephone')).replace(/(\d{2})(?=\d)/g, '$1' + NB) + '</b>.';
+      try { document.getElementById('f-code').focus({preventScroll: true}); } catch(e){}
+    } else {
+      note('q-code-note', '');
+      form.elements.code_sms.value = '';
+      bad(form.elements.code_sms, false);
+    }
+    setHeight();
+  }
+
+  function demandeCode(renvoi){
+    var btn = document.getElementById(renvoi ? 'q-code-renvoi' : 'q-send');
+    var lib = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = renvoi ? 'Envoi…' : '<span class="spin" aria-hidden="true"></span>Envoi du code';
+    track('sms_code_demande', {renvoi: renvoi ? 'oui' : 'non', departement: state.departement});
+
+    fetch('/api/sms/code', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({code_postal: val('code_postal'), telephone_e164: telE164()})
+    }).then(function(r){
+      btn.disabled = false; btn.innerHTML = lib;
+      if (r.status === 204){
+        montreCode(true);
+        if (renvoi) note('q-code-note', 'Nouveau code envoyé.');
+        return;
+      }
+      if (r.status === 429){
+        montreCode(true);
+        note('q-code-note', 'Trop de codes demandés pour ce numéro. Saisissez celui que vous avez déjà reçu, ou réessayez dans une heure.', true);
+        setHeight();
+        return;
+      }
+      /* Panne du fournisseur, ou réponse imprévue : le lead passe quand même.
+         Un SMS indisponible ne doit pas coûter un prospect. */
+      track('sms_code_indisponible', {statut: r.status});
+      if (renvoi) { note('q-code-note', 'L’envoi n’a pas abouti. Réessayez dans un instant.', true); setHeight(); return; }
+      submit();
+    }).catch(function(){
+      /* Réseau coupé : même raisonnement. */
+      btn.disabled = false; btn.innerHTML = lib;
+      if (renvoi) { note('q-code-note', 'L’envoi n’a pas abouti. Réessayez dans un instant.', true); setHeight(); return; }
+      submit();
+    });
+  }
+
+  function verifieCode(){
+    var btn = document.getElementById('q-send');
+    var lib = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin" aria-hidden="true"></span>Vérification';
+
+    fetch('/api/sms/verifie', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({telephone_e164: telE164(), code: (val('code_sms') || '').replace(/\D/g, '')})
+    }).then(function(r){
+      btn.disabled = false; btn.innerHTML = lib;
+      if (r.status === 204){
+        track('sms_code_valide', {departement: state.departement});
+        submit();
+        return;
+      }
+      return r.json().catch(function(){ return {}; }).then(function(j){
+        bad(form.elements.code_sms, true);
+        track('sms_code_refuse', {raison: j.raison || String(r.status)});
+        if (r.status === 410 && j.raison === 'essais') note('q-code-note', 'Trop d’essais sur ce code. Demandez-en un nouveau.', true);
+        else if (r.status === 410) note('q-code-note', 'Ce code a expiré. Demandez-en un nouveau.', true);
+        else if (typeof j.restants === 'number') note('q-code-note', 'Code incorrect. Il vous reste ' + j.restants + (j.restants > 1 ? ' essais.' : ' essai.'), true);
+        else note('q-code-note', 'Code incorrect.', true);
+        setHeight();
+      });
+    }).catch(function(){
+      btn.disabled = false; btn.innerHTML = lib;
+      note('q-code-note', 'La vérification n’a pas abouti. Vérifiez votre connexion puis réessayez.', true);
+      setHeight();
+    });
+  }
+
+  document.getElementById('q-code-renvoi').addEventListener('click', function(){ demandeCode(true); });
+  document.getElementById('q-code-modifier').addEventListener('click', function(){
+    montreCode(false);
+    try { form.elements.telephone.focus({preventScroll: true}); } catch(e){}
+  });
 
   var dernier = null;
   function finish(data){
