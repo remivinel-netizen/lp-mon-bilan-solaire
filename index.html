@@ -269,6 +269,10 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .codebox .liens{display:flex;flex-wrap:wrap;gap:20px;margin-top:12px}
 .codebox .lien{border:0;background:none;padding:0;font:inherit;font-size:15px;font-weight:700;color:var(--ink);text-decoration:underline;cursor:pointer}
 .codebox .lien[disabled]{opacity:.45;cursor:not-allowed}
+.codebox__secours{margin-top:14px}
+/* Volontairement plus discret que « Renvoyer le code » : c'est une issue,
+   pas le chemin qu'on propose. */
+.codebox__secours .lien{font-weight:500;color:var(--ink-2);text-align:left}
 .tel{display:flex;align-items:center;gap:10px}
 .tel .cc{font-size:18px;font-weight:700;color:var(--ink-2);padding:3px 9px;border-radius:9px;background:rgba(38,37,35,.07)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
@@ -702,6 +706,11 @@ section{position:relative}
                 <button type="button" class="lien" id="q-code-renvoi">Renvoyer le code</button>
                 <button type="button" class="lien" id="q-code-modifier">Modifier le numéro</button>
               </div>
+              <!-- Sortie de secours, révélée après 90 s d'attente : un SMS qui
+                   n'arrive pas ne doit pas coûter le lead. -->
+              <p class="codebox__secours" id="q-code-secours" hidden>
+                <button type="button" class="lien" id="q-code-passer">Je n'ai rien reçu, envoyer ma demande quand même</button>
+              </p>
             </div>
             <p class="rgpd-intro" id="q-mention-text">Vos données sont recueillies par <b>LK12 INVEST</b> (254 rue Vendôme, 69003 Lyon), responsable de traitement, et transmises à <b>EKO HABITATIONS</b>, seul installateur destinataire, qui étudie votre projet — c'est l'objet de votre demande. Elles ne sont ni revendues ni cédées à un réseau de partenaires. Détail dans la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
             <label class="consent" id="q-consent-tel-box">
@@ -1338,6 +1347,11 @@ section{position:relative}
      fait que demander. */
   var SMS_DEPTS = ['01', '38', '42', '69'];
   var LIBELLE_ENVOI = null;
+  /* Délai avant d'offrir la sortie de secours. Un SMS arrive en une
+     quinzaine de secondes : passé une minute et demie, c'est qu'il ne
+     viendra pas. */
+  var ATTENTE_SECOURS = 90000;
+  var minuteurSecours = null;
 
   /* Un fixe ne reçoit pas de SMS : dans ce cas le lead part directement, comme
      avant. Le trou est assumé — mieux vaut un numéro fixe non validé qu'un
@@ -1352,6 +1366,14 @@ section{position:relative}
   function montreCode(on){
     state.codeEnvoye = on;
     document.getElementById('q-code-box').hidden = !on;
+    /* Le minuteur repart de zéro à chaque passage : après une correction de
+       numéro, le visiteur n'hérite pas de l'attente précédente. */
+    clearTimeout(minuteurSecours);
+    document.getElementById('q-code-secours').hidden = true;
+    if (on) minuteurSecours = setTimeout(function(){
+      document.getElementById('q-code-secours').hidden = false;
+      setHeight();
+    }, ATTENTE_SECOURS);
     document.getElementById('q-tel-group').hidden = on;
     document.getElementById('q-mention-text').hidden = on;
     document.getElementById('q-consent-tel-box').hidden = on;
@@ -1421,6 +1443,7 @@ section{position:relative}
     }).then(function(r){
       btn.disabled = false; btn.innerHTML = lib;
       if (r.status === 204){
+        clearTimeout(minuteurSecours);
         track('sms_code_valide', {departement: state.departement});
         submit();
         return;
@@ -1442,6 +1465,14 @@ section{position:relative}
   }
 
   document.getElementById('q-code-renvoi').addEventListener('click', function(){ demandeCode(true); });
+  /* Le lead part sans validation. Événement distinct : si ce contournement
+     devient fréquent, c'est la remise des SMS qui est en cause, pas les
+     visiteurs. */
+  document.getElementById('q-code-passer').addEventListener('click', function(){
+    clearTimeout(minuteurSecours);
+    track('sms_code_contourne', {departement: state.departement});
+    submit();
+  });
   document.getElementById('q-code-modifier').addEventListener('click', function(){
     montreCode(false);
     try { form.elements.telephone.focus({preventScroll: true}); } catch(e){}
