@@ -56,7 +56,7 @@ async function dejaEnvoye(tel) {
   return false;
 }
 
-async function envoie(env, tel, corps) {
+async function envoie(env, tel, corps, dept) {
   const message = { body: corps, to: tel };
   if (env.SMS_SENDER) message.from = env.SMS_SENDER;
 
@@ -68,9 +68,25 @@ async function envoie(env, tel, corps) {
     },
     body: JSON.stringify({ messages: [message] })
   });
-  /* Tracé dans les logs du Worker (observability est activée) : sans ça, un SMS
-     qui ne part pas est invisible. */
-  if (!r.ok) console.error('ClickSend', r.status, (await r.text()).slice(0, 300));
+  const brut = await r.text();
+
+  /* Tout est tracé dans les logs du Worker (observability est activée), succès
+     comme échec. Sans la trace de succès, une ligne « POST /api/sms - Ok » ne
+     dit pas si le SMS est parti ou s'il a été écarté par un filtre.
+     Jamais le numéro dans les logs : ce n'est pas un fichier de prospects. */
+  if (!r.ok) { console.error('ClickSend HTTP', r.status, brut.slice(0, 300)); return; }
+
+  /* ClickSend répond 200 même quand il refuse le message : le verdict est dans
+     messages[0].status. */
+  let m = null;
+  try { m = JSON.parse(brut).data.messages[0]; } catch (e) {}
+  if (!m) { console.error('ClickSend reponse inattendue', brut.slice(0, 300)); return; }
+  if (m.status !== 'SUCCESS') { console.error('ClickSend refus', m.status, 'dept=' + dept); return; }
+
+  /* message_parts vaut 1 si le texte tient dans un seul SMS, ce qui est le but
+     du nettoyage du prénom ; message_price permet de suivre le coût réel. */
+  console.log('SMS envoye', 'dept=' + dept, 'parts=' + m.message_parts,
+              'prix=' + m.message_price, 'id=' + m.message_id);
 }
 
 export default {
@@ -104,7 +120,7 @@ export default {
       const prenom = nettoiePrenom(d.prenom);
       /* waitUntil : on répond tout de suite, l'appel à ClickSend finit après.
          La page redirige vers /merci dans la foulée, elle n'attend pas. */
-      ctx.waitUntil(envoie(env, tel, texte(prenom, ZONE.indexOf(dept) > -1)));
+      ctx.waitUntil(envoie(env, tel, texte(prenom, ZONE.indexOf(dept) > -1), dept));
       return new Response(null, { status: 204 });
     }
 
