@@ -4,8 +4,12 @@
   // sinon wrangler demande à chaque déploiement (et se trompe en CI).
   "account_id": "b2ac01a9207feba10a24902f854a4a94",
   "compatibility_date": "2026-09-17",
-  // Site entièrement statique : pas de champ "main", donc aucun code Worker.
-  // Cloudflare sert les fichiers de dist/ directement.
+  // Un Worker minimal est passé devant les fichiers statiques, uniquement pour
+  // /api/sms : l'envoi du SMS de confirmation doit se faire côté serveur, sinon
+  // la clé ClickSend serait lisible dans le JS de la page. Tout le reste est
+  // délégué au moteur d'assets via env.ASSETS, donc le comportement décrit
+  // ci-dessous est inchangé.
+  "main": "src/worker.js",
   //
   // html_handling reste au défaut "auto-trailing-slash". Mesuré en local :
   //   /                        → 200 (index.html)
@@ -16,7 +20,14 @@
   // /merci-non-eligible qu'il faut régler les conversions Google Ads.
   "assets": {
     "directory": "./dist/",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // Le binding permet au Worker de relayer une requête au moteur d'assets.
+    "binding": "ASSETS",
+    // Seul /api/* passe par le Worker. Tout le reste garde le comportement
+    // actuel, servi directement par le moteur d'assets sans invoquer le
+    // Worker : aucune latence ni requête facturée en plus sur les pages, et
+    // not_found_handling continue de s'appliquer comme avant.
+    "run_worker_first": ["/api/*"]
   },
   "routes": [
     { "pattern": "mon-bilan-solaire.fr", "custom_domain": true },

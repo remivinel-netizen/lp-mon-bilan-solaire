@@ -1288,12 +1288,39 @@ section{position:relative}
       if (!r.ok) throw new Error('HTTP ' + r.status);
       if (demo && !spam) console.info('[Mon Bilan Solaire] webhook non configuré, envoi simulé :', data);
       if (!spam) track('generate_lead', {form_name: 'bilan_solaire', priorite: data.priorite, statut: data.statut, facture: data.facture_mensuelle, delai: data.delai_projet, departement: data.departement, zone: data.zone, user_data: {email: data.email, phone_number: data.telephone_e164}});
+      if (!spam && !demo) smsConfirmation(data);
       finish(data);
     }).catch(function(){
       btn.disabled = false; btn.innerHTML = label;
       note('q-tel-note', 'L’envoi n’a pas abouti. Vérifiez votre connexion puis réessayez.', true);
       setHeight();
     });
+  }
+
+  /* ---------- confirmation par SMS ---------- */
+  /* Départements où un SMS de confirmation part. La même liste existe côté
+     Worker, qui recalcule le département depuis le code postal : c'est lui qui
+     décide, la page ne fait que demander. */
+  var SMS_DEPTS = ['01', '38', '42', '69'];
+
+  function smsConfirmation(data){
+    if (SMS_DEPTS.indexOf(String(data.departement)) === -1) return;
+    /* keepalive : la requête survit à la redirection vers /merci, qui part
+       350 ms plus tard. Le corps ne contient aucun secret : la clé du
+       fournisseur reste dans le Worker, elle n'apparaît jamais ici. Et un SMS
+       qui échoue ne doit surtout pas bloquer le lead : tout est silencieux. */
+    try {
+      fetch('/api/sms', {
+        method: 'POST',
+        keepalive: true,
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          code_postal: data.code_postal,
+          telephone_e164: data.telephone_e164,
+          prenom: data.prenom
+        })
+      }).catch(function(){});
+    } catch(e){}
   }
 
   var dernier = null;
