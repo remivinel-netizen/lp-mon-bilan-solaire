@@ -36,7 +36,7 @@
   // comportement d'avant la validation. À remettre sur "on" quand ClickSend
   // aura approuvé le compte : les messages restent sinon en WaitApproval, donc
   // le visiteur attendrait un SMS qui ne part pas.
-  "vars": { "VALIDATION_SMS": "off" },
+  "vars": { "VALIDATION_SMS": "on" },
   // Les codes SMS vivent ici, avec une expiration de 10 minutes posée à
   // l'écriture. Rien d'autre n'y est stocké : ni lead, ni coordonnée.
   "kv_namespaces": [
