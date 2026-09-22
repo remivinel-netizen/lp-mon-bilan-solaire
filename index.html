@@ -1363,17 +1363,29 @@ section{position:relative}
 
   function telE164(){ return '+33' + phoneDigits(val('telephone')).slice(1); }
 
+  function montreSecours(){
+    var lien = document.getElementById('q-code-secours');
+    if (!lien.hidden) return;
+    lien.hidden = false;
+    setHeight();
+  }
+
   function montreCode(on){
+    var dejaVisible = !document.getElementById('q-code-box').hidden;
     state.codeEnvoye = on;
     document.getElementById('q-code-box').hidden = !on;
-    /* Le minuteur repart de zéro à chaque passage : après une correction de
-       numéro, le visiteur n'hérite pas de l'attente précédente. */
-    clearTimeout(minuteurSecours);
-    document.getElementById('q-code-secours').hidden = true;
-    if (on) minuteurSecours = setTimeout(function(){
-      document.getElementById('q-code-secours').hidden = false;
-      setHeight();
-    }, ATTENTE_SECOURS);
+    /* Le minuteur ne démarre qu'à la première apparition de l'écran. Un renvoi
+       de code ne doit pas reprendre au visiteur la sortie de secours qu'il a
+       déjà attendue ; une correction de numéro, si, puisque l'attente
+       recommence sur un autre numéro. */
+    if (!on){
+      clearTimeout(minuteurSecours);
+      document.getElementById('q-code-secours').hidden = true;
+    } else if (!dejaVisible){
+      clearTimeout(minuteurSecours);
+      document.getElementById('q-code-secours').hidden = true;
+      minuteurSecours = setTimeout(montreSecours, ATTENTE_SECOURS);
+    }
     document.getElementById('q-tel-group').hidden = on;
     document.getElementById('q-mention-text').hidden = on;
     document.getElementById('q-consent-tel-box').hidden = on;
@@ -1415,7 +1427,9 @@ section{position:relative}
       if (r.status === 429){
         montreCode(true);
         note('q-code-note', 'Trop de codes demandés pour ce numéro. Saisissez celui que vous avez déjà reçu, ou réessayez dans une heure.', true);
-        setHeight();
+        /* Plus aucun code ne partira avant une heure : faire attendre 90 s de
+           plus avant d'offrir la sortie n'aurait aucun sens. */
+        montreSecours();
         return;
       }
       /* Panne du fournisseur, ou réponse imprévue : le lead passe quand même.
