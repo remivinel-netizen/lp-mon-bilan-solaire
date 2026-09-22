@@ -30,6 +30,13 @@
     // not_found_handling continue de s'appliquer comme avant.
     "run_worker_first": ["/api/*"]
   },
+  // Interrupteur de la validation par code. Sur "off", /api/sms/code répond
+  // 503 sans rien envoyer : la page interprète ça comme une panne du
+  // fournisseur et laisse passer le lead sans validation — c'est le
+  // comportement d'avant la validation. À remettre sur "on" quand ClickSend
+  // aura approuvé le compte : les messages restent sinon en WaitApproval, donc
+  // le visiteur attendrait un SMS qui ne part pas.
+  "vars": { "VALIDATION_SMS": "off" },
   // Les codes SMS vivent ici, avec une expiration de 10 minutes posée à
   // l'écriture. Rien d'autre n'y est stocké : ni lead, ni coordonnée.
   "kv_namespaces": [

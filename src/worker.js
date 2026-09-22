@@ -123,6 +123,11 @@ async function demandeCode(request, env) {
   const dept = cp.slice(0, 2);
   const tel = String(d.telephone_e164 || '');
 
+  /* Interrupteur : sur autre chose que "on", aucun code n'est envoyé et la
+     page repart sur l'envoi direct du lead. Sert quand le fournisseur retient
+     les messages — un code jamais reçu bloque le visiteur pour de bon. */
+  if (env.VALIDATION_SMS !== 'on') return parle(503, { raison: 'desactive' });
+
   if (!/^\d{5}$/.test(cp) || !MOBILE.test(tel)) return vide(400);
   /* Hors périmètre : la page n'aurait pas dû appeler. On refuse plutôt que de
      répondre 204, pour qu'un défaut de câblage se voie. */
