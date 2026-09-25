@@ -914,7 +914,7 @@ section{position:relative}
     <p>Prix du kWh&nbsp;: Tarif Bleu EDF, option Base, TTC, hors abonnement, du 1<sup>er</sup> février 2020 au 1<sup>er</sup> août 2026.</p>
     <p>Mon Bilan Solaire est édité par LK12 INVEST, SAS, 254 rue Vendôme, 69003 Lyon, RCS Lyon 910 949 825. Les installations sont réalisées par EKO HABITATIONS, SAS, 33 quai Arloing, 69009 Lyon, RCS Lyon 911 505 741.</p>
     <nav aria-label="Informations légales"><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Politique de confidentialité</a><a href="mailto:lk12invest@gmail.com">Nous écrire</a></nav>
-    <p style="margin-top:18px">© 2026 Mon Bilan Solaire</p>
+    <p style="margin-top:18px">© <span id="annee">2026</span> Mon Bilan Solaire</p>
   </div>
 </footer>
 
@@ -923,6 +923,12 @@ section{position:relative}
 (function(){
   'use strict';
   var NB = ' ';
+  /* Le copyright du pied de page suit l'horloge du visiteur. C'est la seule
+     année de la page qu'on automatise : toutes les autres désignent un fait
+     daté — le tarif d'août 2026, la série du graphique, le décret du 11 août —
+     et les faire glisser les rendrait fausses. L'année en dur dans le balisage
+     sert de repli si le script ne tourne pas. */
+  try { document.getElementById('annee').textContent = new Date().getFullYear(); } catch(e){}
   var dl = window.dataLayer = window.dataLayer || [];
   function track(ev, data){ var o = {event: ev}; for (var k in data) o[k] = data[k]; dl.push(o); }
   var coarse = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
