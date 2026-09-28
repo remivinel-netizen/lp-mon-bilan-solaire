@@ -1418,7 +1418,12 @@ section{position:relative}
     var lib = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = renvoi ? 'Envoi…' : '<span class="spin" aria-hidden="true"></span>Envoi du code';
-    track('sms_code_demande', {renvoi: renvoi ? 'oui' : 'non', departement: state.departement});
+    /* Les valeurs poussées restent dans le modèle du dataLayer et se collent
+       aux événements suivants : un « raison » laissé par un refus réapparaîtrait
+       sur le contournement qui vient après, et GA4 attribuerait au visiteur un
+       motif qui n'est pas le sien. Chaque événement de cette famille déclare
+       donc toutes ses clés, à undefined quand elles ne s'appliquent pas. */
+    track('sms_code_demande', {renvoi: renvoi ? 'oui' : 'non', departement: state.departement, raison: undefined, statut: undefined});
 
     fetch('/api/sms/code', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -1440,7 +1445,7 @@ section{position:relative}
       }
       /* Panne du fournisseur, ou réponse imprévue : le lead passe quand même.
          Un SMS indisponible ne doit pas coûter un prospect. */
-      track('sms_code_indisponible', {statut: r.status});
+      track('sms_code_indisponible', {statut: r.status, departement: state.departement, renvoi: undefined, raison: undefined});
       if (renvoi) { note('q-code-note', 'L’envoi n’a pas abouti. Réessayez dans un instant.', true); setHeight(); return; }
       submit();
     }).catch(function(){
@@ -1464,13 +1469,13 @@ section{position:relative}
       btn.disabled = false; btn.innerHTML = lib;
       if (r.status === 204){
         clearTimeout(minuteurSecours);
-        track('sms_code_valide', {departement: state.departement});
+        track('sms_code_valide', {departement: state.departement, renvoi: undefined, raison: undefined, statut: undefined});
         submit();
         return;
       }
       return r.json().catch(function(){ return {}; }).then(function(j){
         bad(form.elements.code_sms, true);
-        track('sms_code_refuse', {raison: j.raison || String(r.status)});
+        track('sms_code_refuse', {raison: j.raison || String(r.status), departement: state.departement, renvoi: undefined, statut: undefined});
         if (r.status === 410 && j.raison === 'essais') note('q-code-note', 'Trop d’essais sur ce code. Demandez-en un nouveau.', true);
         else if (r.status === 410) note('q-code-note', 'Ce code a expiré. Demandez-en un nouveau.', true);
         else if (typeof j.restants === 'number') note('q-code-note', 'Code incorrect. Il vous reste ' + j.restants + (j.restants > 1 ? ' essais.' : ' essai.'), true);
@@ -1490,7 +1495,7 @@ section{position:relative}
      visiteurs. */
   document.getElementById('q-code-passer').addEventListener('click', function(){
     clearTimeout(minuteurSecours);
-    track('sms_code_contourne', {departement: state.departement});
+    track('sms_code_contourne', {departement: state.departement, renvoi: undefined, raison: undefined, statut: undefined});
     submit();
   });
   document.getElementById('q-code-modifier').addEventListener('click', function(){
