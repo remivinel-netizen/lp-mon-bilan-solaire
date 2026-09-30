@@ -1353,11 +1353,15 @@ section{position:relative}
   var ATTENTE_SECOURS = 90000;
   var minuteurSecours = null;
 
-  /* Un fixe ne reçoit pas de SMS : dans ce cas le lead part directement, comme
-     avant. Le trou est assumé — mieux vaut un numéro fixe non validé qu'un
-     prospect bloqué devant un code qui ne peut pas arriver. */
+  /* Validation par code coupée le 30 septembre 2026, sur décision. Le
+     mécanisme reste entier — écran du code, renvoi, sortie de secours,
+     endpoints du Worker — mais plus personne ne le déclenche : le lead part
+     directement après le consentement, comme avant sa mise en place.
+     Pour la rallumer, rendre à cette fonction son test du mobile :
+       return /^0[67]/.test(phoneDigits(val('telephone')));
+     et vérifier que VALIDATION_SMS vaut 'on' côté Worker. */
   function codeRequis(){
-    return /^0[67]/.test(phoneDigits(val('telephone')));
+    return false;
   }
 
   function telE164(){ return '+33' + phoneDigits(val('telephone')).slice(1); }
