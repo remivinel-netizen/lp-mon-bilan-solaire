@@ -1595,14 +1595,37 @@ section{position:relative}
   });
 
   /* ---------- bouton flottant mobile ---------- */
+  /* Il se pose en bas de l'écran, exactement là où le bandeau de consentement
+     s'affiche tant qu'il n'a pas reçu de réponse. Mesuré sur la production :
+     bouton à y=774-832, bandeau à partir de y=550 — le doigt touchait le
+     bandeau, jamais le bouton. Clarity a relevé 25 clics morts sur « Vérifier
+     mes aides » pour 17 sessions : les visiteurs tapaient, rien ne se passait,
+     ils recommençaient. On le retire donc de l'écran tant que le bandeau est
+     ouvert, plutôt que de laisser une cible fantôme. */
   var sticky = document.getElementById('sticky');
+  var quizHorsVue = false;
+  function majSticky(){
+    sticky.classList.toggle('is-on', quizHorsVue && !sent && hauteurBandeau() === 0);
+  }
   if ('IntersectionObserver' in window){
     new IntersectionObserver(function(entries){
       var en = entries[0];
-      var above = en.boundingClientRect.bottom < 0;
-      sticky.classList.toggle('is-on', !en.isIntersecting && above && !sent);
+      quizHorsVue = !en.isIntersecting && en.boundingClientRect.bottom < 0;
+      majSticky();
     }, {threshold: 0}).observe(quiz);
   }
+  /* Le bandeau se referme aussi bien sur un refus que sur une acceptation :
+     on réagit à tout choix, pas seulement à l'accord publicitaire. */
+  (function(){
+    function abonne(){ window.IwlCmp.on('consent', function(){ setTimeout(majSticky, 80); }); }
+    try {
+      if (window.IwlCmp && window.IwlCmp.on) return abonne();
+      var n = 0, t = setInterval(function(){
+        if (window.IwlCmp && window.IwlCmp.on) { clearInterval(t); abonne(); }
+        else if (++n > 40) clearInterval(t);
+      }, 250);
+    } catch(e){}
+  })();
 
   /* ---------- galerie ---------- */
   var gal = document.getElementById('gal');
