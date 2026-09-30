@@ -198,11 +198,6 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .ast{color:inherit;text-decoration:none}
 .hero__lead{font-size:16.5px;line-height:1.5;color:rgba(255,255,255,.94);max-width:34em;text-shadow:0 1px 14px rgba(0,0,0,.3)}
 .hero__lead b{color:#fff;font-weight:700}
-.hero__pill{display:inline-flex;align-items:center;gap:11px;margin:10px 0 0;padding:7px 17px 7px 8px;border-radius:999px;background:rgba(255,255,255,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 0 0 1px rgba(255,255,255,.22)}
-.hero__pill .b{width:32px;height:32px;border-radius:10px;background:var(--ambre);color:#2A2419;display:grid;place-items:center;flex:0 0 auto}
-.hero__pill .b .ico{width:18px;height:18px}
-.hero__pill strong{font-size:16px;font-weight:700}
-.hero__pill .t{font-size:16px;color:rgba(255,255,255,.94)}
 .hero__notes{display:none;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 0}
 .hand{display:flex;align-items:flex-start;gap:8px;margin:0;color:var(--orange);font-family:'Caveat',var(--font);font-weight:600;font-size:clamp(20px,5vw,26px);line-height:1.15;transform:rotate(-1.5deg);transform-origin:left center;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .hand svg{width:34px;height:34px;flex:0 0 auto;color:var(--orange);margin-top:-2px}
@@ -604,7 +599,6 @@ section{position:relative}
     <div class="hero__copy">
       <h1 class="ent e2">Jusqu'à <em>90&nbsp;%</em> d'économie sur votre facture d'électricité<a class="ast" href="#notes">*</a></h1>
       <p class="hero__lead ent e3">On calcule les aides qui s'appliquent chez vous, et ce qu'elles changent sur votre facture.</p>
-      <p class="hero__pill ent e4"><span class="b"><svg class="ico"><use href="#i-euro"/></svg></span><strong>Sans apport</strong><span class="t">mensualité fixe</span></p>
       <div class="hero__notes ent e5">
         <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -678,22 +672,20 @@ section{position:relative}
 
           <fieldset class="step" data-step="identite">
             <legend class="step__q" tabindex="-1">À qui envoie-t-on la simulation&nbsp;?</legend>
-            <p class="step__hint"><b>Les aides qui s'appliquent chez vous, l'économie estimée sur votre facture, la mensualité.</b> Par email, à votre nom.</p>
+            <p class="step__hint"><b>Les aides qui s'appliquent chez vous, l'économie estimée sur votre facture, la mensualité.</b> Par email, à votre nom — et votre numéro pour vérifier votre toit avant de calculer.</p>
             <div class="group">
               <div class="field"><label for="f-prenom">Prénom</label><input id="f-prenom" name="prenom" type="text" autocomplete="given-name" autocapitalize="words" placeholder="Camille"></div>
               <div class="field"><label for="f-nom">Nom</label><input id="f-nom" name="nom" type="text" autocomplete="family-name" autocapitalize="words" placeholder="Martin"></div>
               <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="camille.martin@gmail.com"></div>
+              <div class="field"><label for="f-tel">Téléphone</label><div class="tel"><span class="cc">+33</span><input id="f-tel" name="telephone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="06 12 34 56 78" maxlength="14"></div></div>
             </div>
             <p class="note" id="q-id-note" aria-live="polite"></p>
             <div class="step__actions"><button type="button" class="btn btn--ink" data-next>Continuer</button></div>
           </fieldset>
 
           <fieldset class="step" data-step="telephone">
-            <legend class="step__q" tabindex="-1">Votre numéro, pour préparer la simulation avec vous</legend>
-            <p class="step__hint">Un appel de quelques minutes pour vérifier votre consommation et votre toit, avant de faire les calculs.</p>
-            <div class="group" id="q-tel-group">
-              <div class="field"><label for="f-tel">Téléphone</label><div class="tel"><span class="cc">+33</span><input id="f-tel" name="telephone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="06 12 34 56 78" maxlength="14"></div></div>
-            </div>
+            <legend class="step__q" tabindex="-1">On vous appelle avant de calculer</legend>
+            <p class="step__hint">Quelques minutes pour vérifier votre consommation et votre toit, avant de faire les calculs.</p>
             <!-- Validation du numéro par code SMS. Révélée seulement dans les
                  départements concernés, et seulement pour un mobile : on ne
                  peut pas envoyer de SMS à un fixe. -->
@@ -1112,6 +1104,8 @@ section{position:relative}
       });
       var mailGood = MAIL_RE.test(val('email')); bad(form.elements.email, !mailGood);
       if (!mailGood && ok) { msg = 'Cette adresse email semble incomplète.'; ok = false; }
+      var telGood = phoneOk(phoneDigits(val('telephone'))); bad(form.elements.telephone, !telGood);
+      if (!telGood && ok) { msg = 'Ce numéro ne semble pas valide. Il doit compter 10 chiffres.'; ok = false; }
       if (!ok) note('q-id-note', msg, true);
       return ok;
     }
@@ -1123,8 +1117,6 @@ section{position:relative}
         if (saisi.length !== 6) { bad(form.elements.code_sms, true); note('q-code-note', 'Saisissez les 6 chiffres reçus par SMS.', true); return false; }
         return true;
       }
-      var d = phoneDigits(val('telephone'));
-      if (!phoneOk(d)) { bad(form.elements.telephone, true); note('q-tel-note', 'Ce numéro ne semble pas valide. Il doit compter 10 chiffres.', true); return false; }
       if (!form.elements.consentement_appel.checked) { $('#q-consent-tel-box').classList.add('is-bad'); note('q-tel-note', 'Autorisez le rappel téléphonique pour qu’on puisse vous joindre.', true); return false; }
       return true;
     }
@@ -1393,7 +1385,6 @@ section{position:relative}
       document.getElementById('q-code-secours').hidden = true;
       minuteurSecours = setTimeout(montreSecours, ATTENTE_SECOURS);
     }
-    document.getElementById('q-tel-group').hidden = on;
     document.getElementById('q-mention-text').hidden = on;
     document.getElementById('q-consent-tel-box').hidden = on;
 
@@ -1499,8 +1490,13 @@ section{position:relative}
     track('sms_code_contourne', {departement: state.departement, renvoi: undefined, raison: undefined, statut: undefined});
     submit();
   });
+  /* Le champ vit désormais à l'étape des coordonnées : corriger le numéro,
+     c'est y revenir, pas le révéler sur place. */
   document.getElementById('q-code-modifier').addEventListener('click', function(){
     montreCode(false);
+    var iId = cur;
+    steps.forEach(function(st, i){ if (st.getAttribute('data-step') === 'identite') iId = i; });
+    go(iId, -1);
     try { form.elements.telephone.focus({preventScroll: true}); } catch(e){}
   });
 
