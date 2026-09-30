@@ -13,10 +13,6 @@
  * Stockage : espace KV « mbs-codes-sms », lié sous le nom CODES.
  */
 
-/* Départements où le numéro est validé par code. Recalculés côté serveur à
-   partir du code postal : la page ne décide pas qui passe par la validation. */
-const DEPTS = ['01', '38', '42', '69'];
-
 const MOBILE = /^\+33[67]\d{8}$/;
 
 const VALIDITE = 600;        /* 10 minutes de vie pour un code */
@@ -129,10 +125,6 @@ async function demandeCode(request, env) {
   if (env.VALIDATION_SMS !== 'on') return parle(503, { raison: 'desactive' });
 
   if (!/^\d{5}$/.test(cp) || !MOBILE.test(tel)) return vide(400);
-  /* Hors périmètre : la page n'aurait pas dû appeler. On refuse plutôt que de
-     répondre 204, pour qu'un défaut de câblage se voie. */
-  if (DEPTS.indexOf(dept) === -1) return vide(400);
-
   if (await compteEnvois(env, tel) > ENVOIS_MAX) return parle(429, { raison: 'trop_d_envois' });
 
   const code = genereCode();

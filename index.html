@@ -1348,10 +1348,11 @@ section{position:relative}
   }
 
   /* ---------- validation du numéro par code SMS ---------- */
-  /* Départements concernés. La liste est répétée dans le Worker, qui recalcule
-     le département depuis le code postal : c'est lui qui décide, la page ne
-     fait que demander. */
-  var SMS_DEPTS = ['01', '38', '42', '69'];
+  /* Tous les départements passent par la validation. La liste restreinte qui
+     existait ici ne couvrait que 01, 38, 42 et 69 : sur les neuf premiers leads
+     réels — 34, 73, 30, 39, 30, 13, 63, 25, 39 — pas un seul n'y est passé,
+     pendant que cinq d'entre eux se révélaient injoignables. Plus de liste,
+     donc plus de liste à garder en phase avec la zone couverte. */
   var LIBELLE_ENVOI = null;
   /* Délai avant d'offrir la sortie de secours. Un SMS arrive en une
      quinzaine de secondes : passé une minute et demie, c'est qu'il ne
@@ -1363,8 +1364,7 @@ section{position:relative}
      avant. Le trou est assumé — mieux vaut un numéro fixe non validé qu'un
      prospect bloqué devant un code qui ne peut pas arriver. */
   function codeRequis(){
-    return SMS_DEPTS.indexOf(String(state.departement)) > -1
-        && /^0[67]/.test(phoneDigits(val('telephone')));
+    return /^0[67]/.test(phoneDigits(val('telephone')));
   }
 
   function telE164(){ return '+33' + phoneDigits(val('telephone')).slice(1); }
