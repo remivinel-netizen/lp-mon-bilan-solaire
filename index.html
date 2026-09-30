@@ -685,7 +685,7 @@ section{position:relative}
 
           <fieldset class="step" data-step="telephone">
             <legend class="step__q" tabindex="-1">Votre simulation personnalisée arrive par email</legend>
-            <p class="step__hint">Calculée sur votre toit, votre consommation et votre commune. Un conseiller vous appelle d'abord quelques minutes pour vérifier deux ou trois points, sinon le chiffre ne serait qu'une moyenne.</p>
+            <p class="step__hint">Calculée sur votre toit, votre consommation et votre commune.</p>
             <!-- Validation du numéro par code SMS. Révélée seulement dans les
                  départements concernés, et seulement pour un mobile : on ne
                  peut pas envoyer de SMS à un fixe. -->
@@ -705,7 +705,6 @@ section{position:relative}
                 <button type="button" class="lien" id="q-code-passer">Je n'ai rien reçu, envoyer ma demande quand même</button>
               </p>
             </div>
-            <p class="rgpd-intro" id="q-mention-text">Vos données sont recueillies par LK12 INVEST pour répondre à votre demande d'estimation, et transmises au seul installateur EKO HABITATIONS. Détail dans la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
             <label class="consent" id="q-consent-tel-box">
               <span class="switch"><input type="checkbox" id="f-consent-tel" name="consentement_appel" value="oui"><span></span></span>
               <p id="q-consent-tel-text">J'accepte que mes données soient utilisées pour l'établissement de ma simulation personnalisée et que je sois contacté par un conseiller.</p>
@@ -1312,7 +1311,7 @@ section{position:relative}
       consentement_appel: 'oui',
       consentement_appel_texte: document.getElementById('q-consent-tel-text').textContent.replace(/\s+/g, ' ').trim(),
       consentement_horodatage: state.consentAt || now,
-      mention_donnees_texte: document.getElementById('q-mention-text').textContent.replace(/\s+/g, ' ').trim(),
+      mention_donnees_texte: '',
       date_envoi: now,
       page_url: location.href,
       referrer: document.referrer,
@@ -1389,7 +1388,6 @@ section{position:relative}
       document.getElementById('q-code-secours').hidden = true;
       minuteurSecours = setTimeout(montreSecours, ATTENTE_SECOURS);
     }
-    document.getElementById('q-mention-text').hidden = on;
     document.getElementById('q-consent-tel-box').hidden = on;
 
     var btn = document.getElementById('q-send');
