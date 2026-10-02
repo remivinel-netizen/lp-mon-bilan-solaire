@@ -193,6 +193,9 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,22,20,.78) 0%,rgba(24,22,20,.70) 55%,rgba(24,22,20,.48) 100%)}
 .hero__inner{position:relative;display:grid;gap:22px;padding-top:26px}
 .hero__copy{color:#fff;min-width:0}
+.hero__eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.88);margin:0 0 6px;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+.hero__eyebrow b{color:var(--ambre)}
+.hero__eyebrow a{text-decoration:none;color:inherit}
 .hero h1{font-size:clamp(31px,8.2vw,62px);margin:8px 0 8px;text-wrap:balance;letter-spacing:-.028em}
 .hero h1 em{font-style:normal;color:var(--orange)}
 .ast{color:inherit;text-decoration:none}
@@ -218,8 +221,6 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .segs i{flex:1;height:5px;border-radius:5px;background:var(--line);overflow:hidden;position:relative}
 .segs i::after{content:"";position:absolute;inset:0;background:var(--corail);border-radius:5px;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
 .segs i.on::after{transform:scaleX(1)}
-.unique{margin-top:14px;font-size:15px;line-height:1.45;font-weight:700;color:var(--orange-fonce)}
-.unique b{display:block}
 .quiz__count{font-size:15px;font-weight:700;color:var(--ink-3);text-align:right;white-space:nowrap}
 .quiz__viewport{position:relative;transition:height .45s var(--ease)}
 .step{border:0;margin:0;padding:0;min-width:0;display:none}
@@ -608,6 +609,7 @@ section{position:relative}
   </div>
   <div class="wrap hero__inner">
     <div class="hero__copy">
+      <p class="hero__eyebrow ent e2">Jusqu'à <b>90&nbsp;%</b> d'économie sur votre facture d'électricité<a href="#notes" aria-label="Voir les conditions">*</a></p>
       <h1 class="ent e2">Panneaux solaires&nbsp;: à quelles <em>aides 2026</em> avez-vous droit&nbsp;?</h1>
       <p class="hero__lead ent e3">Les aides ne sont pas les mêmes pour tout le monde. Dites-nous votre toit, votre facture et votre commune&nbsp;: vous recevez votre montant par email. Gratuit, sans engagement.</p>
       <div class="hero__notes ent e5">
@@ -698,7 +700,6 @@ section{position:relative}
           <fieldset class="step" data-step="telephone">
             <legend class="step__q" tabindex="-1">Votre simulation personnalisée arrive par email</legend>
             <p class="step__hint">Calculée sur votre toit, votre consommation et votre commune.</p>
-            <p class="unique"><b>Une demande, un seul installateur.</b> Ailleurs, le même formulaire part souvent chez plusieurs entreprises d'un coup. Ici, vos coordonnées ne vont qu'à l'installateur qui réalise votre bilan, et nulle part ailleurs.</p>
             <!-- Validation du numéro par code SMS. Révélée seulement dans les
                  départements concernés, et seulement pour un mobile : on ne
                  peut pas envoyer de SMS à un fixe. -->
@@ -723,7 +724,7 @@ section{position:relative}
               <p id="q-consent-tel-text">J'accepte que mes données soient utilisées pour l'établissement de ma simulation personnalisée.</p>
             </label>
             <p class="note" id="q-tel-note" aria-live="polite"></p>
-            <div class="step__actions"><button type="submit" class="btn btn--corail" id="q-send">Recevoir mes aides par email</button></div>
+            <div class="step__actions"><button type="submit" class="btn btn--corail" id="q-send">Découvrir mes aides</button></div>
           </fieldset>
 
         </div>
