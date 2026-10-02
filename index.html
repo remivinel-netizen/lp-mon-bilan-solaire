@@ -537,6 +537,17 @@ section{position:relative}
   .sticky{display:none}
   .foot{padding:56px 0 56px}
 }
+/* Sur téléphone, le bandeau CMP occupe les 294 px du bas de l'écran. Chaque
+   pixel gagné au-dessus rapproche la première option du formulaire de la zone
+   cliquable. Resserrage limité aux écrans < 640 px : au-delà, .hero__inner est
+   de toute façon redéfini par le palier 1024. */
+@media (max-width:639px){
+  .hero__inner{gap:14px;padding-top:14px}
+  .hero h1{margin:2px 0 4px}
+  .quiz{padding-top:14px}
+  .quiz__titre{margin-top:0}
+  .quiz__bar{margin-bottom:10px}
+}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .btn--corail::after{display:none}
