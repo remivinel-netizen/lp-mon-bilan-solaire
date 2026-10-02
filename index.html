@@ -218,7 +218,7 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .segs i{flex:1;height:5px;border-radius:5px;background:var(--line);overflow:hidden;position:relative}
 .segs i::after{content:"";position:absolute;inset:0;background:var(--corail);border-radius:5px;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
 .segs i.on::after{transform:scaleX(1)}
-.quiz__count{font-size:15px;font-weight:700;color:var(--ink-3);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
+.quiz__count{font-size:15px;font-weight:700;color:var(--ink-3);text-align:right;white-space:nowrap}
 .quiz__viewport{position:relative;transition:height .45s var(--ease)}
 .step{border:0;margin:0;padding:0;min-width:0;display:none}
 .step.is-active{display:block;animation:inR .45s var(--ease) both}
@@ -610,7 +610,8 @@ section{position:relative}
       <div class="quiz__bar">
         <button type="button" class="qbtn" id="q-back" aria-label="Question précédente" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
         <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <span class="quiz__count" id="q-count" aria-live="polite">1/6</span>
+        <span class="quiz__count" id="q-count">≈ 1 min</span>
+        <span class="sr" id="q-progres" aria-live="polite">Étape 1 sur 7</span>
       </div>
 
       <form id="q-form" novalidate data-endpoint="https://hook.eu1.make.com/z77ikgtrv5tfv5n89hxc789uy3bi6tpq">
@@ -995,6 +996,7 @@ section{position:relative}
   var steps = Array.prototype.slice.call(form.querySelectorAll('.step'));
   var segs = document.querySelectorAll('#q-segs i');
   var count = document.getElementById('q-count');
+  var progres = document.getElementById('q-progres');
   var back = document.getElementById('q-back');
   var done = document.getElementById('q-done');
   var total = steps.length, cur = 0, timer = null, arrowNav = false, started = false, sent = false;
@@ -1034,7 +1036,7 @@ section{position:relative}
       segs[i].hidden = i >= a.length;
       segs[i].classList.toggle('on', i < rang);
     }
-    count.textContent = rang + '/' + a.length;
+    progres.textContent = 'Étape ' + rang + ' sur ' + a.length;
     back.hidden = precedent(cur) < 0;
   }
 
