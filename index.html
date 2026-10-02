@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Quelles aides pour vos panneaux solaires ? | Mon Bilan Solaire</title>
-<meta name="description" content="Panneaux solaires de marque française et batterie de stockage, sans apport. Jusqu'à 90 % d'économie sur votre facture d'électricité. Simulation gratuite envoyée par email.">
+<meta name="description" content="Vérifiez en une minute si votre toit est éligible aux aides 2026 pour le solaire. Aides applicables, économie estimée et mensualité envoyées par email. Gratuit, sans engagement.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F6F4EC">
 <meta property="og:title" content="Mon Bilan Solaire">
@@ -189,8 +189,8 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .hero{position:relative;padding-bottom:28px}
 .hero__media{position:absolute;left:0;right:0;top:0;height:520px;overflow:hidden;border-radius:0 0 var(--r-lg) var(--r-lg)}
 .hero__media picture{display:contents}
-.hero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 60%}
-.hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,22,20,.66) 0%,rgba(24,22,20,.56) 55%,rgba(24,22,20,.3) 100%)}
+.hero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;filter:saturate(.82)}
+.hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,22,20,.78) 0%,rgba(24,22,20,.70) 55%,rgba(24,22,20,.48) 100%)}
 .hero__inner{position:relative;display:grid;gap:22px;padding-top:26px}
 .hero__copy{color:#fff;min-width:0}
 .hero h1{font-size:clamp(31px,8.2vw,62px);margin:8px 0 8px;text-wrap:balance;letter-spacing:-.028em}
@@ -206,8 +206,7 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
 .sticker i{display:block;font-style:normal;font-size:15px;font-weight:700;line-height:1.15;margin-top:2px}
 
 /* ---------- quiz card (iOS feel) ---------- */
-.quiz{position:relative;background:rgba(255,255,255,.97);border-radius:30px;box-shadow:var(--shadow-card);padding:18px 18px 16px;scroll-margin-top:12px}
-@supports (backdrop-filter:blur(20px)){.quiz{background:rgba(255,255,255,.9);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4)}}
+.quiz{position:relative;background:#fff;border:2px solid rgba(242,92,5,.38);border-radius:30px;box-shadow:var(--shadow-card);padding:18px 18px 16px;scroll-margin-top:12px}
 .quiz__titre{margin:2px 0 10px;font-size:clamp(21px,4.6vw,25px);line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
 .quiz__titre em{font-style:normal;color:var(--orange-fonce)}
 .quiz__bar{display:flex;align-items:center;gap:12px;margin-bottom:12px}
@@ -503,7 +502,7 @@ section{position:relative}
   .top{padding:0 16px}
   .top .wrap{padding-left:56px}
   .hero__media{height:auto;bottom:34px;left:16px;right:16px;border-radius:var(--r-lg)}
-  .hero__media::after{background:linear-gradient(95deg,rgba(24,22,20,.8) 0%,rgba(24,22,20,.62) 45%,rgba(24,22,20,.12) 78%)}
+  .hero__media::after{background:linear-gradient(95deg,rgba(24,22,20,.88) 0%,rgba(24,22,20,.74) 45%,rgba(24,22,20,.22) 78%)}
   .hero__inner{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:56px;align-items:center;padding:64px 40px 64px 56px;min-height:680px}
   .hero__lead{font-size:20px}
   .sticker{width:118px;height:118px}
@@ -596,8 +595,8 @@ section{position:relative}
   </div>
   <div class="wrap hero__inner">
     <div class="hero__copy">
-      <h1 class="ent e2">Jusqu'à <em>90&nbsp;%</em> d'économie sur votre facture d'électricité<a class="ast" href="#notes">*</a></h1>
-      <p class="hero__lead ent e3">On calcule les aides qui s'appliquent chez vous, et ce qu'elles changent sur votre facture.</p>
+      <h1 class="ent e2">Votre toit est-il éligible aux <em>aides 2026</em>&nbsp;?</h1>
+      <p class="hero__lead ent e3">Une minute pour savoir. Vous recevez les aides applicables, l'économie estimée et la mensualité par email. Gratuit, sans engagement.</p>
       <div class="hero__notes ent e5">
         <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -607,7 +606,7 @@ section{position:relative}
     </div>
 
     <div class="quiz ent e6" id="bilan">
-      <h2 class="quiz__titre">Quelles <em>aides</em> pour vos panneaux solaires&nbsp;?</h2>
+      <h2 class="quiz__titre">Vérifions votre <em>éligibilité</em></h2>
       <div class="quiz__bar">
         <button type="button" class="qbtn" id="q-back" aria-label="Question précédente" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
         <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
