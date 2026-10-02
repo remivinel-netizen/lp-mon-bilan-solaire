@@ -709,7 +709,7 @@ section{position:relative}
             </div>
             <label class="consent" id="q-consent-tel-box">
               <span class="switch"><input type="checkbox" id="f-consent-tel" name="consentement_appel" value="oui"><span></span></span>
-              <p id="q-consent-tel-text">J'accepte que mes données soient utilisées pour l'établissement de ma simulation personnalisée.</p>
+              <p id="q-consent-tel-text">J'accepte que mes données soient utilisées pour l'établissement de ma simulation personnalisée et que je sois contacté par EKO HABITATIONS.</p>
             </label>
             <p class="note" id="q-tel-note" aria-live="polite"></p>
             <div class="step__actions"><button type="submit" class="btn btn--corail" id="q-send">Découvrir mes aides</button></div>
@@ -1118,7 +1118,7 @@ section{position:relative}
         if (saisi.length !== 6) { bad(form.elements.code_sms, true); note('q-code-note', 'Saisissez les 6 chiffres reçus par SMS.', true); return false; }
         return true;
       }
-      if (!form.elements.consentement_appel.checked) { $('#q-consent-tel-box').classList.add('is-bad'); note('q-tel-note', 'Cochez cette case pour recevoir votre simulation.', true); return false; }
+      if (!form.elements.consentement_appel.checked) { $('#q-consent-tel-box').classList.add('is-bad'); note('q-tel-note', 'Autorisez le contact pour qu’on puisse vous joindre.', true); return false; }
       return true;
     }
     return true;
