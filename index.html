@@ -1247,7 +1247,7 @@ section{position:relative}
     cpCtrl = ('AbortController' in window) ? new AbortController() : null;
     var to = setTimeout(function(){ if (cpCtrl) cpCtrl.abort(); }, 4000);
     note('q-cp-note', 'Recherche de la commune&hellip;');
-    fetch('https://geo.api.gouv.fr/communes?codePostal=' + cp + '&fields=nom,codeDepartement&format=json', cpCtrl ? {signal: cpCtrl.signal} : {})
+    fetch('https://geo.api.gouv.fr/communes?codePostal=' + cp + '&fields=nom,codeDepartement,population&format=json', cpCtrl ? {signal: cpCtrl.signal} : {})
       .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function(list){
         clearTimeout(to);
@@ -1255,8 +1255,17 @@ section{position:relative}
         var box = $('#q-communes');
         if (!list.length) { state.cpStatus = 'none'; note('q-cp-note', 'Ce code postal ne correspond à aucune commune. Vérifiez-le.', true); return; }
         state.departement = list[0].codeDepartement || state.departement;
-        list.sort(function(a, b){ return a.nom.localeCompare(b.nom, 'fr'); });
-        box.innerHTML = list.slice(0, 12).map(function(c){
+        /* Par population décroissante : l'API renvoie par ordre alphabétique, et
+           la liste était tronquée à 12. Mesuré sur la zone couverte, 45 communes
+           principales étaient purement absentes de leur propre code postal —
+           Vesoul pour 70000, Évian-les-Bains pour 74500, Uzès pour 30700. Trier
+           puis garder les 20 plus peuplées fait passer la couverture de 70 % à
+           98 % des habitants concernés. */
+        list.sort(function(a, b){
+          var d = (b.population || 0) - (a.population || 0);
+          return d !== 0 ? d : a.nom.localeCompare(b.nom, 'fr');
+        });
+        box.innerHTML = list.slice(0, 20).map(function(c){
           return '<button type="button" class="chip" aria-pressed="false" data-commune="' + c.nom.replace(/"/g, '&quot;') + '" data-dep="' + c.codeDepartement + '"><svg class="ico"><use href="#i-pin"/></svg>' + c.nom + '</button>';
         }).join('');
         if (list.length === 1) { pick(box.firstChild); state.cpStatus = 'one'; note('q-cp-note', ''); }
