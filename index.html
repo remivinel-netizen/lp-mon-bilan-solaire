@@ -1260,7 +1260,7 @@ section{position:relative}
           return '<button type="button" class="chip" aria-pressed="false" data-commune="' + c.nom.replace(/"/g, '&quot;') + '" data-dep="' + c.codeDepartement + '"><svg class="ico"><use href="#i-pin"/></svg>' + c.nom + '</button>';
         }).join('');
         if (list.length === 1) { pick(box.firstChild); state.cpStatus = 'one'; note('q-cp-note', ''); }
-        else { state.cpStatus = 'many'; note('q-cp-note', 'Touchez votre commune.'); }
+        else { state.cpStatus = 'many'; note('q-cp-note', 'Touchez votre commune.'); setTimeout(amenerCommunes, 60); }
       })
       .catch(function(){ clearTimeout(to); if (val('code_postal') === cp) { state.cpStatus = 'error'; note('q-cp-note', ''); } });
   }
@@ -1271,6 +1271,7 @@ section{position:relative}
     state.commune = chip.getAttribute('data-commune');
     state.departement = chip.getAttribute('data-dep') || state.departement;
     note('q-cp-note', '');
+    setTimeout(amenerAction, 60);
   }
   document.getElementById('q-communes').addEventListener('click', function(e){
     var c = e.target.closest && e.target.closest('.chip'); if (c) pick(c);
@@ -1577,6 +1578,32 @@ section{position:relative}
      la page défilait, et rien ne paraissait bouger : 25 clics morts relevés sur
      ce bouton en une semaine. On vise donc la question elle-même, placée dans
      le quart supérieur de la hauteur réellement visible. */
+  /* La liste des communes apparaît sans changement d'étape, donc sans
+     défilement : elle se dessine sous le bandeau CMP, qui est collé au bas de
+     l'écran. Mesuré sur iPhone, les puces sortaient à y 595 pour un bandeau
+     occupant 550 à 844 — aucune n'était touchable. On remonte la liste. */
+  function degager(el){
+    if (!el) return;
+    var utile = Math.max(240, innerHeight - hauteurBandeau());
+    var r = el.getBoundingClientRect();
+    /* on amène le bas de la cible juste au-dessus du bandeau, sans jamais faire
+       sortir son sommet par le haut : une liste de douze communes est plus
+       haute que la zone utile. */
+    var delta = Math.min(r.bottom - (utile - 16), r.top - 96);
+    if (delta > 4) window.scrollTo({top: Math.round(window.scrollY + delta), behavior: 'smooth'});
+  }
+  function amenerCommunes(){
+    var box = document.getElementById('q-communes');
+    if (box && box.firstChild) degager(box);
+  }
+  /* Une fois la commune choisie, c'est le bouton qui doit sortir de sous le
+     bandeau : mesuré, il tombait à 651 pour un bandeau démarrant à 550, et le
+     clic n'avançait pas. */
+  function amenerAction(){
+    var st = steps[cur];
+    degager(st && st.querySelector('.step__actions'));
+  }
+
   function amenerQuestion(){
     var cible = sent ? document.getElementById('q-done-title')
                      : (steps[cur] && steps[cur].querySelector('.step__q'));
