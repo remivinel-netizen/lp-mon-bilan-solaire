@@ -1056,7 +1056,15 @@ section{position:relative}
     paint();
     setHeight();
     var r = quiz.getBoundingClientRect();
-    if (r.top < 0) quiz.scrollIntoView({behavior: 'smooth', block: 'start'});
+    /* La question suivante se dessinait sans que la page bouge : mesuré sur
+       iPhone, les réponses s'étalaient de 486 à 690 pour un bandeau CMP
+       démarrant à 550, et une seule était touchable — aucune sur un écran de
+       360 px. degager() ne défile que si c'est nécessaire, donc le desktop et
+       les étapes courtes ne bougent pas. Il tourne dans les deux cas : la
+       remontée de carte ne suffit pas, elle ne sait rien du bandeau. */
+    var remonte = r.top < 0;
+    if (remonte) quiz.scrollIntoView({behavior: 'smooth', block: 'start'});
+    setTimeout(function(){ degager(st); }, remonte ? 380 : 60);
     var input = st.querySelector('.field input');
     if (input && dir > 0 && !coarse) { try { input.focus({preventScroll: true}); } catch(e){} }
     else { try { st.querySelector('.step__q').focus({preventScroll: true}); } catch(e){} }
@@ -1611,7 +1619,13 @@ section{position:relative}
     /* on amène le bas de la cible juste au-dessus du bandeau, sans jamais faire
        sortir son sommet par le haut : une liste de douze communes est plus
        haute que la zone utile. */
-    var delta = Math.min(r.bottom - (utile - 16), r.top - 96);
+    /* La marge laissée au-dessus s'adapte : 96 px tant que la cible tient
+       largement, puis juste ce qu'il faut. Fixe à 96, l'étape identité — 490 px
+       pour 534 utiles — restait 29 px sous le bandeau et son bouton ne
+       répondait pas. Une cible plus haute que la zone colle en haut : mieux
+       vaut perdre son sommet que son bouton. */
+    var marge = Math.min(96, Math.max(8, (utile - 16) - r.height));
+    var delta = Math.min(r.bottom - (utile - 16), r.top - marge);
     if (delta > 4) window.scrollTo({top: Math.round(window.scrollY + delta), behavior: 'smooth'});
   }
   function amenerCommunes(){
