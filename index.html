@@ -1269,18 +1269,31 @@ section{position:relative}
           return '<button type="button" class="chip" aria-pressed="false" data-commune="' + c.nom.replace(/"/g, '&quot;') + '" data-dep="' + c.codeDepartement + '"><svg class="ico"><use href="#i-pin"/></svg>' + c.nom + '</button>';
         }).join('');
         if (list.length === 1) { pick(box.firstChild); state.cpStatus = 'one'; note('q-cp-note', ''); }
-        else { state.cpStatus = 'many'; note('q-cp-note', 'Touchez votre commune.'); setTimeout(amenerCommunes, 60); }
+        else {
+          state.cpStatus = 'many';
+          /* La plus peuplée est retenue d'office pour que « Continuer » soit
+             immédiatement actif. Elle est juste pour un visiteur sur deux :
+             le libellé doit donc rendre la correction évidente. */
+          pick(box.firstChild, true);
+          /* Le nom est repris dans le message : sur un code postal à vingt
+             communes, la puce retenue est hors écran une fois le bouton amené
+             en vue, et la présélection serait invisible. */
+          note('q-cp-note', 'Commune retenue : <b>' + state.commune + '</b>. Ce n\u2019est pas la vôtre ? Touchez la bonne.');
+          /* On vise le bouton, pas la liste : il est sous le bandeau sinon, et
+             c'est lui que la présélection sert à rendre immédiatement cliquable. */
+          setTimeout(amenerAction, 60);
+        }
       })
       .catch(function(){ clearTimeout(to); if (val('code_postal') === cp) { state.cpStatus = 'error'; note('q-cp-note', ''); } });
   }
-  function pick(chip){
+  function pick(chip, sansDefilement){
     var all = document.querySelectorAll('#q-communes .chip');
     for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', 'false');
     chip.setAttribute('aria-pressed', 'true');
     state.commune = chip.getAttribute('data-commune');
     state.departement = chip.getAttribute('data-dep') || state.departement;
     note('q-cp-note', '');
-    setTimeout(amenerAction, 60);
+    if (!sansDefilement) setTimeout(amenerAction, 60);
   }
   document.getElementById('q-communes').addEventListener('click', function(e){
     var c = e.target.closest && e.target.closest('.chip'); if (c) pick(c);
