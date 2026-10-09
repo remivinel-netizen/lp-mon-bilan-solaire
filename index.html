@@ -605,6 +605,58 @@ section{position:relative}
     <div class="hero__copy">
       <h1 class="ent e2">Panneaux solaires&nbsp;: à quelles <em>aides 2026</em> avez-vous droit&nbsp;?</h1>
       <p class="hero__lead ent e3"><span class="bloc"><span class="chiffre">Jusqu'à 90&nbsp;% d'économie</span> sur votre facture d'électricité<a href="#notes" aria-label="Voir les conditions">*</a>.</span><span class="bloc">Reste à savoir ce que l'État prend en charge chez vous. Quelques questions, et vous êtes fixé.</span><span class="bloc">Estimation gratuite et sans engagement.</span></p>
+      <script>
+      /* Accord du titre au mot-clé qui a déclenché l'annonce. utm_term est bien
+         présent dans les URL d'arrivée — vérifié dans GA4, 32 mots-clés
+         distincts sur 28 jours. Placé ici et non dans le <head> : l'exécution
+         précède le premier affichage, donc pas de clignotement, mais le <h1>
+         et le sous-titre existent déjà.
+         Le mot-clé n'est jamais recopié dans la page : on choisit seulement
+         parmi cinq libellés écrits à l'avance. */
+      (function(){
+        var V = {
+          prix: {
+            t: "Panneaux solaires&nbsp;: combien ça coûte, et <em>ce qu'il vous reste</em> à payer",
+            s: "Reste à savoir ce que l'État prend en charge, et ce qu'il vous reste à financer. Quelques questions, et vous êtes fixé."
+          },
+          installation: {
+            t: "Panneaux solaires&nbsp;: votre projet confié à un <em>installateur certifié RGE</em>",
+            s: "Reste à savoir ce que votre toit permet, et ce que l'État prend en charge. Quelques questions, et vous êtes fixé."
+          },
+          batterie: {
+            t: "Panneaux solaires et batterie&nbsp;: <em>combien stocker</em>, combien économiser&nbsp;?",
+            s: "Reste à savoir ce que votre toit produit, et ce que l'État prend en charge. Quelques questions, et vous êtes fixé."
+          },
+          general: {
+            t: "Panneaux solaires&nbsp;: <em>combien pouvez-vous économiser</em> chez vous&nbsp;?",
+            s: "Reste à savoir ce que ça donne chez vous, et ce que l'État prend en charge. Quelques questions, et vous êtes fixé."
+          }
+        };
+        var variante = 'aucune';
+        try {
+          var brut = new URLSearchParams(location.search).get('utm_term') || '';
+          if (brut) {
+            var t = brut.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            /* L'ordre compte : « prix installation photovoltaique » est une
+               intention de prix, pas d'installateur. */
+            variante = /prix|tarif|devis|cout|combien|budget/.test(t) ? 'prix'
+                     : /aide|subvention|prime/.test(t)               ? 'aides'
+                     : /install|poseur|artisan|entreprise|societe/.test(t) ? 'installation'
+                     : /batterie|stockage|autoconsommation/.test(t) ? 'batterie'
+                     : 'general';
+            var v = V[variante];
+            if (v) {
+              var h = document.querySelector('.hero__copy h1');
+              var b = document.querySelectorAll('.hero__lead .bloc')[1];
+              if (h) h.innerHTML = v.t;
+              if (b) b.textContent = v.s;
+            }
+          }
+        } catch(e){}
+        window.MBS_VARIANTE = variante;
+        (window.dataLayer = window.dataLayer || []).push({event: 'hero_variante', variante: variante});
+      })();
+      </script>
       <div class="hero__notes ent e5">
         <p class="hand">Une maison plus sobre,<br>des factures plus légères&nbsp;!
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M5 7c15 1.5 25.5 10 29.5 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M27 29.5l7.8 1.8-1.4-7.9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -926,7 +978,7 @@ section{position:relative}
      sert de repli si le script ne tourne pas. */
   try { document.getElementById('annee').textContent = new Date().getFullYear(); } catch(e){}
   var dl = window.dataLayer = window.dataLayer || [];
-  function track(ev, data){ var o = {event: ev}; for (var k in data) o[k] = data[k]; dl.push(o); }
+  function track(ev, data){ var o = {event: ev, variante: window.MBS_VARIANTE || 'aucune'}; for (var k in data) o[k] = data[k]; dl.push(o); }
   var coarse = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
 
   /* ---------- paramètres de campagne ---------- */
