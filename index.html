@@ -346,10 +346,6 @@ section{position:relative}
 
 /* proof strip */
 ".proof{padding:10px 0 34px}
-.avis{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:14px}
-.avis__txt{font-size:13.5px;line-height:1.4;color:var(--ink-3);max-width:30em;text-align:center}
-.avis__txt b{color:var(--ink-2)}
-.avis > div{width:100%;display:flex;justify-content:center}
 .proof ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .proof li:last-child{grid-column:1 / -1}
 .proof li{display:flex;gap:12px;align-items:center;background:#fff;border-radius:20px;padding:14px;box-shadow:0 0 0 1px var(--line)}
@@ -753,9 +749,6 @@ section{position:relative}
       <li><span class="b c-brume"><svg class="ico"><use href="#i-panel"/></svg></span><div><strong>Panneaux français</strong><span>garantis 30 ans</span></div></li>
       <li><span class="b c-ble"><svg class="ico"><use href="#i-clock"/></svg></span><div><strong>Pose en 1 jour</strong><span>contrôle Consuel</span></div></li>
     </ul>
-    <div class="avis" id="avis-eko" hidden>
-      <p class="avis__txt">Les avis clients d'<b>EKO HABITATIONS</b>, l'installateur qui réalise les bilans, vérifiés par&nbsp;:</p>
-    </div>
   </div>
 </section>
 
@@ -1978,27 +1971,21 @@ section{position:relative}
 <!-- Avis Vérifiés (abonnement EKO HABITATIONS). Sans cookie ni stockage local :
      vérifié, le script n'appelle ni document.cookie ni localStorage. -->
 <script defer charset="utf-8" src="https://widgets.rr.skeepers.io/generated/c63a8575-468d-04f4-c53f-6ca6f6b71815/27d35b21-6137-4b99-bb15-acfd17461e77.js"></script>
-<script>
-/* Skeepers accroche son badge à la fin du <body> en position:fixed, coin bas-droit.
-   C'est la zone du bouton flottant et du bandeau CMP : on le déplace dans la bande
-   de garanties et on neutralise son positionnement. */
-(function(){
-  var ID = '27d35b21-6137-4b99-bb15-acfd17461e77';
-  var cible = document.getElementById('avis-eko');
-  if (!cible) return;
-  var essais = 0;
-  var t = setInterval(function(){
-    var n = document.getElementById(ID);
-    if (n && n.querySelector('a')) {
-      var lien = n.querySelector('a');
-      ['position','top','right','bottom','left','zIndex','margin'].forEach(function(k){ lien.style[k] = ''; });
-      lien.style.position = 'static';
-      cible.appendChild(n);
-      cible.hidden = false;
-      clearInterval(t);
-    } else if (++essais > 60) { clearInterval(t); }
-  }, 120);
-})();
-</script>
+<style>
+/* Skeepers pose son badge en position:fixed dans le coin bas-droit, par un
+   style en ligne — d'où les !important. Le coin est déjà pris par le bouton
+   flottant : le badge se cale au-dessus de lui quand celui-ci est visible, et
+   reste sous lui dans l'ordre d'empilement. */
+a[class*="skeepers-widget-wrapper"]{
+  position:fixed!important;top:auto!important;left:auto!important;
+  right:10px!important;bottom:14px!important;z-index:15!important;
+  transform:scale(.74);transform-origin:100% 100%;
+}
+body:has(#sticky.is-on) a[class*="skeepers-widget-wrapper"]{bottom:80px!important}
+@media (min-width:1024px){
+  a[class*="skeepers-widget-wrapper"]{right:18px!important;bottom:18px!important;transform:scale(.9)}
+  body:has(#sticky.is-on) a[class*="skeepers-widget-wrapper"]{bottom:18px!important}
+}
+</style>
 </body>
 </html>
