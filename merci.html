@@ -56,8 +56,20 @@ ol li{display:grid;grid-template-columns:32px 1fr;gap:14px;align-items:start}
 .n{width:32px;height:32px;border-radius:50%;background:var(--creme);display:grid;place-items:center;font-weight:700;font-size:15px}
 ol b{display:block;font-size:17px}
 ol span{display:block;color:var(--ink-2);font-size:15.5px;line-height:1.45}
-.unique{margin-top:26px;font-size:15.5px;line-height:1.45;font-weight:700;color:var(--orange-fonce)}
-.unique b{display:block}
+.garde{margin-top:30px;padding:20px;border-radius:22px;background:var(--creme);border:1px solid rgba(178,60,0,.18)}
+.garde__oeil{margin:0 0 8px;font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--orange-fonce)}
+.garde__titre{margin:0 0 8px;font-size:20px;line-height:1.15;letter-spacing:-.02em;color:var(--orange-fonce)}
+.garde__lead{margin:0;font-size:15.5px;line-height:1.45;color:var(--ink)}
+.garde__suite{margin:16px 0 12px;font-size:14px;font-weight:700;color:var(--ink-2)}
+.garde__liste{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.garde__liste li{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start}
+.garde__liste svg{width:22px;height:22px;color:var(--orange-fonce);margin-top:1px}
+.garde__liste b{display:block;font-size:14.5px;line-height:1.25;margin-bottom:2px}
+.garde__liste span{display:block;font-size:13.5px;line-height:1.4;color:var(--ink-2)}
+@media (min-width:620px){
+  .garde{padding:24px}
+  .garde__liste{grid-template-columns:1fr 1fr;gap:18px 22px}
+}
 .pro{display:flex;align-items:center;gap:14px;margin-top:28px;padding:16px;border-radius:20px;background:var(--creme);text-decoration:none;color:inherit}
 .pro__logo{width:46px;height:46px;border-radius:14px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;letter-spacing:-.02em;flex:0 0 auto}
 .pro__txt{flex:1;font-size:15px;line-height:1.35;color:var(--ink-2)}
@@ -92,7 +104,18 @@ footer a{color:var(--ink-2)}
         <li><span class="n">3</span><div><b>Vous décidez</b><span>Si les chiffres vous conviennent, on organise la visite technique.</span></div></li>
       </ol>
 
-      <p class="unique"><b>Une demande, un seul installateur.</b> Ailleurs, le même formulaire part souvent chez plusieurs entreprises d'un coup. Ici, vos coordonnées ne vont qu'à l'installateur qui réalise votre bilan, et nulle part ailleurs.</p>
+      <section class="garde" aria-labelledby="garde-titre">
+        <p class="garde__oeil">Pour votre tranquillité</p>
+        <h2 class="garde__titre" id="garde-titre">Une demande, un seul installateur.</h2>
+        <p class="garde__lead">Ailleurs, le même formulaire part souvent chez plusieurs entreprises d'un coup. Ici, vos coordonnées ne vont qu'à l'installateur qui réalise votre bilan, et nulle part ailleurs.</p>
+        <p class="garde__suite">Déposer la même demande sur d'autres sites, c'est souvent&nbsp;:</p>
+        <ul class="garde__liste">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h3l2 5-2.2 1.1a9.5 9.5 0 0 0 5.1 5.1L15 12l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg><div><b>Des appels en série</b><span>Un seul formulaire peut être transmis à plusieurs installateurs, qui vous rappellent tous.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM15 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM5 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7.6 10.6l4.8-2.9M7.6 13.4l4.8 2.9"/></svg><div><b>Vos coordonnées qui circulent</b><span>Elles partent chez des sociétés que vous n'avez pas choisies, et sont parfois revendues.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM5.6 5.6l12.8 12.8"/></svg><div><b>Des appels non autorisés</b><span>Depuis le 11 août 2026, démarcher par téléphone sans votre accord préalable est interdit.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.5v5l3.5 2"/></svg><div><b>Un projet plus dur à suivre</b><span>Plusieurs interlocuteurs pour une seule installation, et des devis qui ne se comparent pas.</span></div></li>
+        </ul>
+      </section>
 
       <a class="pro" href="https://eko-habitations.fr/" target="_blank" rel="noopener">
         <span class="pro__logo">EKO</span>
