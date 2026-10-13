@@ -57,6 +57,20 @@ h1{font-size:clamp(28px,6vw,40px);line-height:1.06;letter-spacing:-.02em;margin:
 footer{padding:0 0 46px;font-size:15px;color:var(--ink-3)}
 footer a{color:var(--ink-2)}
 @media (min-width:640px){.carte{padding:38px 36px 40px}}
+
+/* Pied repris de la page d'accueil, pour que les trois pages de remerciement
+   portent les mêmes mentions — dont celle de France Rénov', obligatoire. */
+.foot .wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 16px}
+.renov{background:#fff;color:#1b1b35;border-radius:14px;padding:14px 16px;margin:0 0 20px;max-width:560px}
+.renov__txt{font-size:13.5px;line-height:1.45}
+.renov__txt a{font-weight:700;color:#000091;text-decoration:underline}
+.foot{background:var(--ink);color:rgba(255,255,255,.72);padding:44px 0 56px;font-size:15px;line-height:1.6}
+.foot img{height:34px;width:auto;margin-bottom:18px}
+.foot p + p{margin-top:10px}
+.foot .credit{color:#fff;font-weight:700;font-size:15px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.08)}
+.foot nav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px}
+.foot nav a{color:#fff}
+.foot nav a:focus-visible{outline:2px solid var(--ble);outline-offset:3px;border-radius:4px}
 </style>
 </head>
 <body>
@@ -88,11 +102,23 @@ footer a{color:var(--ink-2)}
     </div>
   </main>
 
-  <footer>
-    <p>Mon Bilan Solaire est édité par LK12 INVEST, SAS — 254 rue Vendôme, 69003 Lyon. Installations réalisées par EKO HABITATIONS.
-      <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></p>
-  </footer>
+  
 </div>
+<footer class="foot" id="notes">
+  <div class="wrap">
+    <img src="img/logo-blanc.svg" alt="Mon Bilan Solaire" width="162" height="34">
+    <aside class="renov" aria-label="Information du service public">
+      <p class="renov__txt">Avant de vous engager, le service public vous informe gratuitement pour préparer et sécuriser votre projet&nbsp;:<br>
+        <a href="https://france-renov.gouv.fr" target="_blank" rel="noopener">france-renov.gouv.fr</a></p>
+    </aside>
+    <p class="credit">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
+    <p>* Jusqu'à 90&nbsp;%&nbsp;: économie maximale estimée sur la facture d'électricité. L'économie réelle dépend de votre consommation et de vos habitudes, de l'orientation et de l'inclinaison du toit, de l'ensoleillement de votre commune, de la puissance installée et de la capacité de la batterie. Elle est calculée dans votre simulation personnalisée.</p>
+    <p>Prix du kWh&nbsp;: Tarif Bleu EDF, option Base, TTC, hors abonnement, du 1<sup>er</sup> février 2020 au 1<sup>er</sup> août 2026.</p>
+    <p>Mon Bilan Solaire est édité par LK12 INVEST, SAS, 254 rue Vendôme, 69003 Lyon, RCS Lyon 910 949 825. Les installations sont réalisées par EKO HABITATIONS, SAS, 33 quai Arloing, 69009 Lyon, RCS Lyon 911 505 741.</p>
+    <nav aria-label="Informations légales"><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Politique de confidentialité</a><a href="mailto:lk12invest@gmail.com">Nous écrire</a></nav>
+    <p style="margin-top:18px">© <span id="annee">2026</span> Mon Bilan Solaire</p>
+  </div>
+</footer>
 
 <script>
 /* Le questionnaire dépose la raison de l'arrêt, jamais de coordonnées : il
@@ -122,5 +148,6 @@ footer a{color:var(--ink-2)}
   try { sessionStorage.removeItem('mbs_non_eligible'); } catch(e){}
 })();
 </script>
+<script>try{document.getElementById('annee').textContent=new Date().getFullYear();}catch(e){}</script>
 </body>
 </html>
