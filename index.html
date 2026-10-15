@@ -284,7 +284,13 @@ body > header, main, .foot, .sticky{position:relative;z-index:1}
    applique à [hidden] : sans cette ligne, masquer le bloc n'a aucun effet. */
 .consent[hidden]{display:none}
 .consent + .consent{margin-top:10px}
-.consent{display:flex;gap:14px;align-items:flex-start;margin-top:12px;padding:14px 14px 14px 16px;border-radius:18px;background:var(--creme);cursor:pointer}
+.consent{display:flex;gap:14px;align-items:flex-start;margin-top:12px;padding:14px 14px 14px 16px;border-radius:18px;background:var(--creme);cursor:pointer;transition:box-shadow .25s ease}
+/* Décochée, la case porte le même contour orange que les réponses du
+   formulaire : elle se lit comme une action attendue et non comme un
+   élément neutre. Le contour disparaît une fois cochée. Exclu quand
+   .is-bad est posée, sinon l'orange masquerait le rouge d'erreur —
+   :has() est plus spécifique que .consent.is-bad. */
+.consent:has(input:not(:checked)):not(.is-bad){box-shadow:0 0 0 2px var(--orange) inset}
 .consent p{font-size:14px;line-height:1.45;color:var(--ink-2)}
 .consent a{color:var(--ink)}
 .switch{position:relative;flex:0 0 auto;width:51px;height:31px;margin-top:1px}
