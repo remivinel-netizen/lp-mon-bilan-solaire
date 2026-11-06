@@ -448,6 +448,20 @@ section{position:relative}
 
 /* faq */
 .faq{margin-top:30px;display:grid;gap:10px}
+.estim{background:var(--creme);border-radius:18px;padding:16px;margin:0 0 12px}
+.estim__l{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;font-size:15px;color:var(--ink-2)}
+.estim__l + .estim__l{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.estim__l b{font-size:17px;font-weight:700;color:var(--ink);white-space:nowrap}
+.estim__l--fort b{font-size:25px;letter-spacing:-.02em;color:var(--orange-fonce)}
+.estim__l--fort i{font-style:normal;font-variant-numeric:tabular-nums}
+.estim__l b a{color:inherit;text-decoration:none}
+.estim__tva{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2)}
+.estim__tva b{color:var(--ink)}
+.estim__src{margin:0 0 16px;font-size:14px}
+.estim__src summary{cursor:pointer;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
+.estim__src div{margin-top:10px;color:var(--ink-3);line-height:1.5}
+.estim__src p + p{margin-top:8px}
+.estim__src b{color:var(--ink-2)}
 .faq details{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px var(--line);transition:box-shadow .3s var(--ease)}
 .faq details[open]{box-shadow:0 0 0 1px var(--line-2),0 22px 40px -26px rgba(38,37,35,.45)}
 .faq summary .pm{background:var(--creme)!important}
@@ -685,7 +699,7 @@ section{position:relative}
     <div class="quiz ent e6" id="bilan">
       <div class="quiz__bar">
         <button type="button" class="qbtn" id="q-back" aria-label="Question précédente" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
-        <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="segs" id="q-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <span class="quiz__count" id="q-count">≈ 1 min</span>
         <span class="sr" id="q-progres" aria-live="polite">Étape 1 sur 7</span>
       </div>
@@ -716,10 +730,10 @@ section{position:relative}
             <legend class="step__q" tabindex="-1">Combien payez-vous d'électricité par mois&nbsp;?</legend>
             <p class="step__hint">Une estimation suffit. Votre dernier prélèvement vous donne l'ordre de grandeur.</p>
             <div class="opts">
-              <label class="opt"><input type="radio" name="facture" value="Moins de 100 €" data-an="jusqu'à 1&nbsp;200&nbsp;€ par an"><span class="opt__ico c-brume"><span class="bars" data-n="1"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Moins de 100&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
-              <label class="opt"><input type="radio" name="facture" value="Entre 100 et 200 €" data-an="entre 1&nbsp;200 et 2&nbsp;400&nbsp;€ par an"><span class="opt__ico c-ble"><span class="bars" data-n="2"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Entre 100 et 200&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
-              <label class="opt"><input type="radio" name="facture" value="Entre 200 et 300 €" data-an="entre 2&nbsp;400 et 3&nbsp;600&nbsp;€ par an"><span class="opt__ico c-ambre"><span class="bars" data-n="3"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Entre 200 et 300&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
-              <label class="opt"><input type="radio" name="facture" value="Plus de 300 €" data-an="plus de 3&nbsp;600&nbsp;€ par an"><span class="opt__ico c-corail"><span class="bars" data-n="4"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Plus de 300&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="opt"><input type="radio" name="facture" value="Moins de 100 €" data-eco="1080" data-ecopre="jusqu'à" data-an="jusqu'à 1&nbsp;200&nbsp;€ par an"><span class="opt__ico c-brume"><span class="bars" data-n="1"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Moins de 100&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="opt"><input type="radio" name="facture" value="Entre 100 et 200 €" data-eco="2160" data-ecopre="jusqu'à" data-an="entre 1&nbsp;200 et 2&nbsp;400&nbsp;€ par an"><span class="opt__ico c-ble"><span class="bars" data-n="2"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Entre 100 et 200&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="opt"><input type="radio" name="facture" value="Entre 200 et 300 €" data-eco="3240" data-ecopre="jusqu'à" data-an="entre 2&nbsp;400 et 3&nbsp;600&nbsp;€ par an"><span class="opt__ico c-ambre"><span class="bars" data-n="3"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Entre 200 et 300&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="opt"><input type="radio" name="facture" value="Plus de 300 €" data-eco="3240" data-ecopre="plus de" data-an="plus de 3&nbsp;600&nbsp;€ par an"><span class="opt__ico c-corail"><span class="bars" data-n="4"><b></b><b></b><b></b><b></b></span></span><span class="opt__txt">Plus de 300&nbsp;€</span><span class="opt__radio"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
             </div>
           </fieldset>
 
@@ -743,6 +757,25 @@ section{position:relative}
             <div class="chips" id="q-communes" role="group" aria-label="Choisissez votre commune"></div>
             <p class="note" id="q-cp-note" aria-live="polite"></p>
             <div class="step__actions"><button type="button" class="btn btn--ink" data-next>Continuer</button></div>
+          </fieldset>
+
+          <fieldset class="step" data-step="estimation">
+            <legend class="step__q" tabindex="-1">Voici ce que ça peut changer chez vous</legend>
+            <p class="step__hint">Une première estimation, à partir de ce que vous venez d'indiquer.</p>
+            <div class="estim">
+              <p class="estim__l"><span>Votre facture d'électricité</span><b id="e-facture">&mdash;</b></p>
+              <p class="estim__l estim__l--fort"><span>Ce que le solaire peut vous en faire économiser</span><b><i id="e-eco-pre">jusqu'à</i> <i id="e-eco">0</i>&nbsp;€ par an<a href="#notes" aria-label="Voir les conditions">*</a></b></p>
+              <p class="estim__tva">Votre installation est éligible à la <b>TVA à 5,5&nbsp;%</b>, sous conditions.</p>
+            </div>
+            <details class="estim__src">
+              <summary>D'où viennent ces chiffres&nbsp;?</summary>
+              <div>
+                <p><b>Votre facture</b>&nbsp;: le montant mensuel que vous venez d'indiquer, ramené à l'année.</p>
+                <p><b>L'économie</b>&nbsp;: jusqu'à 90&nbsp;% de cette facture*. Elle dépend de votre consommation, de l'orientation et de l'inclinaison du toit, et de l'ensoleillement de votre commune. Le calcul exact vous arrive par email après l'appel.</p>
+                <p><b>La TVA à 5,5&nbsp;%</b> s'applique aux installations jusqu'à 9&nbsp;kWc, sous conditions cumulatives.</p>
+              </div>
+            </details>
+            <div class="step__actions"><button type="button" class="btn btn--ink" data-next>Voir le détail chiffré</button></div>
           </fieldset>
 
           <fieldset class="step" data-step="identite">
@@ -1070,6 +1103,14 @@ section{position:relative}
   var quiz = document.getElementById('bilan');
   var form = document.getElementById('q-form');
   var view = document.getElementById('q-view');
+  /* Interrupteur du bloc d'estimation. Passer à false le retire du parcours
+     sans toucher au reste : l'étape sort du DOM avant que steps soit construit,
+     donc ni la barre de progression ni la validation ne la voient. */
+  var ESTIMATION = true;
+  if (!ESTIMATION) {
+    var aRetirer = form.querySelector('[data-step="estimation"]');
+    if (aRetirer) aRetirer.parentNode.removeChild(aRetirer);
+  }
   var steps = Array.prototype.slice.call(form.querySelectorAll('.step'));
   var segs = document.querySelectorAll('#q-segs i');
   var count = document.getElementById('q-count');
@@ -1097,6 +1138,7 @@ section{position:relative}
   function actif(i){
     var key = steps[i].getAttribute('data-step');
     if (key === 'facture') return checked('statut') !== 'Bientôt propriétaire';
+    if (key === 'estimation') return checked('facture') !== '';
     return true;
   }
   function actifs(){
@@ -1117,6 +1159,31 @@ section{position:relative}
     back.hidden = precedent(cur) < 0;
   }
 
+  /* Remplit le bloc d'estimation et anime le montant. Les deux chiffres
+     viennent de la tranche de facture choisie : le montant annuel est celui
+     déjà affiché après la question facture, l'économie en est 90 % — le
+     plafond annoncé en bas de page, avec sa note. */
+  function sep(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, NB); }
+  function remplitEstimation(){
+    var f = form.querySelector('input[name="facture"]:checked');
+    var elF = document.getElementById('e-facture');
+    var elE = document.getElementById('e-eco');
+    var elP = document.getElementById('e-eco-pre');
+    if (!f || !elF || !elE) return;
+    elF.innerHTML = f.getAttribute('data-an') || '';
+    if (elP) elP.textContent = f.getAttribute('data-ecopre') || "jusqu'à";
+    var cible = parseInt(f.getAttribute('data-eco'), 10) || 0;
+    var sobre = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (sobre) { elE.textContent = sep(cible); return; }
+    var t0 = 0, duree = 900;
+    requestAnimationFrame(function tic(t){
+      if (!t0) t0 = t;
+      var p = Math.min(1, (t - t0) / duree);
+      elE.textContent = sep(Math.round(cible * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tic);
+    });
+  }
+
   function go(i, dir){
     if (i < 0 || i >= total) return;
     var from = steps[cur];
@@ -1126,6 +1193,7 @@ section{position:relative}
     st.classList.toggle('from-left', dir < 0);
     void st.offsetWidth;
     st.classList.add('is-active');
+    if (st.getAttribute('data-step') === 'estimation') remplitEstimation();
     paint();
     setHeight();
     var r = quiz.getBoundingClientRect();
@@ -1251,7 +1319,7 @@ section{position:relative}
 
   function choose(input){
     var name = input.name;
-    if (!started) { started = true; track('quiz_start', {first_answer: input.value}); }
+    if (!started) { started = true; try { document.body.classList.add('quiz-en-cours'); } catch(e){} track('quiz_start', {first_answer: input.value}); }
     /* Retour à la première étape puis changement de statut : la facture déjà
        cochée porterait sur une question qu'on ne pose plus. */
     if (name === 'statut' && input.value === 'Bientôt propriétaire'){
@@ -2053,6 +2121,9 @@ a[class*="skeepers-widget-wrapper"]{
   transform:scale(.74);transform-origin:100% 100%;
 }
 body:has(#sticky.is-on) a[class*="skeepers-widget-wrapper"]{bottom:80px!important}
+/* Pendant le questionnaire, le badge sort de l'écran : ses 115 px en bas à
+   droite recouvraient le bouton des étapes hautes, dont l'estimation. */
+body.quiz-en-cours a[class*="skeepers-widget-wrapper"]{display:none!important}
 @media (min-width:1024px){
   a[class*="skeepers-widget-wrapper"]{right:18px!important;bottom:18px!important;transform:scale(.9)}
   body:has(#sticky.is-on) a[class*="skeepers-widget-wrapper"]{bottom:18px!important}
