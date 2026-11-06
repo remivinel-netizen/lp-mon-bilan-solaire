@@ -636,11 +636,20 @@ section{position:relative}
           general: {
             t: "Panneaux solaires&nbsp;: <em>combien pouvez-vous économiser</em> chez vous&nbsp;?",
             s: "Reste à savoir ce que ça donne chez vous, et ce que l'État prend en charge. Quelques questions, et vous êtes fixé."
+          },
+          /* Demand Gen : ses liens n'ont pas d'utm_term. Le titre reprend les
+             deux titres d'annonce les plus diffusés (« Panneaux solaires sans
+             apport », « Mensualité fixe »). L'annonce « Angle aides » et le
+             remarketing parlent d'aides : ils gardent le titre par défaut. */
+          demandgen: {
+            t: "Panneaux solaires <em>sans apport</em>&nbsp;: une mensualité fixe",
+            s: "Votre mensualité reste la même pendant que le prix de l'électricité monte. Quelques questions, et vous êtes fixé."
           }
         };
         var variante = 'aucune';
         try {
-          var brut = new URLSearchParams(location.search).get('utm_term') || '';
+          var q = new URLSearchParams(location.search);
+          var brut = q.get('utm_term') || '';
           if (brut) {
             var t = brut.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             /* L'ordre compte : « prix installation photovoltaique » est une
@@ -650,13 +659,16 @@ section{position:relative}
                      : /install|poseur|artisan|entreprise|societe/.test(t) ? 'installation'
                      : /batterie|stockage|autoconsommation/.test(t) ? 'batterie'
                      : 'general';
-            var v = V[variante];
-            if (v) {
-              var h = document.querySelector('.hero__copy h1');
-              var b = document.querySelectorAll('.hero__lead .bloc')[1];
-              if (h) h.innerHTML = v.t;
-              if (b) b.textContent = v.s;
-            }
+          } else if (q.get('utm_medium') === 'demandgen'
+                     && !/^(remarketing|prospection-aides)$/.test(q.get('utm_content') || '')) {
+            variante = 'demandgen';
+          }
+          var v = V[variante];
+          if (v) {
+            var h = document.querySelector('.hero__copy h1');
+            var b = document.querySelectorAll('.hero__lead .bloc')[1];
+            if (h) h.innerHTML = v.t;
+            if (b) b.textContent = v.s;
           }
         } catch(e){}
         window.MBS_VARIANTE = variante;
