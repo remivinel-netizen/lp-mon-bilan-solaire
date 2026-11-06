@@ -457,7 +457,7 @@ section{position:relative}
 .estim__l b a{color:inherit;text-decoration:none}
 .estim__tva{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2)}
 .estim__tva b{color:var(--ink)}
-.estim__src{margin:0 0 16px;font-size:14px}
+.estim__src{margin:16px 0 0;font-size:14px}
 .estim__src summary{cursor:pointer;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
 .estim__src div{margin-top:10px;color:var(--ink-3);line-height:1.5}
 .estim__src p + p{margin-top:8px}
@@ -767,6 +767,7 @@ section{position:relative}
               <p class="estim__l estim__l--fort"><span>Ce que le solaire peut vous en faire économiser</span><b><i id="e-eco-pre">jusqu'à</i> <i id="e-eco">0</i>&nbsp;€ par an<a href="#notes" aria-label="Voir les conditions">*</a></b></p>
               <p class="estim__tva">Votre installation est éligible à la <b>TVA à 5,5&nbsp;%</b>, sous conditions.</p>
             </div>
+            <div class="step__actions"><button type="button" class="btn btn--ink" data-next>Voir le détail chiffré</button></div>
             <details class="estim__src">
               <summary>D'où viennent ces chiffres&nbsp;?</summary>
               <div>
@@ -775,7 +776,6 @@ section{position:relative}
                 <p><b>La TVA à 5,5&nbsp;%</b> s'applique aux installations jusqu'à 9&nbsp;kWc, sous conditions cumulatives.</p>
               </div>
             </details>
-            <div class="step__actions"><button type="button" class="btn btn--ink" data-next>Voir le détail chiffré</button></div>
           </fieldset>
 
           <fieldset class="step" data-step="identite">
@@ -1363,6 +1363,14 @@ section{position:relative}
     if (t.name === 'prenom' || t.name === 'nom' || t.name === 'email'){ bad(t, false); note('q-id-note', ''); }
     if (t.name === 'email') suggestMail(t.value);
   });
+  /* Le panneau « D'où viennent ces chiffres ? » s'ouvre vers le bas : mesuré,
+     il descendait à 971 et emportait le bouton à 987, hors écran, sans que rien
+     ne défile. Même traitement que le reste du formulaire. */
+  var srcEstim = form.querySelector('.estim__src');
+  if (srcEstim) srcEstim.addEventListener('toggle', function(){
+    if (srcEstim.open) setTimeout(function(){ degager(srcEstim.closest('.step') || srcEstim); }, 80);
+  });
+
   form.elements.consentement_appel.addEventListener('change', function(){
     $('#q-consent-tel-box').classList.remove('is-bad');
     note('q-tel-note', '');
